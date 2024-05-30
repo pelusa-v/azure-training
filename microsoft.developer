@@ -1,0 +1,151 @@
+jean.leon.v@outlook.com
+
+
+* IAAS vs PAAS:
+	- App Service => Platform as a Service
+	- Virtual Machines => Infrastructure as a Service  
+Repasar imagen
+
+
+* WEBAPP:
+	- App Service Plan: Pricing model for apps and hosting options. B1, S1, etc. Is a resource that
+	- Manual Scaling: 
+		- Scale up (B1, S1, Premium, etc), Scale out (number of instances).
+		- B: 3 parallel instances
+		- S: 10 parallel instances
+		- When upgrade the number of instances in Scale out, Azure takes car of load balancing betweeen instances (traffic coming to a one url is divided)
+	- Auto Scaling:
+		- Based on rules
+		- Based on defined number of instances
+	- Publishing apps: 
+		- I can publish from VS Code.
+		- I can create slots for differents environments (staging or development for example)
+		- I can deploy a different version of the app to a slot
+		- There is the "swap" functionallity to exchange the content of the webapp (main) and any slot. This is important when we don't want to lose the production version, if there is an error or bug in the new version swapped to main webapp, we can swap another time to return the last production version to main webapp.
+		- When swap occurs, the settings of the app aren't changed (for example consume staging or production database)
+	- App service logs:
+		- Application logging (Filesystem and blob), level, web server logging, retention period, failed request tracing.
+	- Diagnostic settings:
+		- Send to log analytics workspace
+	- Log stream:
+		Real time logging (It has delay)
+	- To create (PowerShell, cli):
+		- Create Resource group (Name, Location <====> --name or -n, --location or -l)
+		- Create App service plan (Name, Location, ResourceGroupName, Tier <====> --name or -n, --location or -l, --resource-group or -g, --sku)
+		- Create WebApp (Name, Location, ResourceGroupName, AppServicePlan <====> --name or -n, --location or -l, --resource-group or -g, --plan)
+		- PowerShell:
+			Connect-AzAccount
+			New-AzResourceGroup -Location 'EastUs' -Name ''
+			New-AzAppServicePlan -ResourceGroupName '' -Name '' -Location 'EastUS' -Tier 'Free'
+			New-AzWebApp -ResourceGroupName '' -Name ''  -Location 'EastUS' -AppServicePlan ''
+		- CLI:
+			az login
+			az group create --name .... --location eastus
+			az appservice plan create --resource-group ... --name ... --sku FREE --location eastus
+			az webapp create --resource-group ... --name ... --plan ...
+	- To create resources and deploy quickly:
+		- CLI:
+			az webapp list-runtimes
+			az webapp up -n ... --runtime dotnet:8 --location eastus
+	- Console:
+		- Interacting with webapp folder, can run read commands
+	- Advanced Tools (Kudu):
+		- You can run cmd or powershell to interact with files of webapp in real time
+		- You can view files and configuration of webapp (files deployed)
+		- It's good for diagnostic (debug when It works in local but doesn't work in cloud environment)
+	- Docker Container:
+		- You can create a webapp based on an image fo azure container registry
+
+
+* CONTAINER INSTANCE:
+	- Create container instance: You can specify the following features:
+		- Images source: quickstart, azure registry, other registry
+		- Networking configuration: Ports, dns, public or private network
+		- When create container from azure registry, this identify the os type of the image.
+
+
+* CONTAINER REGISTRY:
+	- Create new registry: You can specify the following features:
+		- Pracing plan: Basic, Standart, Premium
+		- Networking: Private is only available for premium pricing plan
+		- Encryption: Enable is only available for premium pricing plan
+	- Prepare the images:
+		Use vs for mac for use "add docker support", look for another solution in vscode or similar
+	- You can deploy images using vscode or console:
+		az acr login --name mytestcompany
+		docker tag testcontainer:latest mytestcompany.azurecr.io/testcontainer:latest
+		docker push mytestcompany.azurecr.io/testcontainer:latest
+
+		If you want to use vscode, change the azure account for docker and azure extensions
+	- You need to enable "Admin user" in order to use the user to deploy the docker (registry name as admin username)
+	- You can create webapp using Docker container option
+
+
+* FUNCTION APP:
+	- Create function app:
+		- Runtimes: It supports .net, nodejs, python, java, powershell, custom handler
+			- Custom Handler: This options is used when need another runtime or language (go, php, etc)
+		- Functions needs an storage account, that's because underneath the function model is a file system
+		- Hosting plan:
+			- Consumption (Serverless): Recommended for free
+			- Flex Consumption
+			- Functions premium
+			- App Service
+			- Container App environment
+		- Networking: Private or public access
+			- Enable networking injection is only available in functions premium
+	- Create function:
+		- Select template (Http trigger, timmer trigger, etc)
+		- Authorization level:
+			- Function (token)
+			- Anonymous (open to everyone)
+			- Admin (higher level of security required)
+		- Test and code:
+			- Get function url with key and execute
+		- Monitoring:
+			- Success and failed executions
+			- Logs: real time logs
+	- Bindings:
+		- Output: output method to storage the response data of function app trigger
+			- Blob storage: Create an storage account, and a container, create a new container and configure in C# using the container name, wildcard name and connection string and BlobOutput attribute
+
+	- Durable functions:
+		- Patterns:
+			- Function chaining pattern:
+				A[Orchestration Function Starts] --> B[Function A]
+			    B --> C[Function B]
+			    C --> D[Function C]
+			    D --> E[Orchestration Function Completes]
+
+			- Fan in / Fan out pattern:
+				F1 calls three functions in parallel (F2), It will wait for all three functions to finish before move to F3
+				A[Orchestration Function Starts] --> B[Function Fan-Out]
+			    B --> C1[Function C1]
+			    B --> C2[Function C2]
+			    B --> C3[Function C3]
+			    C1 --> D[Function Fan-In]
+			    C2 --> D[Function Fan-In]
+			    C3 --> D[Function Fan-In]
+			    D --> E[Orchestration Function Completes]
+
+			- Asynchronous API pattern:
+				F1 start long task and give register of execution as output. 
+				Another function GetStatus can call the output and monitoring execution.
+				Another function DoWork can call the output and monitoring execution finish to execute the work
+
+			- Monitor pattern:
+				A function is waiting something to happen in another function, and execute when "that something" has happened
+
+			- Human interaction pattern:
+				A function request approval to call other functions, the function have a return a timeout if human approval is not received
+
+		- Enable durable functions support:
+			- For Javascript runtime, create diretly from azure portal and download the npm durable-functions package, then restart the funcion app
+			- For .NET runtime:
+				- Create the project (durable function orchestrator) from vscode and use azurite extension for test local storage (Azurite: Start in command palette)
+
+			
+
+
+
+

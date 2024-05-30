@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "test_fa": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7235",
+      "launchBrowser": false
+    }
+  }
+}

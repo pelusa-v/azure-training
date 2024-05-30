@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "test_durable_fa": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7089",
+      "launchBrowser": false
+    }
+  }
+}
