@@ -105,9 +105,50 @@ Repasar imagen
 		- Monitoring:
 			- Success and failed executions
 			- Logs: real time logs
+		- Using function core tools:
+			- func init
+			- func new
+			- func start
+			- func azure functionapp publish "fa name"
+	- Trigger types:
+		- QueueTrigger
+		- HttpTrigger
+		- BlobTrigger
+		- TimerTrigger
+		- EventHubTrigger
+		- ServiceBusQueueTrigger
+		- ServiceBusTopicTrigger
+		- EventGridTrigger
+		- CosmosDBTrigger
+		- DaprPublishOutputBinding
+		- DaprServiceInvocationTrigger
+		- DaprTopicTrigger
 	- Bindings:
+		(https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=isolated-process%2Cpython-v2&pivots=programming-language-csharp)
 		- Output: output method to storage the response data of function app trigger
 			- Blob storage: Create an storage account, and a container, create a new container and configure in C# using the container name, wildcard name and connection string and BlobOutput attribute
+		- Types:
+			Blob storage
+			Azure Cosmos DB
+			Azure Data Explorer
+			Azure SQL
+			Dapr4
+			Event Grid
+			Event Hubs
+			HTTP & webhooks
+			IoT Hub
+			Kafka3
+			Mobile Apps (only v1.x)
+			Notification Hubs (only v1.x)
+			Queue storage
+			Redis
+			RabbitMQ3
+			SendGrid
+			Service Bus
+			SignalR
+			Table storage
+			Timer
+			Twilio
 
 	- Durable functions:
 		- Patterns:
@@ -143,6 +184,11 @@ Repasar imagen
 			- For Javascript runtime, create diretly from azure portal and download the npm durable-functions package, then restart the funcion app
 			- For .NET runtime:
 				- Create the project (durable function orchestrator) from vscode and use azurite extension for test local storage (Azurite: Start in command palette)
+				- For run in mac:
+					- download the nuget package: Contrib.Grpc.Core.M1
+					- add this before last project tag:
+						<Target Name="CopyGrpcNativeAssetsToOutDir" AfterTargets="Build"> <ItemGroup> <NativeAssetToCopy Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="$(OutDir)runtimes/osx-arm64/native/*" /> </ItemGroup> <Copy SourceFiles="@(NativeAssetToCopy)" DestinationFolder="$(OutDir).azurefunctions/runtimes/osx-arm64/native" /> </Target>
+				
 
 			
 
