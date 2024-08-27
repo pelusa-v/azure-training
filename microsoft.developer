@@ -149,10 +149,19 @@ Repasar imagen
 			Table storage
 			Timer
 			Twilio
+		- Example:
+			BlobInput: Some stored file in blob storage to read the content as input
+			BlobOutput: File name with name parameter like this: blob/{name}-output.txt
+			BlobTrigger: New or updated blob is detected (Stream or string)
 
 	- Durable functions:
+		- Enable to have sequence of steps (functions). This steps use ActivityTrigger and the orchestrator uses OrchestrationTrigger and launch all the ActivityTrigger functions.
+		  The OrchestrationTrigger can be called in another function of any trigger type.
+		  Example:
+		  	HttpTrigger -----calls in function-----> OrchestrationTrigger -----calls in function-----> ActivityTrigger1 ---output---> ActivityTrigger2 ---output---> output in orchestrator
+
 		- Patterns:
-			- Function chaining pattern:
+			- Function chaining pattern: (READY–)
 				A[Orchestration Function Starts] --> B[Function A]
 			    B --> C[Function B]
 			    C --> D[Function C]
@@ -190,8 +199,25 @@ Repasar imagen
 						<Target Name="CopyGrpcNativeAssetsToOutDir" AfterTargets="Build"> <ItemGroup> <NativeAssetToCopy Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="$(OutDir)runtimes/osx-arm64/native/*" /> </ItemGroup> <Copy SourceFiles="@(NativeAssetToCopy)" DestinationFolder="$(OutDir).azurefunctions/runtimes/osx-arm64/native" /> </Target>
 				
 
-			
-
+* AZURE STORAGE ACCOUNT
+	- Managed disks (usually fixed) are more expensive than blob storage (on demand).
+	- Blob storage (or unmanaged storage) is the cheapest way to store files within azure.
+	- Price depends on region
+	- Storage account performance:
+		* You pay for storage and you pay for the number of request per month.
+		- GPV2 = Standard storage: 
+		- Premium: It costs way more to store it, but you save a lot of money on the access. (If you need read thousands of files per second)
+	- Storage account redundancy:
+		- LRS: Locally
+		- GRS
+		- ZRS
+		- GZRS
+	- Blob storage tiers:
+		- Premium
+		- Hot
+		- Cool
+		- Archive: Hard to access, intended for backups and files that are rarely used.
+	- Create storage account
 
 
 
