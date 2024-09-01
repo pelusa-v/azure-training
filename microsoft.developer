@@ -218,6 +218,37 @@ Repasar imagen
 		- Cool
 		- Archive: Hard to access, intended for backups and files that are rarely used.
 	- Create storage account
+		- performance: GPV2 or premium
+		- redundancy
+		- secure transfer
+		- public access
+		- Secutiry access: storage account keys or/and azure AD (entra)
+		- data lake storage gen2: big data scenarios, change the file system
+		- Networking: 
+			- public, selected virtual networks, private (private endpoint)
+			- microsoft network routing VS internet routing (slower)
+		- Data protection:
+			- soft delete
+			- versioning and tracking
+		- Encryption:
+			- MMK
+			- CMK
+	- Access tier:
+		- Hot: Frequently accesed, day-to-day usage scenarios
+		- Cool: Infrequently accessed, backup scenarios
+	- Storage browser:
+		- Tool for search data in storage account easyly (containers, files, table, queues)
+	- Containers:
+		- To access to blobs programaticlly
+	- AzCopy:
+		- To copy files between container (or table storage MAYBE), even between different subscriptions (or different cloud providers)
+	- Access Keys (if pick up storage account keys on creation):
+		- Azure provide a pair of keys, they can be rotated manually (invalid old keys) or using a timmer (set rotation reminder)
+		- YOU DONT WANT TO GIVE AWAY YOUR KEYS (use shared access signature instead)
+	- Shared access signature (SAS)
+		- To provide access to clients who should not be trusted.
+		- You CANNOT revoke this access directly, unless rotate the signing key (based on access key). This invalids all the SAS generated using the rotated key.
+		- There is another way to revoke the SAS acces, using stored access policy.
 
 
 
