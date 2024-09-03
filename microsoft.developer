@@ -238,10 +238,21 @@ Repasar imagen
 		- Cool: Infrequently accessed, backup scenarios
 	- Storage browser:
 		- Tool for search data in storage account easyly (containers, files, table, queues)
-	- Containers:
+	- Azure storage account contains those storage services:
+		- AZURE BLOB STORAGE
+		- AZURE TABLE STORAGE
+		- AZURE FILE STORAGE
+		- AZURE QUEUE STORAGE
+	- Blob storage vs File storage:
+		- file storage uses a file system. (classic) hosted on azure, blob storage is highly scalable object storage solution.
+
+	- AZURE BLOB STORAGE (Containers):
 		- To access to blobs programaticlly
-	- AzCopy:
-		- To copy files between container (or table storage MAYBE), even between different subscriptions (or different cloud providers)
+		- Use the SDK to manage container, blob level objects (BlobServiceClient, BlobContainerClient, BlobCLient)
+		- StartCopyFromUriAsync and SetMetadataAsync as important methods.
+		- AzCopy:
+			- To copy files between container, even between different subscriptions (or different cloud providers)
+
 	- Access Keys (if pick up storage account keys on creation):
 		- Azure provide a pair of keys, they can be rotated manually (invalid old keys) or using a timmer (set rotation reminder)
 		- YOU DONT WANT TO GIVE AWAY YOUR KEYS (use shared access signature instead)

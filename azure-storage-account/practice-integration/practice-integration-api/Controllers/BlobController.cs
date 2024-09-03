@@ -15,11 +15,18 @@ namespace practice_integration_api.Controllers
             _blobIntegration = blobIntegration;
         }
 
-        [HttpPost]
+        [HttpPost("copy")]
         public IActionResult ExecuteCopyBlob([FromBody] ExecuteCopyDTO dto)
         {
-            _blobIntegration.CopyBlob(dto.SourceContainer, dto.SourceBlob, dto.DestinationContainer, dto.DestinationBlob);
+            _blobIntegration.CopyBlob(dto);
             return Ok("Copying blob asynchronously...");
+        }
+
+        [HttpPost("metadata")]
+        public IActionResult AddMetadata([FromBody] AddMetadataDTO dto)
+        {
+            _blobIntegration.AddBlobMetadata(dto);
+            return Ok("Metadata added successfully");
         }
     }
 }

@@ -12,10 +12,16 @@ public class BlobIntegration
         _azureStorageConnString = configuration["Azure:Storage:ConnectionString"];
     }
 
-    public void CopyBlob(string sourceContainer, string sourceBlob, string destContainer, string destBlob)
+    public void CopyBlob(ExecuteCopyDTO dto)
     {
-        var sourceBlobClient = new BlobClient(_azureStorageConnString, sourceContainer, sourceBlob);
-        var destBlobClient = new BlobClient(_azureStorageConnString, destContainer, destBlob);
+        var sourceBlobClient = new BlobClient(_azureStorageConnString, dto.SourceContainer, dto.SourceBlob);
+        var destBlobClient = new BlobClient(_azureStorageConnString, dto.DestinationContainer, dto.DestinationBlob);
         destBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
     }
+
+    public void AddBlobMetadata(AddMetadataDTO dto)
+    {
+        var blobClient = new BlobClient(_azureStorageConnString, dto.Container, dto.Blob);
+        blobClient.SetMetadataAsync(dto.Metadata);
+    }  
 }
