@@ -261,5 +261,31 @@ Repasar imagen
 		- You CANNOT revoke this access directly, unless rotate the signing key (based on access key). This invalids all the SAS generated using the rotated key.
 		- There is another way to revoke the SAS acces, using stored access policy.
 
+* AZURE COSMOS DB
+	- Fully managed NoSQL and relational database service for scalable, high performance applications.
+	- APIs:
+		- COSMOS DB FOR NOSQL: Core Native api for working with documents (JSON), supports familiar SQL language. Choose this when start from scratch (there is no data). ------> NON RELATIONAL
+		- COSMOS DB FOR POSTGRESQL: OpenSource postgresql. Choose this if you need tables, foreign keys, primary keys, etc ------> RELATIONAL
+		- COSMOS DB FOR MONGODB: MongoDb datbase for working with documents (BSON). Choose this if you have existing mongoDb data and plan to migrate to azure ------> NON RELATIONAL
+		- COSMOS DB FOR APACHE CASSANDRA: Cassandra database, mongodb and cassandra APIs are compatible (you can migrate without changes). Choose this if you have existing cassandra data and plan to migrate to azure ------> NON RELATIONAL
+		- COSMOS DB FOR TABLE: Compatible with azure table storage (you can migrate without changes). Choose this if you have existing azure table storage data ------> NON RELATIONAL
+		- COSMOS DB FOR GREMLIN: Graph database service using gremlin query language (nodes, edges). Choose if you need relationships between data ------> NON RELATIONAL
+	- Create NOSQL:
+		- Capacity mode:
+			- Provisioned throughput: Fix an ammount of provisioned throughput to consume (RUs/s) regardless of consumption. Use free tier for this if possible
+			- Serverless: Pay as you use
+		- Limit throughput: Protects your account from cost overruns
+		- Global distribution:
+			- geo-redundancy: I created this in west and it will also create a version in east
+			- multi-region writes
+		- Backup Policy (NOT EXAM):
+			- Periodic backup (interval, retention, copies, redundancy)
+			- Continuos
+			
+
+
+
+
+
 
 
