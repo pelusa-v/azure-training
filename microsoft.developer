@@ -253,13 +253,22 @@ Repasar imagen
 		- AzCopy:
 			- To copy files between container, even between different subscriptions (or different cloud providers)
 
-	- Access Keys (if pick up storage account keys on creation):
+	- Access Keys (if chosen storage account keys on creation):
 		- Azure provide a pair of keys, they can be rotated manually (invalid old keys) or using a timmer (set rotation reminder)
 		- YOU DONT WANT TO GIVE AWAY YOUR KEYS (use shared access signature instead)
 	- Shared access signature (SAS)
 		- To provide access to clients who should not be trusted.
 		- You CANNOT revoke this access directly, unless rotate the signing key (based on access key). This invalids all the SAS generated using the rotated key.
 		- There is another way to revoke the SAS acces, using stored access policy.
+
+	- Data protection:
+		- Recovery:
+			- Operational backup: Using azure backup vault and a backup policy (retention days)
+			- Point in time restore
+			- Soft delete for blobs and containers (retention days)
+	- Object replication
+	- Lifecycle management:
+		- Add rules that will move files from the hot tier to the cool or archive tier based on the last access date (you can configure to delete instead to move files)
 
 * AZURE COSMOS DB
 	- Fully managed NoSQL and relational database service for scalable, high performance applications.
@@ -281,7 +290,15 @@ Repasar imagen
 		- Backup Policy (NOT EXAM):
 			- Periodic backup (interval, retention, copies, redundancy)
 			- Continuos
-			
+	- Global replication:
+		- You can add more regions (replications) as a READ REGIONS (you can program the application to read from the closest region to the client)
+		- Muti region writes:
+			- Enable WRITE and READ in all selected regions, this will double the cost
+		- If the cosmos db has only a WRITE region (primary region), you can perform read and write operations in that region.
+	- Keys:
+		- You can access to cosmos using the URI (exposed on internet or azure virtual network) and a primary or secondary key
+		- You have primary/seconday keys for Read-write regions, and read-only regions
+
 
 
 
