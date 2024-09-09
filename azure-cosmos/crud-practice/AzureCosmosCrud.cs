@@ -72,21 +72,21 @@ public class AzureCosmosCrud
         }
     }
 
-    public async Task<T> ReadItem<T>(string dbId, string containerId, string itemId, string partitionKey)
+    public async Task<T> ReadItem<T>(string dbId, string containerId, string itemId, string partitionKeyValue)
     {
         var container = await GetContainer(dbId, containerId);
-        ItemResponse<T> item = await container.ReadItemAsync<T>(itemId, new PartitionKey(partitionKey));
+        ItemResponse<T> item = await container.ReadItemAsync<T>(itemId, new PartitionKey(partitionKeyValue));
         return item;
     }
 
-    public async Task<List<T>> QueryItem<T>(string dbId, string containerId, string query, string partitionKey)
+    public async Task<List<T>> QueryItem<T>(string dbId, string containerId, string query, string partitionKeyValue)
     {
         var container = await GetContainer(dbId, containerId);
         var iterator = container.GetItemQueryIterator<T>(
             query,
             requestOptions: new QueryRequestOptions()
             {
-                PartitionKey = new PartitionKey(partitionKey) 
+                PartitionKey = new PartitionKey(partitionKeyValue) 
             });
         var items = new List<T>();
         while (iterator.HasMoreResults)
