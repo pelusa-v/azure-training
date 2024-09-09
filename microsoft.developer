@@ -272,13 +272,28 @@ Repasar imagen
 
 * AZURE COSMOS DB
 	- Fully managed NoSQL and relational database service for scalable, high performance applications.
-	- APIs:
+	-* KEYS:
+		- Unlimited elastic write and read sclability
+		- 99.999% read and write availability all around the world
+		- Guarantedd read and writes serverd in < 10ms (near real time reads and writes)
+	-* APIs:
 		- COSMOS DB FOR NOSQL: Core Native api for working with documents (JSON), supports familiar SQL language. Choose this when start from scratch (there is no data). ------> NON RELATIONAL
 		- COSMOS DB FOR POSTGRESQL: OpenSource postgresql. Choose this if you need tables, foreign keys, primary keys, etc ------> RELATIONAL
 		- COSMOS DB FOR MONGODB: MongoDb datbase for working with documents (BSON). Choose this if you have existing mongoDb data and plan to migrate to azure ------> NON RELATIONAL
 		- COSMOS DB FOR APACHE CASSANDRA: Cassandra database, mongodb and cassandra APIs are compatible (you can migrate without changes). Choose this if you have existing cassandra data and plan to migrate to azure ------> NON RELATIONAL
 		- COSMOS DB FOR TABLE: Compatible with azure table storage (you can migrate without changes). Choose this if you have existing azure table storage data ------> NON RELATIONAL
 		- COSMOS DB FOR GREMLIN: Graph database service using gremlin query language (nodes, edges). Choose if you need relationships between data ------> NON RELATIONAL
+	-* HIERARCHY:
+		- Database account > database > container > item, sps, fucntions, triggers, conflicts
+	-* TYPES:
+		- database: Depends on api (NOSQL, POSTGRESQL, MONGODB, CASSANDRA, TABLE, GREMLIN)
+		- container and items:
+			- NOSQL: container > item
+			- POSTGRESQL: table > row
+			- MONGODB: collection > document
+			- CASSANDRA: table > row
+			- TABLE: table > item
+			- GREMLIN: graph > node/edge
 	- Create NOSQL:
 		- Capacity mode:
 			- Provisioned throughput: Fix an ammount of provisioned throughput to consume (RUs/s) regardless of consumption. Use free tier for this if possible
@@ -290,14 +305,33 @@ Repasar imagen
 		- Backup Policy (NOT EXAM):
 			- Periodic backup (interval, retention, copies, redundancy)
 			- Continuos
-	- Global replication:
+	-* Global replication:
 		- You can add more regions (replications) as a READ REGIONS (you can program the application to read from the closest region to the client)
 		- Muti region writes:
 			- Enable WRITE and READ in all selected regions, this will double the cost
 		- If the cosmos db has only a WRITE region (primary region), you can perform read and write operations in that region.
 	- Keys:
-		- You can access to cosmos using the URI (exposed on internet or azure virtual network) and a primary or secondary key
+		- You can access to cosmos using the URI (or endpoint, exposed on internet or azure virtual network) and a primary or secondary key
 		- You have primary/seconday keys for Read-write regions, and read-only regions
+	- Data explorer:
+		- Create new container:
+			- Create new db or use existing
+			- Autoscale or manual
+			- Set the max RU/s
+			- Partition key: Distribute data across partitions for scalability
+			- Unique keys: Specific unique keys in a partition
+			- id key is required in each item and is a default unique key
+		- Connect
+			- When new Item is created, cosmos add 5 properties to object:
+				- rid (row id), _self (self reference)
+	- Data consistency:
+		- Strong > Bounded staleness > session > consistent prefix > eventual
+		- Cosmos uses "session" consistency as default
+	- Change feed notifications:
+		- Use azure functions (azure cosmos trigger) to execute some task when an item is created or updated (this doesn't recognize item deletion)
+	- SDK:
+		- code
+
 
 
 
