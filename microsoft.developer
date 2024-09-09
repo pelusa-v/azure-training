@@ -272,20 +272,20 @@ Repasar imagen
 
 * AZURE COSMOS DB
 	- Fully managed NoSQL and relational database service for scalable, high performance applications.
-	-* KEYS:
+	* KEYS:
 		- Unlimited elastic write and read sclability
 		- 99.999% read and write availability all around the world
 		- Guarantedd read and writes serverd in < 10ms (near real time reads and writes)
-	-* APIs:
+	* APIs:
 		- COSMOS DB FOR NOSQL: Core Native api for working with documents (JSON), supports familiar SQL language. Choose this when start from scratch (there is no data). ------> NON RELATIONAL
 		- COSMOS DB FOR POSTGRESQL: OpenSource postgresql. Choose this if you need tables, foreign keys, primary keys, etc ------> RELATIONAL
 		- COSMOS DB FOR MONGODB: MongoDb datbase for working with documents (BSON). Choose this if you have existing mongoDb data and plan to migrate to azure ------> NON RELATIONAL
 		- COSMOS DB FOR APACHE CASSANDRA: Cassandra database, mongodb and cassandra APIs are compatible (you can migrate without changes). Choose this if you have existing cassandra data and plan to migrate to azure ------> NON RELATIONAL
 		- COSMOS DB FOR TABLE: Compatible with azure table storage (you can migrate without changes). Choose this if you have existing azure table storage data ------> NON RELATIONAL
 		- COSMOS DB FOR GREMLIN: Graph database service using gremlin query language (nodes, edges). Choose if you need relationships between data ------> NON RELATIONAL
-	-* HIERARCHY:
+	* HIERARCHY:
 		- Database account > database > container > item, sps, fucntions, triggers, conflicts
-	-* TYPES:
+	* TYPES:
 		- database: Depends on api (NOSQL, POSTGRESQL, MONGODB, CASSANDRA, TABLE, GREMLIN)
 		- container and items:
 			- NOSQL: container > item
@@ -305,7 +305,7 @@ Repasar imagen
 		- Backup Policy (NOT EXAM):
 			- Periodic backup (interval, retention, copies, redundancy)
 			- Continuos
-	-* Global replication:
+	* Global replication:
 		- You can add more regions (replications) as a READ REGIONS (you can program the application to read from the closest region to the client)
 		- Muti region writes:
 			- Enable WRITE and READ in all selected regions, this will double the cost
@@ -324,14 +324,26 @@ Repasar imagen
 		- Connect
 			- When new Item is created, cosmos add 5 properties to object:
 				- rid (row id), _self (self reference)
-	- Data consistency:
+	* Data consistency:
 		- Strong > Bounded staleness > session > consistent prefix > eventual
 		- Cosmos uses "session" consistency as default
-	- Change feed notifications:
-		- Use azure functions (azure cosmos trigger) to execute some task when an item is created or updated (this doesn't recognize item deletion)
-	- SDK:
+	* SDK:
 		- code
+	- Sp, trigger, user-defined functions:
+		- sp: for large data executions. You can execute sp from sdk
+		- triggers: to validate or add something before (pre trigger) and after (post trigger) creation/deletion/update
+		- user-defined functions: function that you can use inside a query. To calculate fields.
 
+	* CHANGE FEED NOTIFICATIONS:
+		- Change feed in Azure Cosmos DB is a persistent record of changes to a container in the order they occur
+		- This doesn't recognize item deletion or filter between insert and update operations. (Use soft delete + TTL to overcome deletion)
+		- READ:
+			- Push model: change feed push work to client, client has bussines loginc for processing work. Delegate hard work to cosmos (RECOMMENDED)
+				- Azure functions:
+					- Use azure functions (azure cosmos trigger) to execute some task when an item is created or updated.
+				- Change feed processor library:
+
+			- Pull model: client pull work from server, client has bussines logic for processing work, store state and handles load balancing. Extra low level control (NOR RECOMMENDED)
 
 
 
