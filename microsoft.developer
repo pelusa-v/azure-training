@@ -342,11 +342,39 @@ Repasar imagen
 				- Azure functions:
 					- Use azure functions (azure cosmos trigger) to execute some task when an item is created or updated.
 				- Change feed processor library:
+					- The monitored container
+					- The lease container
+					- The compute instance
+					- The delegate
 
 			- Pull model: client pull work from server, client has bussines logic for processing work, store state and handles load balancing. Extra low level control (NOR RECOMMENDED)
 
 
+* MICROSOFT IDENTITY PLATFORM
 
+	* Components:
+		- OAuth 2.0 and OpenID Connect standard-compliant authentication service
+		- Open-source libraries
+		- Microsoft identity platform endpoint
+		- Application management portal
+		- Application configuration API and powershell
+
+	* Register app in the Azure portal:
+		- When register an app with microsoft entra ID:
+			- You're creating an IDENTITY CONFIGURATION.
+			- Your must choose whether it is SINGLE TENANT or MULTI TENANT
+			- An APPLICATION OBJECT (Globally unique app instance) is created in the home tenant.
+			- A SERVICE PRINCIPAL OBJECT is created in the home tenant
+			- You have a globally UNIQUE ID for the app (app or clientID)
+			- You can add secrets, certificates, scopes and so on
+	* IDENTITY CONFIGURATION:
+		- Allows to integrate with microsoft entra ID
+	* TENANT:
+		- An instance of Azure Microsoft Entra ID that an organization or individual uses to manage users, apps, etc.
+	* APPLICATION OBJECT:
+		- Application ------------ one to one ------------ Application object
+	* SCHEMA:
+		- https://app.diagrams.net/#G1l1P8atQcV2vNu8CWlNm4b7_yU5Etr9_D#%7B%22pageId%22%3A%22MnA-WK4r-ufKpTyJempP%22%7D
 
 
 
