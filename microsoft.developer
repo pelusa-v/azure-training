@@ -375,7 +375,16 @@ Repasar imagen
 		- Application ------------ one to one ------------ Application object
 	* SCHEMA:
 		- https://app.diagrams.net/#G1l1P8atQcV2vNu8CWlNm4b7_yU5Etr9_D#%7B%22pageId%22%3A%22MnA-WK4r-ufKpTyJempP%22%7D
-
+	* INTEGRATION:
+		- You need AzureAd in appsettings.json and use OpenIdConnectDefaults.AuthenticationScheme and .AddMicrosoftIdentityWebApp
+		- AzureAd section:
+			- Instance: From directory
+			- Domain: From directory
+			- ClientId: From application (application Id)
+			- TenantId: From directory could be:
+				- "common": Auth request an organization account, allow users (and personal account) from any organization, multitenant
+				- "organizations": Intended only for organizational users, not Microsoft personal accounts
+				- "specific-tenant": Specific tenantID of the directory
 
 
 
