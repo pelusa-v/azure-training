@@ -384,7 +384,16 @@ Repasar imagen
 			- TenantId: From directory could be:
 				- "common": Auth request an organization account, allow users (and personal account) from any organization, multitenant
 				- "organizations": Intended only for organizational users, not Microsoft personal accounts
-				- "specific-tenant": Specific tenantID of the directory
+				- "specific-tenant": Specific tenantID of the directory}
+	* Permissions and consent:
+		- permissions = scopes
+		- Permission types:
+			- DELEGATED ACCESS:
+				- App has a signed-in user. The app acts as a signed-in users when it makes calls to target resource.
+			- APP ONLY ACCESS:
+				- App doesn't have a signed-in user. Only administrator can consent permissions for this app
+		- Consents: TO PRACTICE
+		- Conditional access: TO PRACTICE
 
 
 
