@@ -395,6 +395,20 @@ Repasar imagen
 		- Consents: TO PRACTICE
 		- Conditional access: TO PRACTICE
 
+	* MSAL:
+		The librery enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, etc.
+		Authentication flows:
+			- Authorization code
+			- Client credentials
+			- Device code
+			- Implicit grant
+			- On-behalf-of (OBO)
+			- Username/password (ROPC)
+			- Integrated Windows authentication (IWA)
+		Client applications:
+			- Public (desktop, browserless APIs, mobile, browser apps)
+			- Confidentials (web apps, web api apps, deamon/service apps)
+
 
 
 
