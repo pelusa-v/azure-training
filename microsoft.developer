@@ -417,6 +417,8 @@ Repasar imagen
 		Client applications:
 			- Public (desktop, browserless APIs, mobile, browser apps)
 			- Confidentials (web apps, web api apps, deamon/service apps)
+		Complete frontend-backend flow:
+			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
 
 
 
