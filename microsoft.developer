@@ -418,6 +418,18 @@ Repasar imagen
 			- Public (desktop, browserless APIs, mobile, browser apps)
 			- Confidentials (web apps, web api apps, deamon/service apps)
 		Complete frontend-backend flow:
+			- Steps:
+				*** DELEGATED ACCESS ***
+				- Register client (spa) app registration
+				- Register api app registration
+				- Configure client app to authenticate against azure entra id using its client id and tenant of directory
+				- Configure api app to validate incomming tokens using azure ad (jwt schema and azure configuration), and protect endpoints using Authorize
+				- Add new scopes in api app registration in "expose API", set owner for this app
+				- Register the created api scopes in client app registration, so the client can obtain a token to request api protected endpoints
+				- Validate claims in the backend if needed (roles, policies, etc)
+				- The client will be able to request microsoft graph or other resources (depending of the scopes) using its token (avoid this, and delegate this responsability for the backend)
+				*** APP ONLY ACCESS ***
+				- If you need request microsoft graph or other services from the backend, you need to use client credentials or certificate
 			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
 
 
