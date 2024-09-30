@@ -44,6 +44,14 @@ export const loginRequest = {
     scopes: ["User.Read"]
 };
 
+export const loginBackendRequest = {
+    scopes: ["some-scope"]
+};
+
 export const graphConfig = {
     graphMeEndpoint: "https://graph.microsoft.com/v1.0/me",
 };
+
+export const backendConfig = {
+    itemsEndpoint: "http://localhost:5275/api/items",
+}

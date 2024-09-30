@@ -376,7 +376,16 @@ Repasar imagen
 	* SCHEMA:
 		- https://app.diagrams.net/#G1l1P8atQcV2vNu8CWlNm4b7_yU5Etr9_D#%7B%22pageId%22%3A%22MnA-WK4r-ufKpTyJempP%22%7D
 	* INTEGRATION:
-		- You need AzureAd in appsettings.json and use OpenIdConnectDefaults.AuthenticationScheme and .AddMicrosoftIdentityWebApp
+		- You need AzureAd in appsettings.json and use:
+		
+			- Cookie based auth (stateless or session):
+				services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+	                .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
+
+	        - JWT based auth (stateless):
+	        	services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+	                .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAd"));
+
 		- AzureAd section:
 			- Instance: From directory
 			- Domain: From directory
