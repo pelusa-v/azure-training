@@ -1,6 +1,7 @@
 ﻿using complete_app.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace complete_app.Controllers;
 
@@ -10,6 +11,7 @@ public class ItemsController : ControllerBase
 {
     [Authorize]
     [HttpGet]
+    [EnableRateLimiting("Global")]
     public ActionResult<IEnumerable<Item>> GetItems()
     {
         var items = new List<Item>

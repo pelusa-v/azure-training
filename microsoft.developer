@@ -426,6 +426,7 @@ Repasar imagen
 				- Configure api app to validate incomming tokens using azure ad (jwt schema and azure configuration), and protect endpoints using Authorize
 				- Add new scopes in api app registration in "expose API", set owner for this app
 				- Register the created api scopes in client app registration, so the client can obtain a token to request api protected endpoints
+				- Add the required scopes inthe login scopes in the client app so you can get a token authorized for all the needed scopes (the login prompt ask you for authorize that permissions)
 				- Validate claims in the backend if needed (roles, policies, etc)
 				- The client will be able to request microsoft graph or other resources (depending of the scopes) using its token (avoid this, and delegate this responsability for the backend)
 				*** APP ONLY ACCESS ***

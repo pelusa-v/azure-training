@@ -28,12 +28,18 @@ export const Profile = () => {
             account: accounts[0],
         })
         .then((response) => {  // get user data from backend
-            callItems(response.accessToken).then((response) => setItemsData(response));
+            callItems(response.accessToken).then((response) => {
+              setItemsData(response)
+              console.log(response)
+              console.log("RESPONSEPATO")
+            });
         });
   }
 
   useEffect(() => {
     try {
+        console.log("SEE HERE")
+        console.log(accounts)
         GetProfileData();
         GetItemsData();
     } catch (error) {
@@ -61,7 +67,7 @@ export const Profile = () => {
       {itemsData === null ? "" :
         <div>
           <p>
-            <strong>Items: </strong> {itemsData}
+            <strong>Items: </strong> {itemsData.map((item) => item.name).join(", ")}
           </p>
         </div>
       }
