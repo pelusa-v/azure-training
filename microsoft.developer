@@ -350,7 +350,7 @@ Repasar imagen
 			- Pull model: client pull work from server, client has bussines logic for processing work, store state and handles load balancing. Extra low level control (NOR RECOMMENDED)
 
 
-* MICROSOFT IDENTITY PLATFORM
+* MICROSOFT IDENTITY PLATFORM (ENTRA ID)
 
 	* Components:
 		- OAuth 2.0 and OpenID Connect standard-compliant authentication service
@@ -398,7 +398,7 @@ Repasar imagen
 		- permissions = scopes
 		- Permission types:
 			- DELEGATED ACCESS:
-				- App has a signed-in user. The app acts as a signed-in users when it makes calls to target resource.
+				- App has a signed-in user. The app acts as a signed-in users when it makes calls to target resource. (Microsoft entra id)
 			- APP ONLY ACCESS:
 				- App doesn't have a signed-in user. Only administrator can consent permissions for this app
 		- Consents: TO PRACTICE
@@ -432,6 +432,49 @@ Repasar imagen
 				*** APP ONLY ACCESS ***
 				- If you need request microsoft graph or other services from the backend, you need to use client credentials or certificate
 			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
+
+	* SAS
+		- Signed URI that point to one or more storage resources
+		- Includes a Token that indicates how the resources might be accessed by the client
+		
+		- Types:
+			- USER DELEGATION SAS: (RECOMMENDED)
+				Delegation SAS secured with microsoft entra credentials and permissions for the SAS. (BLOB STORAGE)
+			- SERVICE SAS:
+				Service SAS secured with storage account key. (BLOB, QUEUE, TABLE, AZURE FILES)
+			- ACCOUNT SAS:
+				Account SAS secured with storage account key. Delegate access to resources in one or more of the storage services.
+			- SAS = URI + Authorization params
+				- sp (access rights)
+				- st, se (start access datatime, end access datetime)
+				- sv (version of the storage API)
+				- sr (kind of storage, blob, queue, etc)
+				- sig (cryptographic signature)
+			- When to use:
+				- Service where users read and write their own data to my storage account. (front end proxy service / SAS provider service)
+				- SAS is required when you want to copy Blobs or files to other blobs/storage accounts
+			- STORED ACCESS POLICIES:
+				- Consists of the start time, expiry time, and permissions for the signature (SERVICE LEVEL SAS).
+				- You can create service level SAS (BLOB, QUEUE, TABLE, AZURE FILES) using existing stored access policies or setting custom properties
+				- Services that support (BLOB, QUEUE, TABLE, AZURE FILES)
+
+* MICROSOFT GRAPH
+	
+	- Microsoft graph Connectors: Incoming data direction (external data sources: Jira, Google drive, etc)
+	- Microsoft graph Data Connect: Cached data serves as data source for azure development tools
+	- You need auth tokens of an app registration. to request microsoft graph api
+	- Resources: me, teams, groups, etc
+	- Query parameters: filters
+
+
+
+
+
+
+
+
+
+
 
 
 
