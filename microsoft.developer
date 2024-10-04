@@ -458,6 +458,7 @@ Repasar imagen
 				- You can create service level SAS (BLOB, QUEUE, TABLE, AZURE FILES) using existing stored access policies or setting custom properties
 				- Services that support (BLOB, QUEUE, TABLE, AZURE FILES)
 
+
 * MICROSOFT GRAPH
 	
 	- Microsoft graph Connectors: Incoming data direction (external data sources: Jira, Google drive, etc)
@@ -465,6 +466,23 @@ Repasar imagen
 	- You need auth tokens of an app registration. to request microsoft graph api
 	- Resources: me, teams, groups, etc
 	- Query parameters: filters
+
+	* SDK
+		- Sevice library: models, request builders from graph metadata
+		- Core library: features to work with graph services
+		- TO REQUEST:
+			- YOU MUST CHOOSE THE AUTHENTICATION PROVIDER:
+				- Authorization code provider - (DELEGATED)
+				- Client credentials provider - (APP ONLY)
+				- On-behalf-of provider - (DELEGATED)
+				- Interactive provider - (DELEGATED)
+				- Integrated Windows provider - (DELEGATED)
+				- Username/password provider - (DELEGATED)
+				- Device code provider - (DELEGATED)
+					########## - YOU NEED CERTIFICATE OR CLIENT SECRET in client credentials case ##########
+					########## - YOU NEED TO ENABLE MOBILE AND DESKTOP FLOWS in device code case ##########
+			- YOU MUST ADD THE ENOUGH PERMISSIONS FOR THE APP REGISTRATION
+			- YOU NEED TO GRANT PERMISSION AS ADMIN USER IF NEEDED
 
 
 
