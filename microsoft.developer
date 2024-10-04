@@ -401,7 +401,15 @@ Repasar imagen
 				- App has a signed-in user. The app acts as a signed-in users when it makes calls to target resource. (Microsoft entra id)
 			- APP ONLY ACCESS:
 				- App doesn't have a signed-in user. Only administrator can consent permissions for this app
-		- Consents: TO PRACTICE
+		- Consents:
+			- STATIC USER CONSENT:
+				- Azure portal defined permissions (app configuration)
+			- INCREMENTAL AND DYNAMIC USER CONSENT:
+				- Ignore static and request permissions incrementally
+				- To do so, specify the scopes your app need at any time by including new scopes in "scope" parameter when requesting access token (without the need to predefine them in the app registration)
+				- The user has to consent the new permissions (ONLY APPLIES TO DELEGATED PERMISSIONS!!!!!!)
+			- ADMIN CONSENT:
+				- Is required when your app needs access to certain high-privilege permissions
 		- Conditional access: TO PRACTICE
 
 	* MSAL:
@@ -483,6 +491,19 @@ Repasar imagen
 					########## - YOU NEED TO ENABLE MOBILE AND DESKTOP FLOWS in device code case ##########
 			- YOU MUST ADD THE ENOUGH PERMISSIONS FOR THE APP REGISTRATION
 			- YOU NEED TO GRANT PERMISSION AS ADMIN USER IF NEEDED
+			- You can interact with all the services of microsoft graph using the selected authentication provider
+			- There are some endpints that don't work using client credentials (/me)
+
+	* Request:
+		- You can use MSAL to acquire access token to microsoft graph (specifying scopes)
+
+	* BEST PRACTICES:
+		- Use least privilege
+		- Use the correct permission type based on scenarios
+		- Consider the end user and admin experience (consents)
+		- Consider multi-tenant applications
+		- Handle responses effectively (pagination, Evolvable enumerations)
+		- Cache locally for specific scenarios to avoid make a lot of requests
 
 
 
