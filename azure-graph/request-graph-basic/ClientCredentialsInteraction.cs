@@ -15,9 +15,9 @@ public static class ClientCredentialsInteraction
         var scopes = new[] { "https://graph.microsoft.com/.default" };
 
         // Values from app registration
-        var clientId = "1bb1b054-6e4d-4d43-977e-6f2c33ce452a";
-        var tenantId = "27b8e21b-adae-4ec5-8fe0-85042b64d2d4";
-        var clientSecret = "ulB8Q~0B68gDsNCYSSS3t5FPNsFmDvrtTKVDvc4v";
+        var clientId = "";
+        var tenantId = "";
+        var clientSecret = "";
 
         // using Azure.Identity;
         var options = new ClientSecretCredentialOptions

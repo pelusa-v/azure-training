@@ -11,10 +11,10 @@ public static class DeviceCodeInteraction
 
         // Multi-tenant apps can use "common",
         // single-tenant apps must use the tenant ID from the Azure portal
-        var tenantId = "27b8e21b-adae-4ec5-8fe0-85042b64d2d4";
+        var tenantId = "";
 
         // Value from app registration
-        var clientId = "1bb1b054-6e4d-4d43-977e-6f2c33ce452a";
+        var clientId = "";
 
         var options = new DeviceCodeCredentialOptions
         {
