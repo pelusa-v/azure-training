@@ -503,8 +503,46 @@ Repasar imagen
 		- Consider the end user and admin experience (consents)
 		- Consider multi-tenant applications
 		- Handle responses effectively (pagination, Evolvable enumerations)
-		- Cache locally for specific scenarios to avoid make a lot of requests
+		- Cache locally for specific scenarios to avoid make a lot of requests to graph
 
+
+* AZURE CACHE FOR REDIS:
+	
+	- Provides in memory data store absed on REDIS
+	- To process large volumes of app requests bykeeping frequently accessed data in the server memory (read and write quickly)
+	- Offers REDIS OPEN SOURCE and REDIS ENTERPRISE
+
+	* SCENARIOS:
+		- DATA CACHE (load data into the cache only as needed)
+		- CONTENT CACHE (quick access to static content compared to backend datastores - templates, headers, footers)
+		- SESSION STORE (user session data, shooping carts, us cookies as key to query the inmemory cache, faster than relational db)
+		- JOB AND MESSAGE QUEUING (for requests that take time to execute)
+		- DISTRIBUTED TRANSACTIONS (Redis supports executing a batch of commands as a single transaction)
+
+	* TIERS: (determines the size and performance)
+		- BASIC < STANDARD < PREMIUM < ENTERPRISE < ENTERPRISE FLASH
+		- ENTERPRISE and ENTERPRISE FLASH allows clustering to automaticlly split dataset amoing multiple nodes
+
+	* CONFIGURE AN INSTANCE:
+		- The name contains numbers, letters and '-' (1 - 63 char), cannot startor end with '-', consecutive '-' invalid
+		- Always place the cache instance and app in the same region (or as close as possible, even outside of azure), different region = more latency, less reliability
+		- Microsoft recommends to use Standard tier or higher for production systems.
+
+	* ACCESS:
+		- Redis command line tool
+		- Add TTL (Time to live - expiration time) to keys if needed. Redis stores the date when a key expires
+		- Expire time resolution is always 1 ms, and expiration can be set using s or ms
+		- Use from client:
+			- The host name is the public internet addess of the cache instance. Use access key (primary or secondary)
+			- Use from .NET
+				- Add package StackExchange.Redis
+				- Use host address, port, access key or CONNECTION STRING from azure
+				- Connection string contains "ssl" (encrypted communication) and "abortConnection" (allows a connection to be created even if the server is unavailable at that moment)
+				- The ConnectionMultiplexer class is optimized to manage connections efficiently
+				- Get the db instance from the redis connection (after execute ConnectionMultiplexer.Connect)
+				- You can execute specific commands in db object, or defined methods
+				- You can store complex values (classes) and then serialize to JSON or XML and then retrieve and deserialize to class again.
+				- Dispose the connection object when finish
 
 
 
