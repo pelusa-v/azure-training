@@ -545,6 +545,25 @@ Repasar imagen
 				- Dispose the connection object when finish
 
 
+* CDN:
+	- Content Delivery Network, uses CDN POPs (this contains edge servers)
+	- PROS:
+		- Better performance
+		- Improved user experience
+		- Less traffic is sent to the origin server
+		- Large scaling
+	- HOW IT WORKS:
+		- USER1 request content
+		- DNS routes the request to the best POP location (geographically closets)
+		- If the edge servers in POP don't have the content in cache, POP request the content from the origin server
+		- Origin returns the content to edge server
+		- An edge server in POP caches the content and return the content to USER1
+		- Content remains cached on edge server until TTL (time to live, DEFAULT 7 DAYS if origin didn't specify that)
+		- USER2 request content
+		- If DNS routes to the same POP and the content hasn't expired, edge server returns the content from cache
+
+
+
 
 
 
