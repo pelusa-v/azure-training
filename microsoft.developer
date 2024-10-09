@@ -556,15 +556,57 @@ Repasar imagen
 		- USER1 request content
 		- DNS routes the request to the best POP location (geographically closets)
 		- If the edge servers in POP don't have the content in cache, POP request the content from the origin server
-		- Origin returns the content to edge server
+		- Origin returns the content to edge server (updated copy)
 		- An edge server in POP caches the content and return the content to USER1
 		- Content remains cached on edge server until TTL (time to live, DEFAULT 7 DAYS if origin didn't specify that)
 		- USER2 request content
 		- If DNS routes to the same POP and the content hasn't expired, edge server returns the content from cache
+
+	 - TIME TO LIVE:
+	 	- TTL gets determined by the Cache-Control HEADER in the response from the origin
+	 	- Default values:
+	 		- Generalized web delivery optimizations: seven days (one week)
+			- Large file optimizations: one day
+			- Media streaming optimizations: one year
+
+	- CACHING AND RULES:
+		- CACHING RULES: (endpoint level)
+			- Global rules (affects all requests to the endpoint, overrides any http cache header)
+			- Custom rules (match specific paths, file extensions, overrides global caching)
+
+			- STANDARD RULES ENGINE:
+				- Rule = match conditions + action
+
+		- QUERY STRING CACHING:
+			- Uses query string
+
 	- REQUIREMENTS:
 		- Azure subscription
-		- Azure CDN profile (collection of cdn endpoints)
+		- Azure CDN profile (collection of cdn endpoints which users can customize with cdn behavior and access)
+		- Pricing gets applied at CDN profile level
+	- FEATURES:
+		- Dynamic site acceleration
+		- CDN caching rules
+		- HTTPS custom domain support
+		- Azure diagnostics logs
+		- File compression
+		- Geo-filtering (allow or block content in specific country/region)
 
+	- PURGE CACHED CONTENT: (Force all edege nodes to retrieve new updated assets)
+		- Endpoint level (one or more)
+		- File level
+		- Wildcard level (path)
+		- Commands:
+			 - az cdn endpoint purge: where a large amount of data is invalidated and should be updated in the cache
+			 - az cdn endpoint load: where app creates a large ammount of assets and you want to imprive performance before any request (caching the assets before)
+
+	- SDK: Microsoft.Azure.Management.Cdn (client: CdnManagementClient)
+
+
+
+* APPLICATION INSIGHTS
+	- Provides Application Performance monitoring (APM) features
+	- Proactive (how an app is performing) and Reactive (determine the couse of an incident) monitoring
 
 
 
