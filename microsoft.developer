@@ -413,7 +413,7 @@ Repasar imagen
 		- Conditional access: TO PRACTICE
 
 	* MSAL:
-		The librery enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, etc.
+		The library enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, etc.
 		Authentication flows:
 			- Authorization code
 			- Client credentials
@@ -605,9 +605,70 @@ Repasar imagen
 
 
 * APPLICATION INSIGHTS
+	- Extenssion of AZURE MONITOR
 	- Provides Application Performance monitoring (APM) features
 	- Proactive (how an app is performing) and Reactive (determine the couse of an incident) monitoring
+	- Store logging data, collect metrics and telemetry data (telemetry is sent to application insights for analysis and presentation)
+	- Monitors:
+		- request / failure rates, response times (internal and dependencies), where users are, etc
+		- exceptions
+		- page views load performance
+		- ajax calls
+		- performance counters, memory, CPU, network usage
+		- host diagnostics from Docker or Azure
+		- trace logs
+		- custom events
 
+	- Metrics:
+		- Log-based metrics:
+			- FOR DATA ANALYSIS DIAGNOSTICS
+			- Behind the scene are translated into Kusto queries from stored events
+			- Application insights stores all collected events as logs (manually sent from code skd or from autoinstrumentation)
+		- Standard metrics:
+			- FOR REAL TIME ALERTING
+			- Stored as preaggregated time series (better performance at query time)
+			- Application insights stores metrics as preaggregated time series, and only with key dimensions
+
+	- Connect to webapp:
+		- Download the SDK (Microsoft.Application.Insights.AspNetCore), and add Services.AddApplicationInsightsTelemetry();
+		- You don't need to add application insights connection string to appsettings because it comes by default in your webapp (as an environment variable) when you enable application insights when creating the app.
+
+	- INSTRUMENTING:
+		- Is enabling an app to capture telemetry
+		- two ways:
+			- Automatic instrumentation (AUTOINSTRUMENTATION)
+			- Manual instrumentation
+
+		- AUTOINSTRUMENTATION:
+			- Enables collection through configuration without touching the app's code (LESS CONFIGURABLE)
+
+		- MANUAL INSTRUMENTATION:
+			- Coding against application insights or OpenTelemetry API (Install sdk, and use it from code to capture dependencies not captured with autoinstrumentation)
+			- Use the SDK if you require csutom events and metrics, control over telemetry flow, autoinstrumentation isn't available
+			- two ways:
+				- Application insigths SDKs
+				- Azure Monitor OpenTelemetry Distros
+
+		- OPEN TELEMETRY TERMS (replacing legacy application insights terms):
+			- autocollectors = instrumentation libraries
+			- channel = exporter
+			- codeless / agent-based = autoinstrumentation
+			- traces = logs
+			- requests = server spans
+			- dependencies = client, internal, etc
+			- operation ID = trace ID
+			- ID or operation parent ID = span ID
+
+	- AVAILABILITY TESTS AND TROUBLESHOOT:
+		- Application insights sends requests to webapp at regular intervals from points around the world to alert if the app isn't responding or rsponds too slowly.
+		- 100 availabilty tests per application insights.
+		- Availabitlity tests types:
+			- Standdard test (single test http/https request)
+			- Custom TrackAvailability test (from code using sdk in another app)
+			- URL ping test (classic ping, deprecated)
+
+		- Application map (troubleshoot app performance)
+			- 
 
 
 
