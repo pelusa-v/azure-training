@@ -561,6 +561,10 @@ Repasar imagen
 		- Content remains cached on edge server until TTL (time to live, DEFAULT 7 DAYS if origin didn't specify that)
 		- USER2 request content
 		- If DNS routes to the same POP and the content hasn't expired, edge server returns the content from cache
+	- REQUIREMENTS:
+		- Azure subscription
+		- Azure CDN profile (collection of cdn endpoints)
+
 
 
 
