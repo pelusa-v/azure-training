@@ -466,6 +466,29 @@ Repasar imagen
 				- You can create service level SAS (BLOB, QUEUE, TABLE, AZURE FILES) using existing stored access policies or setting custom properties
 				- Services that support (BLOB, QUEUE, TABLE, AZURE FILES)
 
+	* MANAGED IDENTITIES:
+		* Apps can use managed identities to obtain Microsoft Entra tokens withous having to manage any credentials.
+		* It's like giving your webapp a unique "personality" in the form of credentials that can interact with other resources
+		* YOU MUST CHOOSE BETWEEN TRADITIONAL AUTHENTICATION (DELEGATED OR APP ONLY ACCESS VIA MICROSOFT ENTRA ID) and MANAGED IDENTITIES depends on the type of the application when you need to consume azure resources from a resource
+		* MANAGED IDENTITY is simpler to use when the app (webapp, function, etc) needs access to azure resources WITHOUT TO STORE OR MANAGE CREDENTIALS
+		* IF YOU USE MANAGED IDENTITY, YOU'LL BE USING DefaultAzureCredential AS CREDENTIALS WHEN USE THE SDK OF THE RESOURCES TO CONSUME
+
+		* SYSTEM ASSIGNED MANAGED IDENTITY:
+			- Created as part of an azure resource (webapp, vm, etc, tied to the azure resource)
+			- Can't be shared
+		* USER ASSIGNED MANAGED IDENTITY:
+			- Created as stand-alone azure resource
+			- Can be shared
+
+		* Can be used to authenticate servicees that support Microsoft Entra auth.
+
+		* WEB APP EXAMPLE:
+			- ENABLE SYSTEM ASSIGNED MANAGED IDENTITY
+			- IN WEBAPP SET THE SPECIFIC PERMISSION (in this case READER PERMISSION over a key vault rsource) (option 1)
+				- Or Add the ROLE ASSIGNMENT in the key vault pointing to the webapp (option 2)
+			- USE DefaultAzureCredential from code (SDK) so you can retrieve keys and secrets from key vault (DefaultAzureCredential try to authenticate via multiple mechanisms, environment variable, interactive, etc)
+
+
 
 * MICROSOFT GRAPH
 	
@@ -504,6 +527,47 @@ Repasar imagen
 		- Consider multi-tenant applications
 		- Handle responses effectively (pagination, Evolvable enumerations)
 		- Cache locally for specific scenarios to avoid make a lot of requests to graph
+
+
+* AZURE KEY VAULT:
+	- Service for securely storing and accessing secrets (API keys, passwords, certificates, cryptographic keys)
+	- Container types:
+		- Vaults (software and HSM-backed keys, secrets and certificates)
+		- Managed hardware security module (HSM) pools (HSM-backed keys)
+	- Access requires authentication and authorization (user o application)
+		- Authentication: Microsoft Entra Id
+		- Authorization: Azure RBAC or Key Vault access policy
+	- Diagnostic Settings:
+		- Enable logging for vaults to:
+			- Archive to a storage account
+			- Stream to an event hub
+			- Send logs to Azure Monitor Log
+
+	- BEST PRACTICES:
+		- Authentication:
+			- Managed identities for Azure resources (BEST PRACTICE)
+			- Service principal and certificate (NOT RECOMMENDED)
+			- Service principal and secret (NOT RECOMMENDED)
+		- Azure key vault use TLS (to protect data when it's traveling between Key Vault and clients) and PFS (to protect connection between customers)
+		
+		- A vault per application per environment
+		- Control access to vault (sensitive data)
+		- Backup
+		- Logging
+		- Recovery (soft delete)
+
+	- AUTHENTICATION TO KEY VAULT:
+		- System-assigned managed identity.
+		- Using Azure SDK MSAL
+
+	- USE:
+		- SDK, CLI, PORTAL
+		- CLI:
+			- az group create
+			- az keyvault create
+			- az keyvault secret show
+			- az keyvault secret set
+
 
 
 * AZURE CACHE FOR REDIS:
@@ -664,11 +728,11 @@ Repasar imagen
 		- 100 availabilty tests per application insights.
 		- Availabitlity tests types:
 			- Standdard test (single test http/https request)
-			- Custom TrackAvailability test (from code using sdk in another app)
+			- Custom TrackAvailability test (from code using sdk in another app, complex requests, auth flows, etc)
 			- URL ping test (classic ping, deprecated)
 
 		- Application map (troubleshoot app performance)
-			- 
+			- You need to configure the app (sdk installed) and resources (enabling Distributed Tracing) to use the application map and identify bottlenecks
 
 
 
