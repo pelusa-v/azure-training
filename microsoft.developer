@@ -485,7 +485,8 @@ Repasar imagen
 		* WEB APP EXAMPLE:
 			- ENABLE SYSTEM ASSIGNED MANAGED IDENTITY
 			- IN WEBAPP SET THE SPECIFIC PERMISSION (in this case READER PERMISSION over a key vault rsource) (option 1)
-				- Or Add the ROLE ASSIGNMENT in the key vault pointing to the webapp (option 2)
+				- Or Add the ROLE ASSIGNMENT in the key vault (IAM SECTION) pointing to the webapp (option 2)
+				- The key vault must be RBAC (not access policy)
 			- USE DefaultAzureCredential from code (SDK) so you can retrieve keys and secrets from key vault (DefaultAzureCredential try to authenticate via multiple mechanisms, environment variable, interactive, etc)
 
 
