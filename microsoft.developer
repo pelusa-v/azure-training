@@ -736,6 +736,40 @@ Repasar imagen
 			- You need to configure the app (sdk installed) and resources (enabling Distributed Tracing) to use the application map and identify bottlenecks
 
 
+* AZURE APP CONFIGURATION
+	- Service to centrally manage application settings
+	- Stores data as key-value pairs
+	- App configuration doesn't version key values. Use labels to version.
+	- Each key-value is uniquely identified by its key plus a label
+	- Scenarios:
+		- Centralize management and distribution of hierarchical configuration data for different environments and geographies
+		- Dynamically change application settings without the need to redeploy or restart an app
+		- Control feature availability in real time
+	
+	- TO USE IN CODE:
+		- App Configuration Provider for the specific programming language/framework
+	
+	- FORMAT:
+		AppName:Service1:ApiEndpoint
+		AppName:Service2:ApiEndpoint
+		(invaid: "*", ",", "\", escape invalid using "\" at the begining)
+
+	- LABEL (default: key-value has no label, used to differentiate key-values with the same Key):
+		Key = AppName:DbEndpoint1 & Label = Test
+		Key = AppName:DbEndpoint2 & Label = Staging
+		Key = AppName:DbEndpoint3 & Label = Production
+		("\0" = explicitly reference key-value without a label)
+
+	- APPLICATION FEATURE:
+		- Feature flag: Flag (true or false) to enable or disable a code block
+		- Feature manager: Module of application manager to have extra functionality over feature
+		- Filter: Rule for evaluating the state of a feature
+		- Declaration:
+			- 
+
+
+
+
 
 
 
