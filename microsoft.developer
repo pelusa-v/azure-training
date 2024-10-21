@@ -764,8 +764,19 @@ Repasar imagen
 		- Feature flag: Flag (true or false) to enable or disable a code block
 		- Feature manager: Module of application manager to have extra functionality over feature
 		- Filter: Rule for evaluating the state of a feature
-		- Declaration:
-			- 
+			- Types:
+				- Targeting filter: test feature only for specific users or groups
+				- Time window filter: test feature during a specific date range
+				- Custom filter
+
+	- ENCRYPTION:
+		- It encrypts sensitive information at rest using AES256
+		- When customer-managed key capability is enabled, app configuration uses a manged identity assigned to the app config instance to authenticate with Microsoft Entra ID.
+		- Managed identity then calls Azure Key Vault and wraps the app configuration instance's encryption key.
+		- The wrapped encryption key is then stored and the unwrapped encryption key is cached within app config for ONE HOUR.
+		- App config refreshes the unwrapped version of the app config instance's encryption hourly.
+
+	- You can use private endpoints to allow clients on a virtual network to securely access data over a private link.
 
 
 
