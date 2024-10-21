@@ -781,8 +781,78 @@ Repasar imagen
 
 
 
+* API MANAGEMENT:
+	- Core functionalities to ensure a successful aPI program.
+	- Components:
+		- API GATEWAY: route calls to backends, verify request credentials, quotas and limits, cache, logs, metrics, etc.
+			- Executes CROSS-CUTTING tasks:
+				- Authentication, SSL, rate limiting, quotas, routing.
+			- Without API GATEWAY involves problems.
+		- MANAGEMENT PLANE: api service settings, define api schema, package api -> products, policies, manage users
+		- DEVELOPER PORTAL: api docs, call api via console, manage api keys
+	- PRODUCTS:
+		- A PRODUCT has one or more APIs, it has a title, descriptiom and terms of use.
+		- OPEN: Can be used without subscription
+		- PROTECTED: It needs subscription (require ADMIN APPROVAL or AUTOAPPROVED)
+	- GROUPS: (limit the visibility of products to developers)
+		- Administrators, Developers, Guests
+		- Allows custom groups (or external microsoft entra)
+	- POLICIES
+		- Collection of statements executed sequentially on the request or response.
+		- Simple XML doc that describes statements in sections:
+			- inbound (request)
+			- backend (before request is forwarded to backend)
+			- outbound (response)
+			- on-error (error)
+		- You can use policy expressions if you need (C# statement, like razor pages), the context variable is provided by default (http context of .net)
+		- There are a large number of pre defined policies you can use at different level and scope
+		- You can use <base /> to inherit policies
+		- Popular policies:
+			
+			- choose: classic if-else
+							<choose>
+							    <when condition="Boolean expression | Boolean constant">
+							        <!— one or more policy statements to be applied if the above condition is true  -->
+							    </when>
+						    </choose>
 
+			- forward: forward incoming request to specific backend
+							<forward-request timeout="time in seconds" follow-redirects="true | false"/>
 
+			- limit: limit number of requests
+							<limit-concurrency key="expression" max-count="number">
+							        <!— nested policy statements -->
+							</limit-concurrency>
+
+			- log: send messages to event hub
+							<log-to-eventhub logger-id="id of the logger entity" partition-id="index of the partition where messages are sent" partition-key="value used for partition assignment">
+							  Expression returning a string to be logged
+							</log-to-eventhub>
+
+			- mock: mock APIs and operations
+							<mock-response status-code="code" content-type="media type"/>
+
+			- retry: retries execution of child policies
+							<retry
+							    condition="boolean expression or literal"
+							    count="number of retry attempts"
+							    interval="retry interval in seconds"
+							    max-interval="maximum retry interval in seconds"
+							    delta="retry interval delta in seconds"
+							    first-fast-retry="boolean expression or literal">
+							        <!-- One or more child policies. No restrictions -->
+							</retry>
+
+			- return: abort pipeline execution policies
+							<return-response response-variable-name="existing context variable">
+							  <set-header/>
+							  <set-body/>
+							  <set-status/>
+							</return-response>
+
+	- HOSTING:
+		- Managed (All API traffic flows through Azure)
+		- Self-hosted (For hybrid and multicloud or on-premise scenarios)
 
 
 
