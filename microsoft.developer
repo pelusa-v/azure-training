@@ -853,6 +853,38 @@ Repasar imagen
 	- HOSTING:
 		- Managed (All API traffic flows through Azure)
 		- Self-hosted (For hybrid and multicloud or on-premise scenarios)
+	
+	- SECURITY:
+		- Subscription keys:
+			- Subscription has two keys (rotation)
+			- Including this in http request (header or query parameter) (Header: Ocp-Apim-Subscription-Key)
+			- Devs who need to consume published APIs can get subscriptions (subscription requst for PROTECTED products)
+			- Scopes: ALL APIS (all the gateway), SINGLE API (specific api), PRODUCT (colelction of apis of product)
+		- OAUTH2
+		- IP whitelist
+		- Client certificates:
+			- TLR security
+			- Are signed
+			- API Management gateway inspect the certificate within the request and check properties: Certificate Authority (CA), Thumbprint, Subject, Expiration Date
+			- Validation: Check who issued the certificate, If it's issued by partner, check that it came from them
+
+
+* EVENT GRID
+	- Pub Sub message distribution
+	- For event driven serverless architecture
+	- Uses HTTP and MQTT
+	- Maximum allowed size for event: 1 MB
+	* (event source) publisher ----> azure grid -----> subscriberA, subscriberB, ... subscriberN (consumer can be the publisher too)
+	- publisher can be a PARTNER (sends events from its system to make them available to azure customers)
+	- Event source: Azure Storaege, IoT Hub, Custom app, etc
+	- Topic: A collection of related events:
+		- SYSTEM TOPICS: Provide data about the resource. Access = you can suscribe to events
+		- CUSTOM TOPICS: Custom apps and third-party event sources
+		- PARTNER TOPICS: To subscribe to events published by a PARTNER
+	- Event subscription: Tells grid whic events on a topic you want to receive
+	- Event handler: Part of grid where the event is sent. Process the event
+
+
 
 
 
