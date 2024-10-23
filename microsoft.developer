@@ -874,15 +874,57 @@ Repasar imagen
 	- For event driven serverless architecture
 	- Uses HTTP and MQTT
 	- Maximum allowed size for event: 1 MB
+	- Maximum size of events array received in Event grid: 1 MB
 	* (event source) publisher ----> azure grid -----> subscriberA, subscriberB, ... subscriberN (consumer can be the publisher too)
 	- publisher can be a PARTNER (sends events from its system to make them available to azure customers)
-	- Event source: Azure Storaege, IoT Hub, Custom app, etc
+	- Event source: 
+		- Azure Storaege, IoT Hub, Custom app, etc.
+		- Send events to Event Grid in an array (max length size: 1 MB)
+		- If an event or array > 1 MB -----> 413 PAYLOAD TOO LARGE
+		- Operations are charged in 64 KB increments. (1 event of 130 KB ----> 3 events)
 	- Topic: A collection of related events:
 		- SYSTEM TOPICS: Provide data about the resource. Access = you can suscribe to events
 		- CUSTOM TOPICS: Custom apps and third-party event sources
 		- PARTNER TOPICS: To subscribe to events published by a PARTNER
-	- Event subscription: Tells grid whic events on a topic you want to receive
+	- Event subscription: Tells grid which events on a topic you want to receive
 	- Event handler: Part of grid where the event is sent. Process the event
+
+	* SCHEMAS:
+		- Event grid schema
+
+			[
+			  {
+			    "topic": string,
+			    "subject": string,  // to give the ability to filter events to the subscriber (file extensions, paths, containers, etc)
+			    "id": string,
+			    "eventType": string,
+			    "eventTime": string,
+			    "data":{
+			      object-unique-to-each-publisher  // defined by publisher for custom topics
+			    },
+			    "dataVersion": string,
+			    "metadataVersion": string
+			  }
+			]
+
+			different header: "content-type":"application/json; charset=utf-8"
+
+		- Cloud event schema (open specification)
+
+			{
+			    "specversion": "1.0",
+			    "type": "Microsoft.Storage.BlobCreated",  
+			    "source": "/subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Storage/storageAccounts/{storage-account}",
+			    "id": "9aeb0fdf-c01e-0131-0922-9eb54906e209",
+			    "time": "2019-11-18T15:13:39.4589254Z",
+			    "subject": "blobServices/default/containers/{storage-container}/blobs/{new-file}",
+			    "dataschema": "#",
+			    "data": {
+			        object-unique-to-each-publisher
+			    }
+			}
+
+			different header: "content-type":"application/cloudevents+json; charset=utf-8"
 
 
 
