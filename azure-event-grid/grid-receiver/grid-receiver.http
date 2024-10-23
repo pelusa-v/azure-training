@@ -1,0 +1,6 @@
+@grid_receiver_HostAddress = http://localhost:5125
+
+GET {{grid_receiver_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
