@@ -489,6 +489,15 @@ Repasar imagen
 				- The key vault must be RBAC (not access policy)
 			- USE DefaultAzureCredential from code (SDK) so you can retrieve keys and secrets from key vault (DefaultAzureCredential try to authenticate via multiple mechanisms, environment variable, interactive, etc)
 
+	* CONFIGURE MICROSOFT ENTRA ID ACCESS:
+		* In some service, go to IAM, and add role assignment, add role, and member:
+			- User, group, service principal (for a custom app - APP REGISTRATION - for example)
+			- Managed Identity (related with an azure service)
+		* For app registration:
+			- Get secrets and consume the service from SDK using ClientSecretCredential or specific credentials type.
+		* For delegated access:
+			- Get the token using authentication/authorization at app level, or use PublicClientApplicationBuilder to acquire token manually, then make a request to the desired service (similar to consume graph).
+
 
 
 * MICROSOFT GRAPH
@@ -517,6 +526,7 @@ Repasar imagen
 			- YOU NEED TO GRANT PERMISSION AS ADMIN USER IF NEEDED
 			- You can interact with all the services of microsoft graph using the selected authentication provider
 			- There are some endpints that don't work using client credentials (/me)
+		- https://learn.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=csharp
 
 	* Request:
 		- You can use MSAL to acquire access token to microsoft graph (specifying scopes)
@@ -925,6 +935,8 @@ Repasar imagen
 			}
 
 			different header: "content-type":"application/cloudevents+json; charset=utf-8"
+		* All remaining headers are the same
+
 
 
 
