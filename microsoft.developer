@@ -896,7 +896,7 @@ Repasar imagen
 		- SYSTEM TOPICS: Provide data about the resource. Access = you can suscribe to events
 		- CUSTOM TOPICS: Custom apps and third-party event sources
 		- PARTNER TOPICS: To subscribe to events published by a PARTNER
-	- Event subscription: Tells grid which events on a topic you want to receive
+	- Event subscription: Tells grid which events on a topic you want to receive - Subscribers can be azure services (storage account, functions, etc) or CUSTOM WEBHOOKS
 	- Event handler: Part of grid where the event is sent. Process the event
 
 	* SCHEMAS:
@@ -904,16 +904,16 @@ Repasar imagen
 
 			[
 			  {
-			    "topic": string,
-			    "subject": string,  // to give the ability to filter events to the subscriber (file extensions, paths, containers, etc)
-			    "id": string,
-			    "eventType": string,
-			    "eventTime": string,
-			    "data":{
+			    "topic": string,  ------> (optional)
+			    "subject": string,  ------> (REQUIRED) // to give the ability to filter events to the subscriber (file extensions, paths, containers, etc)
+			    "id": string,   ------> (REQUIRED)
+			    "eventType": string, ------> (REQUIRED)  // event type filtering
+			    "eventTime": string,------> (REQUIRED)
+			    "data":{. ------> (optional)
 			      object-unique-to-each-publisher  // defined by publisher for custom topics
 			    },
-			    "dataVersion": string,
-			    "metadataVersion": string
+			    "dataVersion": string,  ------> (optional)
+			    "metadataVersion": string. ------> (optional)
 			  }
 			]
 
@@ -936,6 +936,122 @@ Repasar imagen
 
 			different header: "content-type":"application/cloudevents+json; charset=utf-8"
 		* All remaining headers are the same
+
+	* EVENT SUBSCRIPTION:
+		- Grid tries to send each event at least once for each subscription, if there's a failure, grid retries based on RETRY SCHEDULE or RETRY POLICY
+		- Grid doesn't guarantee order for event delivery
+		
+		- RETRY SCHEDULE:
+			- status code 400, 412 for azure resources -> dead-letter event, doesn't retry
+			- status code 400, 412, 401 for webhook -> dead-letter event, doesn't retry
+			- (if dead-letter isn't configured, events will be dropped)
+			- Normal scenario:
+				- Grid waits 30sfor response, if endpoint hasn't respond, is queued for retry.
+				- Exponential backoff retry policy
+
+		- RETRY POLICY
+			- An event is dropped if:
+				- Maximum number of attempts (1 - 30 attempts)
+				- Event TTL (Time to live) (1 - 1440 min)
+			- If not, retry
+
+		- OUTPT BATCHING: (hish-throughput scenarios)
+			- Max events per batch
+			- Preferred batch size in KB (target ceiling):
+				- batch size < preferred (more events aren't available when publishing)
+				- batch size > preferred (single event is larger than prefered)
+
+		- DELAYED DELIVERY: If the first 10 events fail, grid add delays to all subsequent retries
+		- DEAD-LETTER EVENTS:
+			- Requires an storage account
+			- If grid can't deliver the event within certain time or after trying to deliver a number of times, it can send the undelivered event to storage account.
+			- It's disable by default
+			- This process is executed if:
+				- Event isn't delivered whitin TTL
+				- Number of tries > limit
+
+		- YOU CAN ADD CUSTOM DELIVERY PROPERTIES (Headers)
+
+	* AUTHENTICATION:
+		- Uses RBAC
+
+	* WEBHOOK
+		- Send a POST request to your endpoint
+		- Endpoint validation:
+			- SYNCHRONOUS HANDSHAKE (at subscription creation, grid sends an schema to validate)
+			- ASYNCHRONOUS HANDSHAKE (for third-party services)
+			- MANUAL VALIDATION (using a validationUrl valid for 5 min) for version 2018-05-01-preview
+
+	* FILTERING:
+		* event type
+		* event subject
+		* Grid allows ADVANCED FILTERIN using operators based on event data
+
+
+
+
+* EVENT HUBS:
+	- Stream million of events per second with LOW LATENCY
+	- Any SOURCE ----> Any DESTINATION
+	- Compatible with Apache KAFKA, Azure functions
+	- Supports AMQP, Apache Kafka, HTTPS
+	- AZURE SCHEMA REGISTRY: managing schemas of event streaming applications
+	- AZURE STREAM ANALYTICS: Analyze streaming data
+	- Allows automatically capture data in "Azure Blob Storage" or "Azure Data Lake Storage"
+
+	* COMPONENTS:
+		- Producer application (ingest data via DSK or Kafka client)
+		- Namespace (Contains one or more event hubs or Kafka Topics)
+		- Event Hubs/Kafka topic (Organize events into a topic, it has partitions)
+		- Partition (Used to scale an event hub, lane in a freeway)
+		- Consumer application (consume data by seeking through the event log and maintaining consumer offset. "Kafka consumer client" or "Event Hub SDKs client")
+		- Consumer group (logical group of consumer instances reads data from a topic)
+
+	* CAPTURE DATA:
+		- Azure blob storage and Azure Data Lake Storage are used to capture data (same or different region)
+		- Each partition is an independent segment of data and is consumed independently
+		- Data in partition ages off based on configurable retention period
+		- Captured data ----> APACHE AVRO FORMAT
+
+	* TRAFFIC:
+		- Controlled by THROUGHPUT UNITS
+		- THROUGHPUT UNIT ----> 1MB -----> 1K events/second (ingress) - 2K events/second (egress)
+		- Standard Event Hubs ---> 1 - 20 TU
+
+	* PROCESSING APPLICATION:
+		- Example:
+			- There is a website for residents to monitor activity of their houses
+			- 100K sensors sends data from houses (security)
+			- Sensors pushes data to an Event Hub with 16 partitions
+			- On the consuming end, it's necessary a mechanism that can read the events, consolidate them and upload to a blob storage
+			- Then this data is ready to be used in the website for residents
+
+		- Consumer client:
+			- Te event procesing application may need scaling, running multiple instances of the app and balancing the load among themselves
+			- EventProcessorClient (.NET and JAVA Azure Event Hubs SDKs)
+			- When create an EVENT PROCESSOR, you specify the functions that process events and errors (CLIENT RESPONSABILITY HANDLE THE EVENT)
+			- Execute as little processing as possible over received events.
+			- Code with Retry logic to ensure the consumer processes every message at least once
+
+			* CHECKPINT:
+				- Checkpointing is a process by which an event processor marks or commits the position of the last successfully processed event within a partition. 
+				- Marking a checkpoint is typically done within the function that processes the events and occurs on a per-partition basis within a consumer group.
+				- If an event processor disconnects from a partition, another instance can resume processing the partition at the checkpoint that was previously committed by the last processor of that partition in that consumer group
+
+			- Thread safety (Events from different partitions can be processed concurrently and any shared state that is accessed across partitions have to be synchronized)
+
+		- Ownership of partitions is distributed among all the active event processor instances associated with an event hub and consumer group combination
+		- For production:
+			- EventProcessorClient > EventHubConsumerClient (performance)
+
+	* ACCESS:
+		- Supports Microsoft Entra ID and SAS
+		- Supports authorization using MANAGED IDENTITIES, you need to sonfigure RBAC settings
+		- Roles:
+			- Azure event hubs DATA OWNER
+			- Azure event hubs DATA SENDER
+			- Azure event hubs DATA RECEIVER
+		- SDK: Azure.Messaging.EventHubs
 
 
 
