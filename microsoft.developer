@@ -1113,6 +1113,7 @@ Repasar imagen
 				- Timeout associated with the lock
 
 		- MESSAGE:
+			- Messages are transmitted as binary data (they need to be serialized to JSON, XML, etc)
 			- Payload + metadata (key-value pairs)
 			- Sometimes metadata alone is enough to carry information that the sender wants to communicate
 			- BROKER PROPERTIES control message-level functionality, help the apps route messages to particualr destinations:
@@ -1122,6 +1123,12 @@ Repasar imagen
 				- Multiplexed request/reply
 			- Payload:
 				- Opaque binary block
+
+		- USE:
+			- SDK for .NET
+			- Dispose client and sender after usage
+			- Initialize the client with conn string or credentials (AZURE Identity platform)
+			- Initialize sender specifying queue name or topic
 
 
 

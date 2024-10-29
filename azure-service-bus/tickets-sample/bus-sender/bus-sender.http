@@ -1,0 +1,6 @@
+@bus_sender_HostAddress = http://localhost:5195
+
+GET {{bus_sender_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
