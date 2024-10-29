@@ -21,8 +21,8 @@ app.UseHttpsRedirection();
 
 app.MapPost("/ticket/send/{name}", async (string name) =>
 {
-    var connString = "Endpoint=sb://testbusjp.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=hBse56bUoTadRt2LQQVvwpmINxLSLHHvl+ASbPUhulA=";
-    var queueName = "notifications";
+    var connString = "Some connection string";
+    var queueName = "some-queue-name";
     var service = new TicketService(connString, queueName);
     await service.SendTicketAsync(name);
 })
