@@ -879,7 +879,7 @@ Repasar imagen
 			- Validation: Check who issued the certificate, If it's issued by partner, check that it came from them
 
 
-* EVENT GRID
+* AZURE EVENT GRID
 	- Pub Sub message distribution
 	- For event driven serverless architecture
 	- Uses HTTP and MQTT
@@ -990,7 +990,7 @@ Repasar imagen
 
 
 
-* EVENT HUBS:
+* AZURE EVENT HUBS:
 	- Stream million of events per second with LOW LATENCY
 	- Any SOURCE ----> Any DESTINATION
 	- Compatible with Apache KAFKA, Azure functions
@@ -1052,6 +1052,80 @@ Repasar imagen
 			- Azure event hubs DATA SENDER
 			- Azure event hubs DATA RECEIVER
 		- SDK: Azure.Messaging.EventHubs
+
+
+
+
+* AZURE MESSAGE QUEUES SOLUTIONS
+	* COMPARISON
+		* AZURE SERVICE BUS QUEUES
+			(enterprise messaging)
+			- Solution needs to receive messages without polling the queue (built in in bus SERVICE BUS)
+			- Solution needs guaranteed FIFO order
+			- Solution needs automatic duplicate detection
+			- App requires to process messages as parallel long-running streams
+			- 64KB < messages < 256KB or 1MB depending of tier (Service Bus supports > 100MB)
+			- Solution requires rol-based access model to queues, permission for sender and receivers
+		* AZURE STORAGE QUEUES
+			(simple message buffering, scalable, low cost queueing)
+			- messages < 64KB
+			- If the app must store > 80GB of messages in a queue
+			- If want to track progress for processing a messaeg in queue (a worker can replace another based on tracking)
+			- Solution requires servers ide logs
+
+	* AZURE SERVICE BUS QUEUES
+		- Message broker (messaging, transfer business data)
+		- Decouple apps (client and service don't have to be online at the same time)
+		- TOPIC has many SUBSCRIPTIONS
+		- premium vs standard
+			- 100MB -> 256KB max (message size)
+			- throughput
+			- Fixed -> pay as you go
+			- Scale
+		- ADVANCED FEATURES over storage queue
+		- Protocols: AMQP
+		
+		- QUEUES:
+			- POINT TO POINT PATTERN (MESSAGE PROCESSING)
+			- One to one communication
+			- load-leveling: enables producers and consumers to send and receive messages at different rates
+			- To intermediate between message producers and consumers
+			- Loose coupling between components
+		
+		- TOPICS AND SUBSCRIPTIONS:
+			- PUBLISH SUBSCRIBE PATTERN (MESSAGE BROADCASTING)
+			- One to many communication
+			- Standard and next tiers offers this
+			- Each published message is made available to each subscription registered with the topic
+			- Consumer receive messages from subscriptions of the topic
+			- A subscription resembles a virtual queue that receives copies of the messages that are sent to the topic
+			- FILTER ACTIONS: Subscriptions can filter messages to the virtual subscription queue
+
+		- RECEIVE MODES:
+			- Receive and delete:
+				- Message requested, bus marks message as consumed and returns it
+				- If the consumer app crashes after bus marked message as consumed, it misses the message
+				- For consumer apps that can tolerate not processing a message if failuer occurs.
+			- Peek lock:
+				- Finds the next message to be consumed, locks it to prevent other consumers from receiving it, and then, return the message to the app.
+				- After the app finishes processing the message, it requests the Service Bus to complete the second stage of the receive process. Then, the service marks the message as consumed
+				- If consumer app is unable to process the message, it can request to us to ABANDON the message so the message will be unlocked and will be available to be received again.
+				- Timeout associated with the lock
+
+		- MESSAGE:
+			- Payload + metadata (key-value pairs)
+			- Sometimes metadata alone is enough to carry information that the sender wants to communicate
+			- BROKER PROPERTIES control message-level functionality, help the apps route messages to particualr destinations:
+				- Simple request/reply
+				- Multicast request/reply
+				- Multiplexing
+				- Multiplexed request/reply
+			- Payload:
+				- Opaque binary block
+
+
+
+
 
 
 
