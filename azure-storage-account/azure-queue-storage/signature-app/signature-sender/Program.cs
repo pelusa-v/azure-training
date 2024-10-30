@@ -1,3 +1,6 @@
+using System.Text.Json;
+using Azure.Storage.Queues;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,29 +19,31 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var connString = "";
+var queueName = "";
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/signature/send/{name}", (string name) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    QueueClient queueClient = new QueueClient(connString, queueName);
+    if (queueClient.Exists())
+    {
+        var signature = new Signature
+        {
+            Name = name,
+            DocName = "Contract"
+        };
+        var message = JsonSerializer.Serialize(signature);
+        // Send a message to the queue
+        queueClient.SendMessage(message);
+    }
 })
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
 app.Run();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+public class Signature
 {
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public required string Name { get; set; }
+    public required string DocName { get; set; }
 }

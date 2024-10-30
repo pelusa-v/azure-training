@@ -1145,6 +1145,11 @@ Repasar imagen
 				- Up to 64KB
 				- Supports TTL (time to live), -1 indicates no expiration, default TTL = 7 days
 
+		- USE:
+			- SDK for .NET
+			- You need to manage deque if using PeekMessages (read the message without deletion, default messages number = 1)
+			- If you use ReceiveMessages, the message is deleted from the queue after visibilityTimeout. You need to delete manually to ensure dequeue
+
 
 
 
