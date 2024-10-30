@@ -1068,10 +1068,11 @@ Repasar imagen
 			- Solution requires rol-based access model to queues, permission for sender and receivers
 		* AZURE STORAGE QUEUES
 			(simple message buffering, scalable, low cost queueing)
+			- NOT GUARANTEE FIFO
 			- messages < 64KB
 			- If the app must store > 80GB of messages in a queue
 			- If want to track progress for processing a messaeg in queue (a worker can replace another based on tracking)
-			- Solution requires servers ide logs
+			- Solution requires server side logs
 
 	* AZURE SERVICE BUS QUEUES
 		- Message broker (messaging, transfer business data)
