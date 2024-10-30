@@ -1131,6 +1131,21 @@ Repasar imagen
 			- Initialize sender specifying queue name or topic
 
 
+	* AZURE QUEUE STORAGE
+		- For storing large numbers of messages
+		- Access messages from anywhere in the world via authenticated calls using http or https
+		- Max queue size: 64KB
+		- Queue may contain millions of messages, up to total capacity limit of storage account.
+		- Queues are commonly used to create a backlog of work to process asynchronously
+		- COMPONENTS:
+			- Url format (queues are addressable uing url)
+			- Storage account
+			- Queue (contains a set of messages, name of queue in lowercase)
+			- Message (up to 64KB, supports TTL)
+				- Up to 64KB
+				- Supports TTL (time to live), -1 indicates no expiration, default TTL = 7 days
+
+
 
 
 

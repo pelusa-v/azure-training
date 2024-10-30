@@ -1,0 +1,6 @@
+@signature_sender_HostAddress = http://localhost:5227
+
+GET {{signature_sender_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
