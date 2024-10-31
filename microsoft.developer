@@ -13,7 +13,7 @@ Repasar imagen
 		- Scale up (B1, S1, Premium, etc), Scale out (number of instances).
 		- B: 3 parallel instances
 		- S: 10 parallel instances
-		- When upgrade the number of instances in Scale out, Azure takes car of load balancing betweeen instances (traffic coming to a one url is divided)
+		- When upgrade the number of instances in Scale out, Azure takes care of load balancing betweeen instances (traffic coming to a one url is divided)
 	- Auto Scaling:
 		- Based on rules
 		- Based on defined number of instances
@@ -342,12 +342,12 @@ Repasar imagen
 				- Azure functions:
 					- Use azure functions (azure cosmos trigger) to execute some task when an item is created or updated.
 				- Change feed processor library:
-					- The monitored container
-					- The lease container
-					- The compute instance
-					- The delegate
+					- The monitored container: Container that has the data from with the change feed is generated
+					- The lease container: state storage and coordinate processing the change feed across multiple workers
+					- The compute instance: Instance that is listening for changes
+					- The delegate: What the devs want to do with each bearch of changes
 
-			- Pull model: client pull work from server, client has bussines logic for processing work, store state and handles load balancing. Extra low level control (NOR RECOMMENDED)
+			- Pull model: client pull work from server, client has bussines logic for processing work, store state and handles load balancing. Extra low level control (NOT RECOMMENDED)
 
 
 * MICROSOFT IDENTITY PLATFORM (ENTRA ID)
@@ -442,6 +442,7 @@ Repasar imagen
 			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
 
 	* SAS
+		- To provide access to clients who should not be trusted
 		- Signed URI that point to one or more storage resources
 		- Includes a Token that indicates how the resources might be accessed by the client
 		
@@ -525,7 +526,7 @@ Repasar imagen
 			- YOU MUST ADD THE ENOUGH PERMISSIONS FOR THE APP REGISTRATION
 			- YOU NEED TO GRANT PERMISSION AS ADMIN USER IF NEEDED
 			- You can interact with all the services of microsoft graph using the selected authentication provider
-			- There are some endpints that don't work using client credentials (/me)
+			- There are some endpints that don't work using client credentials (/me because this requires a delegated flow)
 		- https://learn.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=csharp
 
 	* Request:
@@ -621,7 +622,7 @@ Repasar imagen
 
 
 * CDN:
-	- Content Delivery Network, uses CDN POPs (this contains edge servers)
+	- Content Delivery Network, uses CDN POPs (point of precense this contains edge servers)
 	- PROS:
 		- Better performance
 		- Improved user experience
