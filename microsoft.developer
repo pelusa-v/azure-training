@@ -7,6 +7,61 @@ jean.leon.v@outlook.com
 Repasar imagen
 
 
+* WEBAPP 2.0
+	* FEATURES:
+		- Windows (all tiers), Linux (isn't supported on Shared tier)
+		- Built-in AUTO scale (scale up/down -> RESOURCES, scale out/in -> INSTANCES)
+		- Containers support
+			- Pull images from private registry, docker hub or Azure Container Registry
+		- CI/CD
+			- Azure DevOps, Github, Bitbucket, FTP, local git repo, Azure Container Registry
+	
+	* SLOTS:
+		- Live apps with their own host names (separate deployment)
+		- For STANDARD tier or better
+		- App content and config can be swapped between two slots (for example, staging <-> production)
+		- Recommended: Deploy new app version to "staging" slot, then swap "staging" and "production" slots. This allows fast rollback if needed
+	
+	* APP SERVICE PLAN:
+		- Define the set of compute resources and pricing:
+			- Operating system
+			- Region
+			- Number of VMs
+			- Size of VMs (small, medium, large)
+			- Pricing tier:
+				- SHARED COMPUTE (No scale-out)
+					- Free, Shared
+				- DEDICATED COMPUTE (Allow scale-out, only apps in the same plan share resources)
+					- Basic, Standard, Premium, PremiumV2, PremiumV3
+				- ISOLATED (Maximun scale-out capabilities)
+					- Isolated, IsolatedV2
+		- An app always runs in an app service plan.
+		- App service plan ------many----> App
+	
+	* SCALING:
+		- Rules for others
+			- App runs on all VMs configured in APP SERVICE PLAN
+			- All apps in the same APP SERVICE PLAN share the same VMs
+			- All app slots run on the same VMs
+			- Diagnostic logs, perform backups, webjobs (if enabled) use CPU and memory on these VMs
+		- NO Scaling for Free, Shared
+		- If you want to improve an specific app performance, you can try to moving the app to a separate APP SERVICE PLAN (different region, resource-intensive app, etc)
+	
+	* DEPLOY:
+		- Automatic: Using CI/CD
+		- Manual: Git, CLI (az webapp up), ZIP (using curl), FTPS/FTP
+		- Containers:
+			- Build and tag the image (Build pipeline step)
+			- Push tagged image (Push to registry)
+			- Update the slot with new image tag (Updating the tag automaticlly restarts the app app and pulls the new image)
+	
+	* AUTHENTICATION / AUTHORIZATION:
+		
+
+
+
+ 
+
 * WEBAPP:
 	- App Service Plan: Pricing model for apps and hosting options. B1, S1, etc. Is a resource that
 	- Manual Scaling: 
