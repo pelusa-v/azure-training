@@ -54,9 +54,32 @@ Repasar imagen
 			- Build and tag the image (Build pipeline step)
 			- Push tagged image (Push to registry)
 			- Update the slot with new image tag (Updating the tag automaticlly restarts the app app and pulls the new image)
+
+	* COMMANDS:
+		- create/update webapp (static page)
+			- az webapp up -g $resourceGroup -n $appName --html
 	
 	* AUTHENTICATION / AUTHORIZATION:
-		
+		- Run in the same sandbox as the app code (for containers and linux, run in a separate container)
+		- When enabled, it acts like a middleware (receive every incoming request)
+		- Provides built-in authentication and authorization support
+		- Out-of-the-box auth with federated identity providers (endpoints for each provider):
+			- Microsoft identity platform
+			- Facebook
+			- Google
+			- X
+			- OpenID Connect provider
+			- GitHub
+		- Authentication Without SDK (with browser) / with SDK (browser-less app)
+		- Authorization:
+			- Allow unauthenticated request (authorization managed by the app)
+			- Require authentication (apply to all requests)
+		- Built-in token store
+		- Auth traces are collected if application logging is enabled
+
+	* NETWORKING:
+		- INBOUND FEATURES: App-assigned address, Access restrictions, Service endpoints, Private endpoints
+		- OUTBOUND FEATURES: Hybrid Connections, Gateway-required virtual network integration, Virtual network integration
 
 
 
