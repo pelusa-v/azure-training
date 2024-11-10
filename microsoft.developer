@@ -81,7 +81,7 @@ Repasar imagen
 		- INBOUND FEATURES: App-assigned address, Access restrictions, Service endpoints, Private endpoints
 		- OUTBOUND FEATURES: Hybrid Connections, Gateway-required virtual network integration, Virtual network integration
 
-	* ENVIRONMENT VARIABLES:
+	* ENVIRONMENT VARIABLES (application settings):
 		- App service variables, for ASP.NET Core, It's like setting variables in appsettings.json (app service values override appsettings values).
 		- App settings are always encrypted when stored
 		- You can enable deployment slot settings (swappable setting)
@@ -144,6 +144,20 @@ Repasar imagen
 		- You can run cmd or powershell to interact with files of webapp in real time
 		- You can view files and configuration of webapp (files deployed)
 		- It's good for diagnostic (debug when It works in local but doesn't work in cloud environment)
+
+	* SECURITY:
+		- Certificates:
+			- App service plan's resource group + region combination = WEBSPACE
+			- A certifciate is accesible to other apps in the same WEBSPACE
+			- Options:
+				- Free app service managed private cert
+				- Purchase app service private cert
+				- Import cert from Azure Key Vault
+				- Upload private/public cert
+			- Free managed cert:
+				- For BASIC tier or better
+				- Renewed continuously and automaticlly in six month increments, 45 dayse before expiration
+				- Vreate the cert and bind to a custom domain.
 
 
 
