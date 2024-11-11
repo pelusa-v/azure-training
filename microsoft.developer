@@ -7,7 +7,7 @@ jean.leon.v@outlook.com
 Repasar imagen
 
 
-* WEBAPP 2.0
+* AZURE APP SERVICE
 	* FEATURES:
 		- Windows (all tiers), Linux (isn't supported on Shared tier)
 		- Built-in AUTO scale (scale up/down -> RESOURCES, scale out/in -> INSTANCES)
@@ -19,8 +19,29 @@ Repasar imagen
 	* SLOTS:
 		- Live apps with their own host names (separate deployment)
 		- For STANDARD tier or better
+		- Standard (5 max), Premium (20 max)
 		- App content and config can be swapped between two slots (for example, staging <-> production)
 		- Recommended: Deploy new app version to "staging" slot, then swap "staging" and "production" slots. This allows fast rollback if needed
+		- Internal Swap process:
+			- All work of initializing the swapped apps (and warmed up) happens on the source slot, the target slot remains online.
+			- The production slot should be always the target (so swap doesn't affect production app)
+			- Settings that are swapped:
+				- General settings, app settings, connection strings, handler/path mappings, public certificates, Webjobs content
+			- Settings that aren't swapped:
+				- Publishing endpoints, custom domain, non public certs and tls/ssl settings, scale settings, webjos schedules, IP restrictions,
+					always on, diagnostic log settings, CORS, virtual nw integration, managed identities
+			- To make settings swappable set variable WEBSITE_OVERRIDE_PRESERVE_DEFAULT_STICKY_SLOT_SETTINGS = 0 / false
+		- Swap with preview
+			- Apply settings from target to source and you can validate the "result" before to swap to target (prod). You can continue or cancel the swap
+		- Autoswap (only for Windows)
+			- Enable and select target in general settings
+			- For Azure DevOps scenarios (CI/CD, every time push the changes to slot, app service swap app into prod)
+		- If swap fails, swap the same two slots INMEDIATELY and inspect activity log
+		- Route traffic:
+			- You can route a portion of the traffic (to prod slot) to another slot (to receive user feedback for features that aren't ready to release)
+			- Once the client is routed to slot, it's pinned to that slot during the session's life
+			- You give the user a button to "test beta" (url + route cookie) and route to non-prod slot.
+			- Default routing rule (prod o specific slot) in new slot is 0%
 	
 	* APP SERVICE PLAN:
 		- Define the set of compute resources and pricing:
