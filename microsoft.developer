@@ -32,20 +32,67 @@ Repasar imagen
 				- SHARED COMPUTE (No scale-out)
 					- Free, Shared
 				- DEDICATED COMPUTE (Allow scale-out, only apps in the same plan share resources)
-					- Basic (3 VM max), Standard (10 VM max), Premium, PremiumV2, PremiumV3 (30 VM max)
+					- Basic (3 instances), Standard (10 instances max), Premium, PremiumV2, PremiumV3 (30 instances max)
 				- ISOLATED (Maximun scale-out capabilities)
 					- Isolated, IsolatedV2
 		- An app always runs in an app service plan.
 		- App service plan ------many----> App
-	
-	* SCALING:
-		- Rules for others
+		- Instances:
+			- App service plan tier has INSTANCES
 			- App runs on all VMs configured in APP SERVICE PLAN
 			- All apps in the same APP SERVICE PLAN share the same VMs
 			- All app slots run on the same VMs
 			- Diagnostic logs, perform backups, webjobs (if enabled) use CPU and memory on these VMs
-		- NO Scaling for Free, Shared
-		- If you want to improve an specific app performance, you can try to moving the app to a separate APP SERVICE PLAN (different region, resource-intensive app, etc)
+	
+	* SCALING:
+		- Keys
+			- Autoscaling performs scaling IN and OUT (not UP and DOWN). It doesn't have any effect on CPU, memory, etc, It only changes the number of web servers of the APP SERVICE PLAN
+			- Autoscaling is not an effective approach when the web app performs resource-intensive as part of each requuest (It needs scale-up)
+			- Autoscaling isn't the best approach to handling LONG-TERM growth because autoscaling will end up being more expensive (if you can anticipate the rate of growth, do it manually)
+			- NO Scale-out for Free, Shared
+			- If you want to improve an specific app performance, you can try to moving the app to a separate APP SERVICE PLAN (different region, resource-intensive app, etc)
+			- Autoscaling can't create more instances than the limit (tier limit), to prevent runaway autoscaling
+		- Autoscaling Types:
+			- Autoscaling with Azure autoscale
+				- Types of condition:
+					- Based on metrics rules (you define)
+					- To a specific number of instances according to a schedule (you define)
+				- Metric rules:
+					- Autoscaling -> conditions -> rules
+					- Azure can monitor:
+						- CPU%, memory%, disk queue length (I/O requests), http queue length (client requests), data in, data out
+					- Azure analyzes metrics:
+						- Aggregates values for a metric of ALL INSTANCES within the TIME GRAIN (1 min default)
+						- DURATION time is defined to aggregates the aggregation values within TIME GRAIN
+						- Aggregation can be:
+							- AVERAGE
+							- MINIMUM
+							- MAXIMUM
+							- SUM
+							- LAST
+							- COUNT
+					- Autoscale actions is triggered when a metric treshold has crossed based on rule (operators like greater then, equal to, etc)
+					- Autoscale has a cool down period to stabilize between autoscale events
+				- Combining Rules in the same condition
+					- SCALE OUT RULE is performed if ANY of the scale-out rules are met
+					- SCALE IN RULE is performed if ALL of the scale-in rules are met
+					- You can perform scale-in rules independentlly separating scale-in rule in different condition
+				- You can create multiple conditions of the two types and you can combine them
+				- There is a default condition, and this doesn't have schedule
+				- A rule specifies threshold for a metric and triggers an autoscale event when threshold is crossed.
+				- Deallocate resources when workload has diminished
+			- Azure app service automatic scaling
+				- For PREMIUMV2 or better
+				- Based on parameters you've selected
+				- Aure automaticlly handles scaling decisions for web apps and app service plans
+				- Use it if you have you webapp connected to legacy system wich may not scale as fast as the webapp setting the maximun number of instances to scale)
+		- Best practices
+			- Ensure the maximum and minimum values are different and have an adequate margin between them
+			- Choose the appropriate statistic for your diagnostics metric (AVERAGE, MINIMUM, MAXIMUM, SUM, LAST, COUNT)
+			- Choose the thresholds carefully for all metric types
+			- Always select a safe default instance count
+			- Configure autoscale notifications
+
 	
 	* DEPLOY:
 		- Automatic: Using CI/CD
