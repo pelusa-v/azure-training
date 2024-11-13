@@ -15,6 +15,20 @@ Repasar imagen
 			- Pull images from private registry, docker hub or Azure Container Registry
 		- CI/CD
 			- Azure DevOps, Github, Bitbucket, FTP, local git repo, Azure Container Registry
+		* DEPLOY:
+			- Automatic: Using CI/CD
+			- Manual: Git, CLI (az webapp up), ZIP (using curl), FTPS/FTP
+			- Containers:
+				- Build and tag the image (Build pipeline step)
+				- Push tagged image (Push to registry)
+				- Update the slot with new image tag (Updating the tag automaticlly restarts the app app and pulls the new image)
+		* COMMANDS:
+			- create/update webapp (static page)
+				- az webapp up -g $resourceGroup -n $appName --html
+				… New-AzWebApp
+		* NETWORKING:
+			- INBOUND FEATURES: App-assigned address, Access restrictions, Service endpoints, Private endpoints
+			- OUTBOUND FEATURES: Hybrid Connections, Gateway-required virtual network integration, Virtual network integration
 	
 	* SLOTS:
 		- Live apps with their own host names (separate deployment)
@@ -23,6 +37,9 @@ Repasar imagen
 		- App content and config can be swapped between two slots (for example, staging <-> production)
 		- Recommended: Deploy new app version to "staging" slot, then swap "staging" and "production" slots. This allows fast rollback if needed
 		- Internal Swap process:
+			#########################################################################################################################
+			#								ADD ALL THE PROCESS 																	#		
+			################################################################################V########################################
 			- All work of initializing the swapped apps (and warmed up) happens on the source slot, the target slot remains online.
 			- The production slot should be always the target (so swap doesn't affect production app)
 			- Settings that are swapped:
@@ -70,7 +87,7 @@ Repasar imagen
 			- Autoscaling performs scaling IN and OUT (not UP and DOWN). It doesn't have any effect on CPU, memory, etc, It only changes the number of web servers of the APP SERVICE PLAN
 			- Autoscaling is not an effective approach when the web app performs resource-intensive as part of each requuest (It needs scale-up)
 			- Autoscaling isn't the best approach to handling LONG-TERM growth because autoscaling will end up being more expensive (if you can anticipate the rate of growth, do it manually)
-			- NO Scale-out for Free, Shared
+			- For STANDARD tier or better
 			- If you want to improve an specific app performance, you can try to moving the app to a separate APP SERVICE PLAN (different region, resource-intensive app, etc)
 			- Autoscaling can't create more instances than the limit (tier limit), to prevent runaway autoscaling
 		- Autoscaling Types:
@@ -105,7 +122,7 @@ Repasar imagen
 			- Azure app service automatic scaling
 				- For PREMIUMV2 or better
 				- Based on parameters you've selected
-				- Aure automaticlly handles scaling decisions for web apps and app service plans
+				- Azure automaticlly handles scaling decisions for web apps and app service plans
 				- Use it if you have you webapp connected to legacy system wich may not scale as fast as the webapp setting the maximun number of instances to scale)
 		- Best practices
 			- Ensure the maximum and minimum values are different and have an adequate margin between them
@@ -114,47 +131,6 @@ Repasar imagen
 			- Always select a safe default instance count
 			- Configure autoscale notifications
 
-	
-	* DEPLOY:
-		- Automatic: Using CI/CD
-		- Manual: Git, CLI (az webapp up), ZIP (using curl), FTPS/FTP
-		- Containers:
-			- Build and tag the image (Build pipeline step)
-			- Push tagged image (Push to registry)
-			- Update the slot with new image tag (Updating the tag automaticlly restarts the app app and pulls the new image)
-
-	* COMMANDS:
-		- create/update webapp (static page)
-			- az webapp up -g $resourceGroup -n $appName --html
-	
-	* AUTHENTICATION / AUTHORIZATION:
-		- Run in the same sandbox as the app code (for containers and linux, run in a separate container)
-		- When enabled, it acts like a middleware (receive every incoming request)
-		- Provides built-in authentication and authorization support
-		- Out-of-the-box auth with federated identity providers (endpoints for each provider):
-			- Microsoft identity platform
-			- Facebook
-			- Google
-			- X
-			- OpenID Connect provider
-			- GitHub
-		- Authentication Without SDK (with browser) / with SDK (browser-less app)
-		- Authorization:
-			- Allow unauthenticated request (authorization managed by the app)
-			- Require authentication (apply to all requests)
-		- Built-in token store
-		- Auth traces are collected if application logging is enabled
-
-	* NETWORKING:
-		- INBOUND FEATURES: App-assigned address, Access restrictions, Service endpoints, Private endpoints
-		- OUTBOUND FEATURES: Hybrid Connections, Gateway-required virtual network integration, Virtual network integration
-
-	* ENVIRONMENT VARIABLES (application settings):
-		- App service variables, for ASP.NET Core, It's like setting variables in appsettings.json (app service values override appsettings values).
-		- App settings are always encrypted when stored
-		- You can enable deployment slot settings (swappable setting)
-		- For linux replace ":" by "_" for nested keys
-		- Connection strings follow the same flow as app settings
 
 	* APP CONFIGURATION:
 		- General settings:
@@ -179,6 +155,13 @@ Repasar imagen
 			- Virtual application directory: If you need to manage app's folder structure or specific URL path (serve files via url)
 				- https://yourapp.azurewebsites.net/media --> point to a sample storage directory
 				- For custom paths, webapp serve files from site/wwwroot directly
+
+		- ENVIRONMENT VARIABLES (application settings):
+			- App service variables, for ASP.NET Core, It's like setting variables in appsettings.json (app service values override appsettings values).
+			- App settings are always encrypted when stored
+			- You can enable deployment slot settings (swappable setting)
+			- For linux replace ":" by "_" for nested keys
+			- Connection strings follow the same flow as app settings
 
 	* DIAGNOSTIC LOGGING
 		- Logging types:
@@ -207,11 +190,10 @@ Repasar imagen
 			- Kudu
 			- Consume blobs or download zip file if using file system
 
-
-	* ADVANCED TOOLS (Kudu):
-		- You can run cmd or powershell to interact with files of webapp in real time
-		- You can view files and configuration of webapp (files deployed)
-		- It's good for diagnostic (debug when It works in local but doesn't work in cloud environment)
+		- ADVANCED TOOLS (Kudu):
+			- You can run cmd or powershell to interact with files of webapp in real time
+			- You can view files and configuration of webapp (files deployed)
+			- It's good for diagnostic (debug when It works in local but doesn't work in cloud environment)
 
 	* SECURITY:
 		- Certificates:
@@ -226,6 +208,24 @@ Repasar imagen
 				- For BASIC tier or better
 				- Renewed continuously and automaticlly in six month increments, 45 dayse before expiration
 				- Vreate the cert and bind to a custom domain.
+
+		- AUTHENTICATION / AUTHORIZATION:
+			- Run in the same sandbox as the app code (for containers and linux, run in a separate container)
+			- When enabled, it acts like a middleware (receive every incoming request)
+			- Provides built-in authentication and authorization support
+			- Out-of-the-box auth with federated identity providers (endpoints for each provider):
+				- Microsoft identity platform
+				- Facebook
+				- Google
+				- X
+				- OpenID Connect provider
+				- GitHub
+			- Authentication Without SDK (with browser) / with SDK (browser-less app)
+			- Authorization:
+				- Allow unauthenticated request (authorization managed by the app)
+				- Require authentication (apply to all requests)
+			- Built-in token store
+			- Auth traces are collected if application logging is enabled
 
 
 
