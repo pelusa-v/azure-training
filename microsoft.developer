@@ -37,9 +37,18 @@ Repasar imagen
 		- App content and config can be swapped between two slots (for example, staging <-> production)
 		- Recommended: Deploy new app version to "staging" slot, then swap "staging" and "production" slots. This allows fast rollback if needed
 		- Internal Swap process:
+			1) Apply settings (slot app settings, conn strings, CD settings, auth settings) from target slot to all instances of source slot
+				(after this, all source instances are triggered to restart)
+			2) Wait for every source slot instance to complete their restart (if restart fails, swap is reverted)
+			3) If local cache is enabled, trigger local cache init by making an HTTP request to app root ("/") on each slot instance. Wait for any instance response.
+				This triggers another restart on each instance
+			4) If autoswapp is enabled with custom warm-up, trigger app init by making an HTTP request to app root ("/") on each slot instance.
+				- If you need to run scripts or some init-resources before swap, you need to use "applicationInitialization" in web.config file (custom init action)
+					(WEBSITE_SWAP_WARMUP_PING_PATH and WEBSITE_SWAP_WARMUP_PING_STATUSES)
+				- If an instance returns any response, it's considered warmed up.
+			5) If all instances on the source slot are WARMED UP, swap by switching routing rules
+			6) Apply all source settings to swapped content in source slot and restart again.
 			#########################################################################################################################
-			#								ADD ALL THE PROCESS 																	#		
-			################################################################################V########################################
 			- All work of initializing the swapped apps (and warmed up) happens on the source slot, the target slot remains online.
 			- The production slot should be always the target (so swap doesn't affect production app)
 			- Settings that are swapped:
@@ -68,9 +77,9 @@ Repasar imagen
 			- Size of VMs (small, medium, large)
 			- Pricing tier categories:
 				- SHARED COMPUTE (No scale-out)
-					- Free, Shared
+					- Free (F1), Shared (D1)
 				- DEDICATED COMPUTE (Allow scale-out, only apps in the same plan share resources)
-					- Basic (3 instances), Standard (10 instances max), Premium, PremiumV2, PremiumV3 (30 instances max)
+					- Basic (B1, B2, B3) (3 instances), Standard () (10 instances max), Premium, PremiumV2, PremiumV3 (30 instances max)
 				- ISOLATED (Maximun scale-out capabilities)
 					- Isolated, IsolatedV2
 		- An app always runs in an app service plan.
@@ -228,6 +237,38 @@ Repasar imagen
 			- Auth traces are collected if application logging is enabled
 
 
+* AZURE CONTAINERS
+
+	* AZURE CONTAINER REGISTRY (ACR):
+		- Store container images (Windows and Linux) (read only snapshots)
+		- Pull/push images from azure services (AKS, App service, Service fabric, Batch) or in deployment workflows
+		- You can use more than INCLUDED STORAGE up to storage limit (40TB for all ties) paying extra rate per GB
+		- Tiers: (Similar capabilities, different storage and throughput)
+				- BASIC = (INCLUDED STORAGE 10GB)
+				- STANDARD = (INCLUDED STORAGE 100GB)
+				- PREMIUM = (INCLUDED STORAGE 500GB) (high volume scenarios)
+
+		* FEATURES:
+			- Encryption-at-rest (ALL TIERS, encrypt before storing images, decrypt when use)
+			- Geo-replication (PREMIUM)
+			- Zone redundancy (PREMIUM)
+			- Scalable storage (ALL TIERS, up to storage limit)
+			- Create -----> az acr create
+			- List -----> az acr repository list
+			- Versions -----> az acr repository show-tags
+			- Run -----> az acr run (like docker run)
+
+		* ACR Taks:
+			- Builds images for LinuxOS and AMD64 arch.
+			- Streamline building, testing, pushing, deployment in Azure (automation)
+			- Has associated source code context (Git repo specifying branch), tasks use
+			- Build automaticlly when commits code to source
+			- USE-CASES:
+				- Quick task -----> Like "docker build", "docker push" in azure (without docker engine, on demand) -----> az acr build
+				- Triggered tasks -----> Trigges to build on code update, base image update, schedule -----> az acr task create / track base image dependency / schedule
+				- Multi-step task -----> It uses a .yaml file to define steps (custom workflow) 
+
+
 
 * CONTAINER INSTANCE:
 	- Create container instance: You can specify the following features:
@@ -257,7 +298,7 @@ Repasar imagen
 	- Create function app:
 		- Runtimes: It supports .net, nodejs, python, java, powershell, custom handler
 			- Custom Handler: This options is used when need another runtime or language (go, php, etc)
-		- Functions needs an storage account, that's because underneath the function model is a file system
+		- f needs an storage account, that's because underneath the function model is a file system
 		- Hosting plan:
 			- Consumption (Serverless): Recommended for free
 			- Flex Consumption
