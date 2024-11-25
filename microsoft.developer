@@ -112,12 +112,7 @@ Repasar imagen
 						- Aggregates values for a metric of ALL INSTANCES within the TIME GRAIN (1 min default)
 						- DURATION time is defined to aggregates the aggregation values within TIME GRAIN
 						- Aggregation can be:
-							- AVERAGE
-							- MINIMUM
-							- MAXIMUM
-							- SUM
-							- LAST
-							- COUNT
+							- AVERAGE, MINIMUM, MAXIMUM, SUM, LAST, COUNT
 					- Autoscale actions is triggered when a metric treshold has crossed based on rule (operators like greater then, equal to, etc)
 					- Autoscale has a cool down period to stabilize between autoscale events
 				- Combining Rules in the same condition
@@ -223,12 +218,7 @@ Repasar imagen
 			- When enabled, it acts like a middleware (receive every incoming request)
 			- Provides built-in authentication and authorization support
 			- Out-of-the-box auth with federated identity providers (endpoints for each provider):
-				- Microsoft identity platform
-				- Facebook
-				- Google
-				- X
-				- OpenID Connect provider
-				- GitHub
+				- Microsoft identity platform, Facebook, Google, X, OpenID Connect provider, GitHub
 			- Authentication Without SDK (with browser) / with SDK (browser-less app)
 			- Authorization:
 				- Allow unauthenticated request (authorization managed by the app)
@@ -268,30 +258,47 @@ Repasar imagen
 				- Triggered tasks -----> Trigges to build on code update, base image update, schedule -----> az acr task create / track base image dependency / schedule
 				- Multi-step task -----> It uses a .yaml file to define steps (custom workflow) 
 
+	* AZURE CONTAINER INSTANCES (ACI):
+		- No VM is needed, allows Windows and Linux
+		- Focus: Ideal for tasks like batch/background jobs, simple stateless apis, isolated workloads without scaling or complex orchestration (dependencies)
+		- Container instances are billed by the second (you need to stop when not using)
+
+		* Container groups:
+			- Similar to kubernetes POD, collection of container on the same host machine
+			- You can specify the volumes to create, and the AZURE FILES SHARES to mount, you can only mount AZURE FILES SHARES to Linux containers
+				("volumeMounts" and "volumes" properties of .yaml), you can do that using .yaml, command or Resource manager template
+			- Exposes single public IP with port, can be assigned to a DNS name label, use AZURE FILES SHARES as volume mount (for each container)
+			- Multi-containers for LINUX containers, Single-container for WINDOWS containers
+			- Deploy using command, .YAML or Resource manager template (ercommended .yaml)
+			- All containers share one IP address and a common port namespace
+			- Doesn't support port mapping (exposed port is the same as container port, if exposed). Containers internally comunicates each other ia localhost and port
+			- Restart policy:
+				- ACI stops the container when its app, or script exits
+				- ALWAYS (default), NEVER, ONFAILURE
+
+		* Environment Variables:
+			- az container creatr ... --environment-variables 'MaxProcesses'='10'
+			- To secure values use "secureValue" property in .yaml file when set the variable
+
+		* Commands:
+			- az container create ... --file deploy.yaml
+			- az container show
+			- az container create ... --restart-policy OnFailure
+
+	* AZURE CONTAINER APPS (ACA):
+		- No overhead of managing complex infrastructure (this service runs on top of AKS)
+		- Focus: Microservices applications and robust autoscaling, even-driven apps, background procesing apps, api endpoints
+		- Scaling based on: Http traffic, event-driven processing, CPU, memory, etc (KEDA-supported scaler)
+		- CONTAINER APPS ENVIRONMENT:
+			- Secure boundary around groups of container apps
+			- An environment can contain many container apps
+			- Manage related services
+			- Instrument DAPR applications
+			- Same virtual network and log to the same LOG ANALYTICS WORKSPACE
+			- Different environment = apps never share the same compute resources, DAPR apps can't communicate
 
 
-* CONTAINER INSTANCE:
-	- Create container instance: You can specify the following features:
-		- Images source: quickstart, azure registry, other registry
-		- Networking configuration: Ports, dns, public or private network
-		- When create container from azure registry, this identify the os type of the image.
 
-
-* CONTAINER REGISTRY:
-	- Create new registry: You can specify the following features:
-		- Pracing plan: Basic, Standart, Premium
-		- Networking: Private is only available for premium pricing plan
-		- Encryption: Enable is only available for premium pricing plan
-	- Prepare the images:
-		Use vs for mac for use "add docker support", look for another solution in vscode or similar
-	- You can deploy images using vscode or console:
-		az acr login --name mytestcompany
-		docker tag testcontainer:latest mytestcompany.azurecr.io/testcontainer:latest
-		docker push mytestcompany.azurecr.io/testcontainer:latest
-
-		If you want to use vscode, change the azure account for docker and azure extensions
-	- You need to enable "Admin user" in order to use the user to deploy the docker (registry name as admin username)
-	- You can create webapp using Docker container option
 
 
 * FUNCTION APP:
