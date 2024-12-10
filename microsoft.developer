@@ -269,15 +269,15 @@ Repasar imagen
 				("volumeMounts" and "volumes" properties of .yaml), you can do that using .yaml, command or Resource manager template
 			- Exposes single public IP with port, can be assigned to a DNS name label, use AZURE FILES SHARES as volume mount (for each container)
 			- Multi-containers for LINUX containers, Single-container for WINDOWS containers
-			- Deploy using command, .YAML or Resource manager template (ercommended .yaml)
+			- Deploy using command, .YAML or Resource manager template (recommended .yaml)
 			- All containers share one IP address and a common port namespace
-			- Doesn't support port mapping (exposed port is the same as container port, if exposed). Containers internally comunicates each other ia localhost and port
+			- Doesn't support port mapping (exposed port is the same as container port, if exposed). Containers internally comunicates each other via localhost and port
 			- Restart policy:
 				- ACI stops the container when its app, or script exits
 				- ALWAYS (default), NEVER, ONFAILURE
 
 		* Environment Variables:
-			- az container creatr ... --environment-variables 'MaxProcesses'='10'
+			- az container create ... --environment-variables 'MaxProcesses'='10'
 			- To secure values use "secureValue" property in .yaml file when set the variable
 
 		* Commands:
@@ -286,16 +286,54 @@ Repasar imagen
 			- az container create ... --restart-policy OnFailure
 
 	* AZURE CONTAINER APPS (ACA):
+		- Supports any Linux-based x86-64 linux/amd64 image
 		- No overhead of managing complex infrastructure (this service runs on top of AKS)
 		- Focus: Microservices applications and robust autoscaling, even-driven apps, background procesing apps, api endpoints
 		- Scaling based on: Http traffic, event-driven processing, CPU, memory, etc (KEDA-supported scaler)
-		- CONTAINER APPS ENVIRONMENT:
+		- Can split traffic across multiple versions of an app
+		- A container app can contain multiple containers (SIDECAR pattern == app and a log agent for example) (Advanced scenario)
+		
+		- MICROSERVICES:
+			- Independent scaling, versioning, upgrades
+			- Service discovery
+			- Native DAPR integration
+			- DAPR integration provides: observability, pub/sub, service-to-service, retries, etc.
+
+		* CONTAINER APPS ENVIRONMENT:
 			- Secure boundary around groups of container apps
 			- An environment can contain many container apps
 			- Manage related services
 			- Instrument DAPR applications
-			- Same virtual network and log to the same LOG ANALYTICS WORKSPACE
+			- Same virtual network and log to the same LOG ANALYTICS WORKSPACE, and share the same DAPR conf
 			- Different environment = apps never share the same compute resources, DAPR apps can't communicate
+			- Environment ---contains---> container apps ---contains---> revisions, replica
+
+		* REVISIONS:
+			- Azure container apps create versioning by creating REVISIONS (immutable snapshot)
+			- Quickly revert to an earlier version
+			- New revision is created when REVISION-SCOPE changes are applied (revision suffix, container conf, image, scale rules)
+			- By default a first revision is created (test-app -----> test-app--1st-revision, in this case, suffix = "1st-revision")
+
+		* SECRETS:
+			- Adding, removing or changing secrets doesn't create new revisions
+			- az containerapp create ...  --secrets "super-secret=$CONNECTION_STRING"
+			- You can use the secrets in env-vars when creating the container app
+			- Container Apps doesn't support Azure Key Vault integration. Instead, enable managed identity in the container app and use the Key Vault SDK in your app to access secrets.
+
+		* Commands:
+			- az containerapp env create ...
+			- az containerapp create ...
+			- az containerapp create ...  --secrets "super-secret=$CONNECTION_STRING" ------> create container app with secrets
+			- az containerapp update ... ------> modify env variables, compute resources, scale, deploy diff image.
+			- az containerapp revision list ... -----> list rvisions of container app
+
+		* AUTHORIZATION AND AUTHENTICATION:
+			- Provides out-of-the-box auth (built-in auth features, low or no code) with federated identity providers
+			- Built-in auth SHOULD be used with "allowInsecure" disabled and HTTPS
+			- Identity providers: Microsoft identity platform, facebook, githun, google, x, openID
+			- When use those providers, the SIGN-IN endpoint is available for auth token
+			- The authentication and authorizations feature acts using a middleware component (for each HTTP request), runs as a SIDECAR container on each replica
+			- You can use "With SDK flow" (federated) or "Without SDK flow" (client)
 
 
 
