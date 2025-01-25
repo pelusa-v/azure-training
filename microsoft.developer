@@ -354,7 +354,76 @@ Repasar imagen
 			- You can use "With SDK flow" (federated) or "Without SDK flow" (client)
 
 
+* AZURE FUNCTIONS:
+	- Serverless solution that allows you to write less code
+	- Less infrastructure and save on costs
+	- It supports integration with logic apps
+	- Does'nt support Windows containers
 
+	* AZURE FUNCTIONS vs LOGIC APPS:
+		- Both can create complex orchestrations (collection of steps or actions)
+		- Azure functions use code (imperative), while logic apps use gui (declarative)
+		- Azure functions are monitored by application insights, while logic apps are monitered by azure portal or azure monitor logs
+		- Logic apps can execute in on premises context, azure functions cannot
+
+	* AZURE FUNCTIONS vs WEBJOBS
+		- Azure functions is built on the WebJobs SDK (it shares many of the eevnt triggers and connectors with other services)
+		- Azure functions has features that webjobs doesn't
+			- Serverless app with autoscaling
+			- Pay-per-use pricing
+			- Offers more triggers thatn webjobs (http/webhooks, event grid triggers)
+			- More options for programming languages and azure service integration
+
+	* HOSTING OPTIONS
+		- functionTimeout in host.json (time out parameter)
+		- Hosting option specify how the function scale, resource available for funtcion app instances, advanced functionalities, support linux container
+		- Event driven Autoscale: Instances of the functions hosts are dinamiclly added and removed based on incoming events
+		* CONSUMPTION PLAN
+			- Default hosting plan
+			- Pay for compute resources when functions are running (py-as-you-go)
+			- Autoscale: Event driven
+			- Max scale out: 200 (W), 100 (L)
+			- No containers support
+			- Default timeout: 5s
+		* FLEX CONSUMPTION PLAN
+			- High scalability with compute choices (key benefit), virtual networking and pay-as-you-go
+			- Event driven autoscale based on the configured per instance concurrency and incoming events
+			- Support pre-provisioned (always ready) instances
+			- Max scale out: 1000 (L)
+			- No containers support
+			- Default timeout: 30s
+			- No support for windows
+		* PREMIUM PLAN
+			- Event driven using PREWARMED workers (no delay after being idle)
+			- More powerful instances (CPU, memory, maximun execution time)
+			- For apps that runs continously
+			- For many function apps on the same plan
+			- Max scale out: 100 (w), 20-100 (L)
+			- Linux containers support
+			- Default timeout: 30s
+		* DEDICATED PLAN
+			- Within app service plan
+			- Manual/autoscale
+			- For long-runing scenarios where durable functions can't be used
+			- To run multiple webapps and functions on the same plan
+			- Larger compute size
+			- App service environment (ASE): secure network isolation, haigh memory usage and high scale
+			- Max scale out: 40-60
+			- Linux containers support
+			- Default timeout: 30s
+		* CONTAINER APPS (ACA)
+			- Event driven autoscale
+			- Fully managed by azure container apps
+			- Linux containers support
+			- To package custom libraires
+			- To migrate code from on-premises or legacy to cloud microservices (containers)
+			- Max scale out: 300
+			- Default timeout: 30s
+
+	* FUNCTION APP
+		- Unit of deplyment and management for your functions
+		- Functions within a function app are deployed, managed, scaled together and share the same pricing plan, runtime and deplyment method
+		- You can develop and test functions locally
 
 
 * FUNCTION APP:
