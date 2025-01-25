@@ -9,12 +9,16 @@ Repasar imagen
 
 * AZURE APP SERVICE
 	* FEATURES:
-		- Windows (all tiers), Linux (isn't supported on Shared tier)
-		- Built-in AUTO scale (scale up/down -> RESOURCES, scale out/in -> INSTANCES)
+		- Windows (all TIERS)
+		- Linux (from FREE)
+		- Built-in AUTO scale (scale up/down -> RESOURCES, scale out/in -> INSTANCES) (from BASIC)
 		- Containers support
+			- Windows (from PREMIUM)
+			- Linux (from FREE)
 			- Pull images from private registry, docker hub or Azure Container Registry
 		- CI/CD
 			- Azure DevOps, Github, Bitbucket, FTP, local git repo, Azure Container Registry
+		- Custom domains (From BASIC)
 		* DEPLOY:
 			- Automatic: Using CI/CD
 			- Manual: Git, CLI (az webapp up), ZIP (using curl), FTPS/FTP
@@ -30,12 +34,12 @@ Repasar imagen
 			- INBOUND FEATURES: App-assigned address, Access restrictions, Service endpoints, Private endpoints
 			- OUTBOUND FEATURES: Hybrid Connections, Gateway-required virtual network integration, Virtual network integration
 	
-	* SLOTS:
+	* SLOTS (from STANDARD):
 		- Live apps with their own host names (separate deployment)
-		- For STANDARD tier or better
 		- Standard (5 max), Premium (20 max)
 		- App content and config can be swapped between two slots (for example, staging <-> production)
 		- Recommended: Deploy new app version to "staging" slot, then swap "staging" and "production" slots. This allows fast rollback if needed
+		- You can't swap webapps slots between different app service plans
 		- Internal Swap process:
 			1) Apply settings (slot app settings, conn strings, CD settings, auth settings) from target slot to all instances of source slot
 				(after this, all source instances are triggered to restart)
@@ -77,9 +81,12 @@ Repasar imagen
 			- Size of VMs (small, medium, large)
 			- Pricing tier categories:
 				- SHARED COMPUTE (No scale-out)
-					- Free (F1), Shared (D1)
+					- Free (F1), 
+					- Shared (D1)
 				- DEDICATED COMPUTE (Allow scale-out, only apps in the same plan share resources)
-					- Basic (B1, B2, B3) (3 instances), Standard () (10 instances max), Premium, PremiumV2, PremiumV3 (30 instances max)
+					- Basic (B1, B2, B3) (3 instances)
+					- Standard (S1, S2, S3) (10 instances max)
+					- Premium, PremiumV2, PremiumV3 (30 instances max)
 				- ISOLATED (Maximun scale-out capabilities)
 					- Isolated, IsolatedV2
 		- An app always runs in an app service plan.
@@ -96,7 +103,7 @@ Repasar imagen
 			- Autoscaling performs scaling IN and OUT (not UP and DOWN). It doesn't have any effect on CPU, memory, etc, It only changes the number of web servers of the APP SERVICE PLAN
 			- Autoscaling is not an effective approach when the web app performs resource-intensive as part of each requuest (It needs scale-up)
 			- Autoscaling isn't the best approach to handling LONG-TERM growth because autoscaling will end up being more expensive (if you can anticipate the rate of growth, do it manually)
-			- For STANDARD tier or better
+			- For STANDARD tier or better (MANUAL in BASIC)
 			- If you want to improve an specific app performance, you can try to moving the app to a separate APP SERVICE PLAN (different region, resource-intensive app, etc)
 			- Autoscaling can't create more instances than the limit (tier limit), to prevent runaway autoscaling
 		- Autoscaling Types:
@@ -139,7 +146,7 @@ Repasar imagen
 	* APP CONFIGURATION:
 		- General settings:
 			- Stack settings:
-				- Language, SDK, Start-up command (only for linux and containers)
+				- Language, SDK (pyton, php, node, java, .net), Start-up command (only for linux and containers)
 			- Platform settings:
 				- Platform bitness (32-b / 64-b, only for Windows)
 				- FTP state
@@ -237,8 +244,12 @@ Repasar imagen
 				- BASIC = (INCLUDED STORAGE 10GB)
 				- STANDARD = (INCLUDED STORAGE 100GB)
 				- PREMIUM = (INCLUDED STORAGE 500GB) (high volume scenarios)
+		- Authentication methods: azure entra Id, managed identity, admin user 
 
 		* FEATURES:
+			- Microsoft Entra authentication integration (ALL TIERS)
+			- Image deletion (ALL TIERS)
+			- Webhooks (ALL TIERS)
 			- Encryption-at-rest (ALL TIERS, encrypt before storing images, decrypt when use)
 			- Geo-replication (PREMIUM)
 			- Zone redundancy (PREMIUM)
@@ -260,10 +271,12 @@ Repasar imagen
 
 	* AZURE CONTAINER INSTANCES (ACI):
 		- No VM is needed, allows Windows and Linux
+		- Max resources: 4 CPU cores and 16 GB memory
 		- Focus: Ideal for tasks like batch/background jobs, simple stateless apis, isolated workloads without scaling or complex orchestration (dependencies)
 		- Container instances are billed by the second (you need to stop when not using)
+		- No support for persistent storage (natively)
 
-		* Container groups:
+		* Container groups (multi container groups):
 			- Similar to kubernetes POD, collection of container on the same host machine
 			- You can specify the volumes to create, and the AZURE FILES SHARES to mount, you can only mount AZURE FILES SHARES to Linux containers
 				("volumeMounts" and "volumes" properties of .yaml), you can do that using .yaml, command or Resource manager template
@@ -288,16 +301,21 @@ Repasar imagen
 	* AZURE CONTAINER APPS (ACA):
 		- Supports any Linux-based x86-64 linux/amd64 image
 		- No overhead of managing complex infrastructure (this service runs on top of AKS)
+		- ACA doesn't support direct integration with AKS
 		- Focus: Microservices applications and robust autoscaling, even-driven apps, background procesing apps, api endpoints
 		- Scaling based on: Http traffic, event-driven processing, CPU, memory, etc (KEDA-supported scaler)
 		- Can split traffic across multiple versions of an app
 		- A container app can contain multiple containers (SIDECAR pattern == app and a log agent for example) (Advanced scenario)
+		- It doesn't have multi container groups, instead it has container app containing multiple containers
 		
 		- MICROSERVICES:
 			- Independent scaling, versioning, upgrades
 			- Service discovery
 			- Native DAPR integration
 			- DAPR integration provides: observability, pub/sub, service-to-service, retries, etc.
+			- Persistent storage
+			- Custom domains
+			- Built-in load balancing
 
 		* CONTAINER APPS ENVIRONMENT:
 			- Secure boundary around groups of container apps
@@ -463,7 +481,8 @@ Repasar imagen
 	- Price depends on region
 	- Storage account performance:
 		* You pay for storage and you pay for the number of request per month.
-		- GPV2 = Standard storage: 
+		- GPV2 = Standard storage:
+		- GPV1 (Legacy)
 		- Premium: It costs way more to store it, but you save a lot of money on the access. (If you need read thousands of files per second)
 	- Storage account redundancy:
 		- LRS: Locally
@@ -806,7 +825,7 @@ Repasar imagen
 		- Managed hardware security module (HSM) pools (HSM-backed keys)
 	- Access requires authentication and authorization (user o application)
 		- Authentication: Microsoft Entra Id
-		- Authorization: Azure RBAC or Key Vault access policy
+		- Authorization: Azure RBAC (recommended) or Key Vault access policy
 	- Diagnostic Settings:
 		- Enable logging for vaults to:
 			- Archive to a storage account
@@ -1136,6 +1155,7 @@ Repasar imagen
 			- Are signed
 			- API Management gateway inspect the certificate within the request and check properties: Certificate Authority (CA), Thumbprint, Subject, Expiration Date
 			- Validation: Check who issued the certificate, If it's issued by partner, check that it came from them
+		- Basic auth
 
 
 * AZURE EVENT GRID
