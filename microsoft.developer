@@ -420,10 +420,49 @@ Repasar imagen
 			- Max scale out: 300
 			- Default timeout: 30s
 
-	* FUNCTION APP
+	* FUNCTION APP BASICS
 		- Unit of deplyment and management for your functions
 		- Functions within a function app are deployed, managed, scaled together and share the same pricing plan, runtime and deplyment method
 		- You can develop and test functions locally
+		- Use vscode to built azure functions app template (extension)
+
+	* FUNCTION APP CONFIGURATION
+		- host.json: Affect all functions (metadata, logging)
+		- local.settings.json (like a local appsettings.json)
+		- Application settings are in azure functions platform (settings deployed to azure)
+		- When publish the project, be sure to add required ettings to ap settings in azure
+		- Don't store secrets in loca.settings.json (don't push to code repository)
+		- You can download app settings from azure function app to local project
+
+	* TRIGGERS / BINDINGS:
+		* TRIGGER:
+			- Defines how a function is invoked. Azure function ----has only one----> trigger
+			- Trigger have associated data (function payload)
+			- Trigger types:
+				QueueTrigger, HttpTrigger, BlobTrigger, TimerTrigger, EventHubTrigger, ServiceBusQueueTrigger, ServiceBusTopicTrigger, 
+				EventGridTrigger, CosmosDBTrigger, DaprPublishOutputBinding, DaprServiceInvocationTrigger, DaprTopicTrigger
+
+		* BINDINGS:
+			- The way an azure functions connects to another resources
+			- Can be OUTPUT BINDING or INPUT BINDING or both. You can mix different bindings
+			- Data from bindings is provided as function parameters
+			- Binding types:
+				Blob storage, Azure Cosmos DB, Azure Data Explorer, Azure SQL, Dapr4, Event Grid, Event Hubs, HTTP & webhooks, IoT Hub, Kafka3, 
+				Mobile Apps (only v1.x), Notification Hubs (only v1.x), Queue storage, Redis, RabbitMQ3, SendGrid, Service Bus, SignalR, Table storage, Timer, Twilio
+
+		- Use case 1: Function + blob storage (INPUT and OUTPUT)
+			I need each time a txt file is added to specific path of blob storage, a function read the content, process and store in another specific path of blob storage:
+			- Use BlobTrigger because you need trigger actions based on blob updates
+			- Use [BlobOutput], [BlobTrigger], [BlobInput] attributes and name wildcard
+			- Use Connection parameter to set the app setting name instad of the actual conn string (best practice, app settings are stored encypted)
+
+	* CONNECTION TO AZURE SERVICES
+		- Azure functions can securely connect to many azure services using MANAGED IDENTITIES (system-assigned / user-assigned)
+		- Enable managed identity and grant azure RBAC (permissions to access the target service)
+		- Configure the target service to accept authentication from the function's managed identity
+		- The function can access services via SDK using the managed identity
+		- The managed identity is used to execute your OWN operations over the connected service.
+		- AzureWebJobsStorage (Connection parameter) is still required for the function runtime but is unrelated to your blob access (it uses internal function app setting).
 
 
 * FUNCTION APP:
