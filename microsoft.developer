@@ -507,7 +507,37 @@ Repasar imagen
 					- download the nuget package: Contrib.Grpc.Core.M1
 					- add this before last project tag:
 						<Target Name="CopyGrpcNativeAssetsToOutDir" AfterTargets="Build"> <ItemGroup> <NativeAssetToCopy Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="$(OutDir)runtimes/osx-arm64/native/*" /> </ItemGroup> <Copy SourceFiles="@(NativeAssetToCopy)" DestinationFolder="$(OutDir).azurefunctions/runtimes/osx-arm64/native" /> </Target>
-				
+
+
+* AZURE STORAGE
+	- An Azure Storage account is the top-level container for all of your Azure Blob storage
+	- Provides a unique namespace for your azure storage
+
+	* STORAGE ACCOUNT TYPES:
+		* Standard general-purpose v2 (GPV2)
+			- Most scenarios, supports all the storage services (including data lake)
+			- Redundancy: LRZ, GRS, RA-GRS, ZRS, GZRS, RA-GZRS
+		* Premium
+			- Redundancy: LRS, ZRS
+			- Premium block blobs (blob storage including data lake)
+			- Premium file shares (azure files)
+			- Premium page blobs (page blobs only)
+
+	* ACCESS TIERS
+		- HOT: For frequently accessed objects (highest storage cost, lowest access cost). Default tier
+		- COOL: For Infrequently accessed objects. Stored for a minimum of 30 days (lower storage cost, higher access cost than HOT)
+		- COLD: For Infrequently accessed objects. Stored for a minimum of 90 days (lower storage cost, higher access cost than COOL)
+		- ARCHIVE: For data that can tolerate several hours of retrieval latency. Stored for a minimum of 180 days (lowest storage cost, highest access cost than COOL)
+		You can change the tier based on patters of your data
+
+
+	* AZURE BLOB STORAGE
+		- Objects storage solution for cloud (stores massiev ammount of unstructured data)
+		- Use cases: Serving images, docs, files, streaming audio and video, write log files, for backup and restore, disaster recovery, archiving
+		- Access blob storage via http/https from anywhere
+		- Accessible via: Azrure storage rest api, azure powershell, azure CLI or SDK
+
+
 
 * AZURE STORAGE ACCOUNT
 	- Managed disks (usually fixed) are more expensive than blob storage (on demand).
