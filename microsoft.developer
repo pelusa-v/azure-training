@@ -464,87 +464,13 @@ Repasar imagen
 		- The managed identity is used to execute your OWN operations over the connected service.
 		- AzureWebJobsStorage (Connection parameter) is still required for the function runtime but is unrelated to your blob access (it uses internal function app setting).
 
-
-* FUNCTION APP:
-	- Create function app:
-		- Runtimes: It supports .net, nodejs, python, java, powershell, custom handler
-			- Custom Handler: This options is used when need another runtime or language (go, php, etc)
-		- f needs an storage account, that's because underneath the function model is a file system
-		- Hosting plan:
-			- Consumption (Serverless): Recommended for free
-			- Flex Consumption
-			- Functions premium
-			- App Service
-			- Container App environment
-		- Networking: Private or public access
-			- Enable networking injection is only available in functions premium
-	- Create function:
-		- Select template (Http trigger, timmer trigger, etc)
-		- Authorization level:
-			- Function (token)
-			- Anonymous (open to everyone)
-			- Admin (higher level of security required)
-		- Test and code:
-			- Get function url with key and execute
-		- Monitoring:
-			- Success and failed executions
-			- Logs: real time logs
-		- Using function core tools:
-			- func init
-			- func new
-			- func start
-			- func azure functionapp publish "fa name"
-	- Trigger types:
-		- QueueTrigger
-		- HttpTrigger
-		- BlobTrigger
-		- TimerTrigger
-		- EventHubTrigger
-		- ServiceBusQueueTrigger
-		- ServiceBusTopicTrigger
-		- EventGridTrigger
-		- CosmosDBTrigger
-		- DaprPublishOutputBinding
-		- DaprServiceInvocationTrigger
-		- DaprTopicTrigger
-	- Bindings:
-		(https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=isolated-process%2Cpython-v2&pivots=programming-language-csharp)
-		- Output: output method to storage the response data of function app trigger
-			- Blob storage: Create an storage account, and a container, create a new container and configure in C# using the container name, wildcard name and connection string and BlobOutput attribute
-		- Types:
-			Blob storage
-			Azure Cosmos DB
-			Azure Data Explorer
-			Azure SQL
-			Dapr4
-			Event Grid
-			Event Hubs
-			HTTP & webhooks
-			IoT Hub
-			Kafka3
-			Mobile Apps (only v1.x)
-			Notification Hubs (only v1.x)
-			Queue storage
-			Redis
-			RabbitMQ3
-			SendGrid
-			Service Bus
-			SignalR
-			Table storage
-			Timer
-			Twilio
-		- Example:
-			BlobInput: Some stored file in blob storage to read the content as input
-			BlobOutput: File name with name parameter like this: blob/{name}-output.txt
-			BlobTrigger: New or updated blob is detected (Stream or string)
-
-	- Durable functions:
+	* DURABLE FUNCTIONS:
 		- Enable to have sequence of steps (functions). This steps use ActivityTrigger and the orchestrator uses OrchestrationTrigger and launch all the ActivityTrigger functions.
-		  The OrchestrationTrigger can be called in another function of any trigger type.
-		  Example:
-		  	HttpTrigger -----calls in function-----> OrchestrationTrigger -----calls in function-----> ActivityTrigger1 ---output---> ActivityTrigger2 ---output---> output in orchestrator
+		- The OrchestrationTrigger can be called in another function of any trigger type.
+		- Example:
+			HttpTrigger -----calls in function-----> OrchestrationTrigger -----calls in function-----> ActivityTrigger1 ---output---> ActivityTrigger2 ---output---> output in orchestrator
 
-		- Patterns:
+		* DESIGN PATTERNS:
 			- Function chaining pattern: (READY–)
 				A[Orchestration Function Starts] --> B[Function A]
 			    B --> C[Function B]
@@ -573,7 +499,7 @@ Repasar imagen
 			- Human interaction pattern:
 				A function request approval to call other functions, the function have a return a timeout if human approval is not received
 
-		- Enable durable functions support:
+		* ENABLE DURABLE FUNCTIONS SUPPORT:
 			- For Javascript runtime, create diretly from azure portal and download the npm durable-functions package, then restart the funcion app
 			- For .NET runtime:
 				- Create the project (durable function orchestrator) from vscode and use azurite extension for test local storage (Azurite: Start in command palette)
@@ -654,6 +580,8 @@ Repasar imagen
 	- Object replication
 	- Lifecycle management:
 		- Add rules that will move files from the hot tier to the cool or archive tier based on the last access date (you can configure to delete instead to move files)
+
+
 
 * AZURE COSMOS DB
 	- Fully managed NoSQL and relational database service for scalable, high performance applications.
