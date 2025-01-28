@@ -524,18 +524,58 @@ Repasar imagen
 			- Premium page blobs (page blobs only)
 
 	* ACCESS TIERS
-		- HOT: For frequently accessed objects (highest storage cost, lowest access cost). Default tier
-		- COOL: For Infrequently accessed objects. Stored for a minimum of 30 days (lower storage cost, higher access cost than HOT)
-		- COLD: For Infrequently accessed objects. Stored for a minimum of 90 days (lower storage cost, higher access cost than COOL)
-		- ARCHIVE: For data that can tolerate several hours of retrieval latency. Stored for a minimum of 180 days (lowest storage cost, highest access cost than COOL)
+		- HOT: Online, For frequently accessed objects (highest storage cost, lowest access cost). Default tier
+		- COOL: Online, For Infrequently accessed objects. Stored for a minimum of 30 days (lower storage cost, higher access cost than HOT)
+		- COLD: Online, For Infrequently accessed objects. Stored for a minimum of 90 days (lower storage cost, higher access cost than COOL)
+		- ARCHIVE: Offline, For data that can tolerate several hours of retrieval latency. Stored for a minimum of 180 days (lowest storage cost, highest access cost than COOL) (can't e read or modified)
 		You can change the tier based on patters of your data
-
 
 	* AZURE BLOB STORAGE
 		- Objects storage solution for cloud (stores massiev ammount of unstructured data)
 		- Use cases: Serving images, docs, files, streaming audio and video, write log files, for backup and restore, disaster recovery, archiving
 		- Access blob storage via http/https from anywhere
 		- Accessible via: Azrure storage rest api, azure powershell, azure CLI or SDK
+		* RESOURCES:
+			- Storage account: Unique namespace (URL: http://STORAGE_ACCOUNT_NAME.blob.core.windows.net)
+			- Container:
+				- Organize a set of blobs, like a directory
+				- Storage account can contain unlimited containes, containers can store unlimited blobs
+				- naming: lowercase, letters, numbers (no consecutive), dash, start with letter or number, 3 <= chars <= 63,
+				- URL: http://STORAGE_ACCOUNT_NAME.blob.core.windows.net/CONTAINER_NAME
+			- Blob:
+				Block blobs: For text and binary data. Store data up to 190.7-TiB size (individual blocks)
+				Append blobs: Optimized for apppend operations (logging use case)
+				Page blobs: Store random access files up to 8 TB in size. Page blobs store virtual hard drive (VHD) files and serve as disks for Azure virtual machines.
+				- URL: http://STORAGE_ACCOUNT_NAME.blob.core.windows.net/CONTAINER_NAME/BLOB_NAME
+
+	* ENCRYPTION:
+		- All blobs, disks, files, queues, tables and metadata are encrypted for free (any region, tier, type)
+		- Use SSE (service-side encryption) to store the data (256 AES)
+		- Provide client-side encryption for customers who need it (in the SDKs using VERSION 2 GCM and VERSION 1 CBC)
+		* MICROSOFT-MANAGED KEYS: By default
+		* CUSTOMER-MANAGED KEYS: Azure key vault stores the keys
+		* CUSTOMER-PROVIDED KEYS: Customer's own key store
+
+	* DATA LIFECYCLE:
+		* POLICIES (LIFECYCLE MANAGEMENT):
+			- Rule-based policies that are used to change to the appropriate access tiers or to expire data
+			- Policy = collection of rules (up to 100 rules)
+			- Rule filters: limit rule to a subser (blobTypes, prefixMatch, blobIndexMatch)
+			- Rule actions: tiering and deletion of blobs and snapshots (tierToCool, tierToCold, tierToArchive, delete, enableAutoTierToHotFromCool) (azure apply the least expensive action)
+			- Rule time: Based on age, midified time. for blobs, creation time for snapshots (daysAfterModificationGreaterThan, daysAfterCreationGreaterThan, daysAfterLastAccessTimeGreaterThan, daysAfterLastTierChangeGreaterThan)
+		* APPLY POLICIES:
+			- az storage account management-policy create --account-name <storage-account> --policy @policy.json --resource-group <resource-group>
+			- Using the code view of: Data management -> Lifecycle Management
+		* REHYDRATATE:
+			* Copy archived blob to an online tier (recommended): Using COPY BLOB operation (copy to other storage account but the same region)
+			* Change blob's access tier to online tier: Using SET BLOB TIER operation (it can't be canceled. This doesn't affect the modified time)
+			- Archived blobs need to be rehydratated (can take several hours)
+			- Priority:
+				Using header "x-ms-rehydrate-priority"in COPY and SET operations
+				- Standard priority: Default, in order (up to 15h)
+				- High priority: prioritized (under 1h for objects < 10GB)
+				
+
 
 
 
