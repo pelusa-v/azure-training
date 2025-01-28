@@ -574,7 +574,35 @@ Repasar imagen
 				Using header "x-ms-rehydrate-priority"in COPY and SET operations
 				- Standard priority: Default, in order (up to 15h)
 				- High priority: prioritized (under 1h for objects < 10GB)
-				
+	
+	* CONSUME:
+		* SDK CLIENTS:
+			- BlobClient (blob level operations): interact with blob resource (reference and create blob, download blob)
+			- BlobContainerClient (container level operations): create, delete, configure container, list, upload and delete blobs within the container
+			- BlobServiceClient (storage account level operations): list, create, delete containers in storage account, retrieve and configure account properties
+		- You can use the GetBlobContainerClient or GetBlobClient methods to create the specific level cliente from the BlobServiceClient
+		- You can create a BlobContainerClient using the BlobServiceClient created
+		- Pass the URI referencing the endpoint and use DefaultAzureCredential to use Managed identities
+
+		* METADATA:
+			* System properties: Some can be read or set, others are read-only
+			* User-defined metadata: name-value pairs that user specify for blobs
+			
+			* SDK
+				- Container properties: GetProperties and GetPropertiesAsync of BlobContainerClient
+				- Metadata: 
+					- Set: SetMetadata and SetMetadataAsync of BlobContainerClient (data is added as IDictionary)
+					- Get: Use GetProperties and GetPropertiesAsync of BlobContainerClient, and inspect to get Metadata (properties.Value.Metadata)
+				- You can also use REST
+
+			* STANDARD PROPERTIES
+				- represented as headers when using rest
+				- containers: ETag, Last-Modified
+				- blobs: ETag, Last-Modified, Content-Length, Content-Type, Content-MD5, Content-Encoding, Content-Language, Cache-Control, Origin, Range
+
+			- StartCopyFromUriAsync and SetMetadataAsync as important methods.
+			- AzCopy:
+				- To copy files between container, even between different subscriptions (or different cloud providers)
 
 
 
