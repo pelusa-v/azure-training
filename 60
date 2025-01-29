@@ -1,0 +1,66 @@
+60
+
+15 - 18
+- containers
+- webapps
+- functions
+
+9 - 12
+- cosmos
+- blob storage
+
+9 - 12
+- msal
+- key vault
+
+6 - 9
+- redis cache
+- app insights
+
+12 - 15
+- api management
+- event-based
+- message based
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+PROMPT:
+Give me questions about azure functions following the microsoft documentation:
+
+https://learn.microsoft.com/en-us/training/modules/explore-azure-functions/
+https://learn.microsoft.com/en-us/training/modules/develop-azure-functions/
+
+Remember, the questions should be as difficult as az-204 (same difficulty and style)
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+DONE:
+----
+
+AZURE APP SERVICE
+AZURE CONTAINERS
+	AZURE CONTAINERS REGISTRY
+	AZURE CONTAINERS INSTANCE
+	AZURE CONTAINERS APPLICATION
+AZURE FUNCTIONS
+AZURE STORAGE ACCOUNT
+	AZURE BLOB STORAGE
+
+------------------------------------------
+
+PENDING:
+-------
+
+AZURE COSMOS DB
+AZURE ENTRA ID
+AZURE MICROSOFT GRAPH
+AZURE KEY VAULT
+AZURE CACHE FOR REDIS
+AZURE CDN
+AZURE APPLICATIONS INSIGHTS
+AZURE APP CONFIGURATION
+AZURE API MANAGEMENT
+AZURE EVENT GRID
+AZURE EVENT HUB
+AZURE SERVICE BUS
+AZURE STORAGE ACCOUNT
+	AZURE QUEUE STORAGE
