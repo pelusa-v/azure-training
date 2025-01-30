@@ -649,10 +649,61 @@ Repasar imagen
 			- CASSANDRA: table > row
 			- TABLE: table > item
 			- GREMLIN: graph > node/edge
-	- Create NOSQL:
+	* DATA CONSISTENCY:
+		- Define how data is read and written across multiple replicas in a globally distributed environment
+		- Spectrum of well-defined choices (granular tradeoffs - high availability and performance)
+		- Consistency levels are region-agnostic and are guaranteed for all operations
+		- Cosmos uses "session" consistency as default
+		- The consistency level configured on the account applies to all databases, containers under the account
+		- 100% of read requests meet the consistency guarantee for the consistency level chosen
+
+		- STRONG >>>>>> BOUNDED STALENESS >>>>>> SESSION >>>>>> CONSISTENT PREFIX >>>>>> EVENTUAL
+		-------------- Higher availability, lower latency, higher throughput-------------------->
+
+		* STRONG:
+			- Reads are guaranteed to return the most recent version of an item (latest commited write)
+			- Client never sees an uncommited or partial write
+			- Use case: Financial transactions, critical real time apps, etc
+
+		* BOUNDED STALENESS:
+			- Lag of data between any two regions is always less than a specified amount:
+				- Number of versions (K) of the item (e.g 100 updates)
+				- Time window (T) reads may lag behind writes (e.g 5 seconds)
+			- Beneficial to single-region write with more regions
+			- Clients see updates in ORDER with a slight delay
+			- Use case: Leaderboards, collaborative apps where order matters without critical real-time updates
+
+		* SESSION:
+			- A client always sees its own writes inmediately regardless of the region (read-your-own-writes) (No global order)
+			- Other client might see slightly stale data
+			- Use case: User profiles. shopping cart, etc
+
+		* CONSISTENT PREFIX:
+			- Client never sees updates out of order, but stale data is possible
+			- Updates made as a batch within a transaction are returned to the transaction in which they were commited
+			- Write operation withi a transaction of multiple items are always visible together
+			- If writes are "DocA v1 -> DocA v2 & DocB v1 -> DocB v2", the user can see either "DocA v2 & DocB v2" or "DocA v1 & DocB v1" but never "DocA v2 & DocB v1" for the same read
+			- If wites are A -> B -> C, a read may return A -> B but never A -> C without B
+			- Use case: Chat apps, notifications, apps where order matters but real-time freshness is not critical
+
+		* EVENTUAL:
+			- Db will eventually converge, but not guarantees the order
+			- Client could see stale or out of order data
+			- Use case: Social app feed, recommendations, count of likes, apps where the order really doesn't matter
+
+
+	* CONSIDERATIONS OF CREATING PROCESS:
+		- Cost of all operations (point read, write, query) is normalized by request units (RUs)
+		- RU represents the CPU, IOPS and memory required to perform the operation
+			- e.g: Fetch a 1KB item by its ID and partiion key = 1RU
 		- Capacity mode:
-			- Provisioned throughput: Fix an ammount of provisioned throughput to consume (RUs/s) regardless of consumption. Use free tier for this if possible
-			- Serverless: Pay as you use
+			* Provisioned throughput:
+				- Fix an ammount of provisioned throughput to consume (RUs/s) regardless of consumption. Use free tier for this if possible
+				- The throughput can be at container and database granularity level
+			* Serverless: Pay as you use (RUs consumed by operations)
+			* Autoscale mode: 
+				- Automatically and instantly scale throughput (RUs/s) based on usage
+				- For mission-critical workloads with variable traffic patterns
 		- Limit throughput: Protects your account from cost overruns
 		- Global distribution:
 			- geo-redundancy: I created this in west and it will also create a version in east
@@ -660,34 +711,39 @@ Repasar imagen
 		- Backup Policy (NOT EXAM):
 			- Periodic backup (interval, retention, copies, redundancy)
 			- Continuos
-	* Global replication:
+
+	* GLOBAL REPLICATION:
 		- You can add more regions (replications) as a READ REGIONS (you can program the application to read from the closest region to the client)
 		- Muti region writes:
 			- Enable WRITE and READ in all selected regions, this will double the cost
 		- If the cosmos db has only a WRITE region (primary region), you can perform read and write operations in that region.
-	- Keys:
-		- You can access to cosmos using the URI (or endpoint, exposed on internet or azure virtual network) and a primary or secondary key
-		- You have primary/seconday keys for Read-write regions, and read-only regions
-	- Data explorer:
-		- Create new container:
-			- Create new db or use existing
-			- Autoscale or manual
-			- Set the max RU/s
-			- Partition key: Distribute data across partitions for scalability
-			- Unique keys: Specific unique keys in a partition
-			- id key is required in each item and is a default unique key
-		- Connect
-			- When new Item is created, cosmos add 5 properties to object:
-				- rid (row id), _self (self reference)
-	* Data consistency:
-		- Strong > Bounded staleness > session > consistent prefix > eventual
-		- Cosmos uses "session" consistency as default
+
 	* SDK:
-		- code
-	- Sp, trigger, user-defined functions:
-		- sp: for large data executions. You can execute sp from sdk
-		- triggers: to validate or add something before (pre trigger) and after (post trigger) creation/deletion/update
-		- user-defined functions: function that you can use inside a query. To calculate fields.
+		- Base client: CosmosClient, providing cosmos endpoint and credential (keys or DefaultAzureCredential for managed identities)
+		- You can obtain a Database client from CosmosClient so you can perform operations on containers
+		- You can obtain a Container form the datbase, so you can perform operations on items (CRUD and Query)
+
+	* UTILITIES:
+		- Sp, trigger, user-defined functions:
+			- sp: for large data executions. You can execute sp from sdk. All sps have a context object, that provides access to all operations and req and res
+			- triggers: to validate or add something before (pre trigger) and after (post trigger) creation/deletion/update
+			- user-defined functions: function that you can use inside a query. To calculate fields.
+
+		- Keys:
+			- You can access to cosmos using the URI (or endpoint, exposed on internet or azure virtual network) and a primary or secondary key or without credentials using managed identities
+			- You have primary/seconday keys for Read-write regions, and read-only regions
+		- Data explorer:
+			- Create new container:
+				- Create new db or use existing
+				- Autoscale or manual
+				- Set the max RU/s
+				- Partition key: Distribute data across partitions for scalability
+				- Unique keys: Specific unique keys in a partition
+				- id key is required in each item and is a default unique key
+			- Connect
+				- When new Item is created, cosmos add 5 properties to object:
+					- rid (row id), _self (self reference)
+		- Endpoint discovery enables applications to automatically route read requests to the closest Cosmos DB region, reducing latency.
 
 	* CHANGE FEED NOTIFICATIONS:
 		- Change feed in Azure Cosmos DB is a persistent record of changes to a container in the order they occur

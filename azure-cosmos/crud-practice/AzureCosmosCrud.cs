@@ -1,4 +1,5 @@
 using System;
+using Azure.Identity;
 using Microsoft.Azure.Cosmos;
 
 namespace crud_practice;
@@ -9,6 +10,7 @@ public class AzureCosmosCrud
 
     public AzureCosmosCrud(string endpoint, string key)
     {
+        // _client = new CosmosClient(endpoint, new DefaultAzureCredential()); // using managed identites
         _client = new CosmosClient(endpoint, key);
     }
 
