@@ -360,6 +360,7 @@ Repasar imagen
 	- Less infrastructure and save on costs
 	- It supports integration with logic apps
 	- Does'nt support Windows containers
+	- If an Azure Function does not complete within the timeout period, it may be retried, leading to duplicate processing
 
 	* AZURE FUNCTIONS vs LOGIC APPS:
 		- Both can create complex orchestrations (collection of steps or actions)
@@ -379,15 +380,19 @@ Repasar imagen
 		- functionTimeout in host.json (time out parameter, timeout duration for function executions)
 		- Hosting option specify how the function scale, resource available for funtcion app instances, advanced functionalities, support linux container
 		- Event driven Autoscale: Instances of the functions hosts are dinamiclly added and removed based on incoming events
+		- When you create a function app, you must create or link to a general-purpose Azure Storage account that supports Blob, Queue, and Table storage (AzureWebJobsStorage)
+
 		* CONSUMPTION PLAN
 			- Default hosting plan
 			- Pay for compute resources when functions are running (py-as-you-go)
+			- WITHOUT virtual network integration
 			- Autoscale: Event driven
 			- Max scale out: 200 (W), 100 (L)
 			- No containers support
 			- Default functionTimeout: 5m
 		* FLEX CONSUMPTION PLAN
-			- High scalability with compute choices (key benefit), virtual networking and pay-as-you-go
+			- High scalability with compute choices (key benefit) and pay-as-you-go
+			- Virtual network integration 
 			- Event driven autoscale based on the configured per instance concurrency and incoming events
 			- Support pre-provisioned (always ready) instances
 			- Max scale out: 1000 (L)
@@ -396,6 +401,7 @@ Repasar imagen
 			- No support for windows
 		* PREMIUM PLAN
 			- Event driven using PREWARMED workers (no delay after being idle)
+			- This plan can use VNET integration for webapps
 			- More powerful instances (CPU, memory, maximun execution time)
 			- For apps that runs continously
 			- For many function apps on the same plan
@@ -631,13 +637,14 @@ Repasar imagen
 		- Unlimited elastic write and read sclability
 		- 99.999% read and write availability all around the world
 		- Guarantedd read and writes serverd in < 10ms (near real time reads and writes)
+		- The maximum size limit of an item in a cosmos DB container = 2MB (if you need to store larger objects, use blob storage)
 	* APIs:
 		- COSMOS DB FOR NOSQL: Core Native api for working with documents (JSON), supports familiar SQL language. Choose this when start from scratch (there is no data). ------> NON RELATIONAL
 		- COSMOS DB FOR POSTGRESQL: OpenSource postgresql. Choose this if you need tables, foreign keys, primary keys, etc ------> RELATIONAL
 		- COSMOS DB FOR MONGODB: MongoDb datbase for working with documents (BSON). Choose this if you have existing mongoDb data and plan to migrate to azure ------> NON RELATIONAL
 		- COSMOS DB FOR APACHE CASSANDRA: Cassandra database, mongodb and cassandra APIs are compatible (you can migrate without changes). Choose this if you have existing cassandra data and plan to migrate to azure ------> NON RELATIONAL
 		- COSMOS DB FOR TABLE: Compatible with azure table storage (you can migrate without changes). Choose this if you have existing azure table storage data ------> NON RELATIONAL
-		- COSMOS DB FOR GREMLIN: Graph database service using gremlin query language (nodes, edges). Choose if you need relationships between data ------> NON RELATIONAL
+		- COSMOS DB FOR GREMLIN: Graph database service using gremlin query language (nodes, edges). Choose if you need relationships between data (hierarchical) ------> NON RELATIONAL
 	* HIERARCHY:
 		- Database account > database > container > item, sps, fucntions, triggers, conflicts
 	* TYPES:
@@ -692,7 +699,7 @@ Repasar imagen
 			- Use case: Social app feed, recommendations, count of likes, apps where the order really doesn't matter
 
 
-	* CONSIDERATIONS OF CREATING PROCESS:
+	* CONSIDERATIONS:
 		- Cost of all operations (point read, write, query) is normalized by request units (RUs)
 		- RU represents the CPU, IOPS and memory required to perform the operation
 			- e.g: Fetch a 1KB item by its ID and partiion key = 1RU
@@ -700,6 +707,7 @@ Repasar imagen
 			* Provisioned throughput:
 				- Fix an ammount of provisioned throughput to consume (RUs/s) regardless of consumption. Use free tier for this if possible
 				- The throughput can be at container and database granularity level
+				- If the traffic exceeds the RU/s limit, requests get throttled
 			* Serverless: Pay as you use (RUs consumed by operations)
 			* Autoscale mode: 
 				- Automatically and instantly scale throughput (RUs/s) based on usage
@@ -744,6 +752,15 @@ Repasar imagen
 				- When new Item is created, cosmos add 5 properties to object:
 					- rid (row id), _self (self reference)
 		- Endpoint discovery enables applications to automatically route read requests to the closest Cosmos DB region, reducing latency.
+		
+		* INDEXING:
+			- Cosmos DB automatically indexes all properties by default
+		* PARTITION KEYS:
+			- When you design a cosmosDB container, you must choose a partition key
+			- This determines how data is distributed across logical partitions
+			- Choose as partiton key: Many unique values
+			- If all the writes in a workload on a container target the same partition key, the partition gets all requests , while others reamin idle, RU/s consumed only in that partition (performance bottleneck)
+			- The above issue is called  "hot partition"
 
 	* CHANGE FEED NOTIFICATIONS:
 		- Change feed in Azure Cosmos DB is a persistent record of changes to a container in the order they occur
