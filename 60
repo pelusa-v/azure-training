@@ -24,12 +24,10 @@
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROMPT:
-Give me questions about azure functions following the microsoft documentation:
+I'm practicing for az-204 azure certificate, so I want to practice about SERVICE_NAME.
+I need you to make me questions to practice. Remember, the questions should be at the same level of az-204 certification exam, you need to make the questions based documentation and up to date information about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score and the correct answer of each question. When you're asking me the questions, don't show the answer so I can practice.
 
-https://learn.microsoft.com/en-us/training/modules/explore-azure-functions/
-https://learn.microsoft.com/en-us/training/modules/develop-azure-functions/
-
-Remember, the questions should be as difficult as az-204 (same difficulty and style)
+Here is the documentation:
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------

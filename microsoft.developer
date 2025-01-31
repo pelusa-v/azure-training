@@ -245,7 +245,8 @@ Repasar imagen
 				- BASIC = (INCLUDED STORAGE 10GB)
 				- STANDARD = (INCLUDED STORAGE 100GB)
 				- PREMIUM = (INCLUDED STORAGE 500GB) (high volume scenarios)
-		- Authentication methods: azure entra Id, managed identity, admin user 
+		- Authentication methods: azure entra Id, managed identity, admin user (recommended to restrict access: disable admin user and use RBAC)
+		- Use microsoft defender for containers when need automatic image scanning for vulnerabilities
 
 		* FEATURES:
 			- Microsoft Entra authentication integration (ALL TIERS)
@@ -266,7 +267,7 @@ Repasar imagen
 			- Has associated source code context (Git repo specifying branch), tasks use
 			- Build automaticlly when commits code to source
 			- USE-CASES:
-				- Quick task -----> Like "docker build", "docker push" in azure (without docker engine, on demand) -----> az acr build
+				- Quick task -----> Like "docker build", "docker push" in azure (without docker engine, on demand) -----> az acr build (reduces local resources usage by building in cloud)
 				- Triggered tasks -----> Trigges to build on code update, base image update, schedule -----> az acr task create / track base image dependency / schedule
 				- Multi-step task -----> It uses a .yaml file to define steps (custom workflow) 
 
@@ -276,6 +277,7 @@ Repasar imagen
 		- Focus: Ideal for tasks like batch/background jobs, simple stateless apis, isolated workloads without scaling or complex orchestration (dependencies)
 		- Container instances are billed by the second (you need to stop when not using)
 		- No support for persistent storage (natively)
+		- You can run ACI in a private network by deploying the app in a VNET
 
 		* Container groups (multi container groups):
 			- Similar to kubernetes POD, collection of container on the same host machine
@@ -314,6 +316,8 @@ Repasar imagen
 			- Service discovery
 			- Native DAPR integration
 			- DAPR integration provides: observability, pub/sub, service-to-service, retries, etc.
+			- DAPR is used for service discovery and communication
+			- Use kubernetes-based service mesh for distributed applications
 			- Persistent storage
 			- Custom domains
 			- Built-in load balancing
