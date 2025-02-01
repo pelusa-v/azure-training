@@ -808,11 +808,22 @@ Repasar imagen
 	* IDENTITY CONFIGURATION:
 		- Allows to integrate with microsoft entra ID
 	* TENANT:
-		- An instance of Azure Microsoft Entra ID that an organization or individual uses to manage users, apps, etc.
+		- An instance of Azure Microsoft Entra ID that an organization or individual uses to manage users, apps, etc. This is true for both users (user principal) and applications (service principal)
 	* APPLICATION OBJECT:
 		- Application ------------ one to one ------------ Application object
+		- Application ------------ one to many ------------ Service principal
 	* SCHEMA:
 		- https://app.diagrams.net/#G1l1P8atQcV2vNu8CWlNm4b7_yU5Etr9_D#%7B%22pageId%22%3A%22MnA-WK4r-ufKpTyJempP%22%7D
+		- Security principal: 
+			- To access resources secured by a Microsoft Entra tenant the entity that is requesting access must be represented by a security principal
+			- This applies to users (user principal) and applications (service principal)
+			- This defines the access policy and permissions for the user/app in the tenant
+			- Application object: Global representation of the app for all the tenants
+			- Service principal: Local representation for use in a specific tenant
+			- TYPES OF SERVICE PRINCIPAL:
+				* APPLICATION: Representation of a global application (app registration) in a tenant, defines who can access the app, and what resources the app can access
+				* MANAGED IDENTITY: Represents a managed identity, an Identiy is provided for apps (app registration) to use when connecting to resources.
+				* LEGACY: For apps created before app registrations were introduced
 	* INTEGRATION:
 		- You need AzureAd in appsettings.json and use:
 		
