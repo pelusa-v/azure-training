@@ -24,10 +24,37 @@
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROMPT:
-I'm practicing for az-204 azure certificate, so I want to practice about SERVICE_NAME.
-I need you to make me questions to practice. Remember, the questions should be at the same level of az-204 certification exam, you need to make the questions based documentation and up to date information about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score and the correct answer of each question. When you're asking me the questions, don't show the answer so I can practice.
+I'm practicing for az-204 azure certificate, so I want to practice about AZURE_SERVICE_NAME.
+I need you to make me questions to practice. Remember, the questions should be AS DIFFICULT AS az-204 certification exam, you need to make the questions based on the documentation I'll provide you and up to date information (2025) about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score and the correct answer of each question. When you're asking me the questions, don't show the answer so I can practice.
 
-Here is the documentation:
+Here is the documentation so you can make te question based on that pages about the topics:
+
+
+Ok, now, give me 20 questions about all those services:
+AZURE APP SERVICE
+AZURE CONTAINERS (ACR, ACI, ACA)
+AZURE FUNCTIONS
+AZURE STORAGE ACCOUNT
+AZURE COSMOS DB
+
+I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB.
+I need you to make me questions to practice. Remember, the questions should be AS DIFFICULT AS az-204 certification exam, you need to make the questions based on the documentation I'll provide you and up to date information (2025) about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score and the correct answer of each question. When you're asking me the questions, don't show the answer so I can practice.
+
+Here is the documentation so you can make te question based on that pages about the topics:
+https://learn.microsoft.com/en-us/training/modules/introduction-to-azure-app-service/
+https://learn.microsoft.com/en-us/training/modules/configure-web-app-settings/
+https://learn.microsoft.com/en-us/training/modules/scale-apps-app-service/
+https://learn.microsoft.com/en-us/training/modules/understand-app-service-deployment-slots/
+https://learn.microsoft.com/en-us/training/modules/publish-container-image-to-azure-container-registry/
+https://learn.microsoft.com/en-us/training/modules/create-run-container-images-azure-container-instances/
+https://learn.microsoft.com/en-us/training/modules/implement-azure-container-apps/
+https://learn.microsoft.com/en-us/training/modules/explore-azure-functions/
+https://learn.microsoft.com/en-us/training/modules/develop-azure-functions/
+https://learn.microsoft.com/en-us/training/modules/explore-azure-blob-storage/
+https://learn.microsoft.com/en-us/training/modules/manage-azure-blob-storage-lifecycle/
+https://learn.microsoft.com/en-us/training/modules/work-azure-blob-storage/
+https://learn.microsoft.com/en-us/training/modules/explore-azure-cosmos-db/
+https://learn.microsoft.com/en-us/training/modules/work-with-cosmos-db/
 
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -19,6 +19,8 @@ Repasar imagen
 		- CI/CD
 			- Azure DevOps, Github, Bitbucket, FTP, local git repo, Azure Container Registry
 		- Custom domains (From BASIC)
+		- Azure app service certiticate (From BASIC)
+		- SSL Connection (From BASIC)
 		* DEPLOY:
 			- Automatic: Using CI/CD
 			- Manual: Git, CLI (az webapp up), ZIP (using curl), FTPS/FTP
@@ -173,6 +175,10 @@ Repasar imagen
 			- You can enable deployment slot settings (swappable setting)
 			- For linux replace ":" by "_" for nested keys
 			- Connection strings follow the same flow as app settings
+		- Domain (DNS records you need to add with domain provider):
+			- A RECORD: For root domain
+			- CNAME RECORD: For subdomain or wildcard
+			- TXT RECORD: Domain verification ID
 
 	* DIAGNOSTIC LOGGING
 		- Diagnose and solve problems: Use Azure service diagnostics (built-in) to look into deep insights (perfomance issues, memory leaks, etc)
