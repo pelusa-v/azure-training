@@ -884,15 +884,34 @@ Repasar imagen
 				- Apps performing On-behalf-of flow
 				- Apps accessing multiple services/resources
 				- SPAs using MSAL
-		- FLOW:
-			- For client app like Blazor or MVC (without specific permissions):
-				- Create an app registration (represents the app)
-				- Add  services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-	                .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
-	            - Add redirect url as web or webapp to app registration configuration
-	            - The url must match with the CallbackPath of AzuerAd configuration of appsettings.json
-	            - The implicit flow must be allowed (in this use case)
-	        - For API + Client:
+	* FLOW:
+		- Scenarios: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/azure-active-directory/?view=aspnetcore-9.0
+		* For web app (traditional server based app like Blazor or MVC) - (AUTHORIZATION CODE flow):
+			- Create an app registration (represents the app)
+			- Configures the OpenID connect options, so the authotity is the Micrososft identity platform
+				- install Microsoft.Identity.Web and  Microsoft.Identity.Web.UI
+ 				- Add  
+ 					services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+ 						.AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
+	        - Add redirect url as web or webapp to app registration configuration
+	        - The url must match with the CallbackPath of AzuerAd configuration of appsettings.json
+	        - The client secret must be aded in the azuread seciton because this is a server based app using authorization code
+
+	    * For web app (traditional server based app like Blazor or MVC) - (AUTHORIZATION CODE HYBRID flow):
+	    	- Create an app registration (represents the app)
+			- Enable Id Token to hybrid apps in authentication section
+			- Configures the OpenID connect options, so the authotity is the Micrososft identity platform
+				- install Microsoft.Identity.Web and  Microsoft.Identity.Web.UI
+ 				- Add  
+ 					services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+ 						.AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
+	        - Add redirect url as web or webapp to app registration configuration
+	        - The url must match with the CallbackPath of AzuerAd configuration of appsettings.json
+	        - The implicit flow must be allowed (in this use case)
+
+	    * For client app (React, angular, vure, SPAs) - (using MSAL RECOMMENDED or IMPLICIT flow):
+
+	    * For API + Client:
 
 	* MSAL:
 		The library enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, etc.
