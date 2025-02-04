@@ -1,0 +1,6 @@
+@incremental_consent_HostAddress = http://localhost:5120
+
+GET {{incremental_consent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

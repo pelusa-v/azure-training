@@ -286,6 +286,8 @@ Repasar imagen
 		- You can run ACI in a private network by deploying the app in a VNET
 
 		* Container groups (multi container groups):
+			- Max number of containers per group = 60
+			- Max number of volumes per group = 20
 			- Similar to kubernetes POD, collection of container on the same host machine
 			- You can specify the volumes to create, and the AZURE FILES SHARES to mount, you can only mount AZURE FILES SHARES to Linux containers
 				("volumeMounts" and "volumes" properties of .yaml), you can do that using .yaml, command or Resource manager template
@@ -826,6 +828,7 @@ Repasar imagen
 				* LEGACY: For apps created before app registrations were introduced
 	* INTEGRATION:
 		- You need AzureAd in appsettings.json and use:
+			Install Microsoft.Identity.Web
 		
 			- Cookie based auth (stateless or session):
 				services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
@@ -843,23 +846,53 @@ Repasar imagen
 				- "common": Auth request an organization account, allow users (and personal account) from any organization, multitenant
 				- "organizations": Intended only for organizational users, not Microsoft personal accounts
 				- "specific-tenant": Specific tenantID of the directory}
-	* Permissions and consent:
-		- permissions = scopes
-		- Permission types:
+	
+	* PERMISISONS AND CONSENTS:
+		- OAUTH2.0: 
+			- Method through which a third-party app can access web-hosted resources on behalf of a user
+			- permissions = scopes (string value)
+			- An app requests permissions it needs by specifying the permission in "scope" query parameter
+			- Permission is indicated appending the permission to resource's identitifer or app ID: https://graph.microsoft.com/Calendar.Read
+			- Some high-privilege permission can be granted only through admin consent
+			- If the resource identifier is omitter in scope, ther default resource is Microsoft Graph (scope=User.Read ==> https://graph.microsoft.com/User.Read)
+		- PERMISSION TYPES:
 			- DELEGATED ACCESS:
 				- App has a signed-in user. The app acts as a signed-in users when it makes calls to target resource. (Microsoft entra id)
 			- APP ONLY ACCESS:
 				- App doesn't have a signed-in user. Only administrator can consent permissions for this app
-		- Consents:
+		- CONSENTS:
 			- STATIC USER CONSENT:
 				- Azure portal defined permissions (app configuration)
+				- You must specify all the permissions it needs
+				- If the user hasn't granted consent for that app, microsoft identity platform prompts the user to allow them to give consent at this time
+				- The app needs to request all the permission in the first sign-in (could be a long list of permissions)
+				- The app needs to know all of the resources it would ever access before using them
 			- INCREMENTAL AND DYNAMIC USER CONSENT:
 				- Ignore static and request permissions incrementally
 				- To do so, specify the scopes your app need at any time by including new scopes in "scope" parameter when requesting access token (without the need to predefine them in the app registration)
+				- If the user hasn't yet consented the new scopes, the're prompted to consent only the new permissions
 				- The user has to consent the new permissions (ONLY APPLIES TO DELEGATED PERMISSIONS!!!!!!)
 			- ADMIN CONSENT:
 				- Is required when your app needs access to certain high-privilege permissions
-		- Conditional access: TO PRACTICE
+		- CONDITIONAL ACCESS:
+			- Offers one of several wayt to secure an app:
+				- Multifactor auth
+				- Ony Intune enroleeed devices to access specific services
+				- Restrictirng user locations and ip ranges
+			- Sometimes it impacts an application, requiring code changes
+			- Require changes:
+				- Apps performing On-behalf-of flow
+				- Apps accessing multiple services/resources
+				- SPAs using MSAL
+		- FLOW:
+			- For client app like Blazor or MVC (without specific permissions):
+				- Create an app registration (represents the app)
+				- Add  services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+	                .AddMicrosoftIdentityWebApp(Configuration.GetSection("AzureAd"));
+	            - Add redirect url as web or webapp to app registration configuration
+	            - The url must match with the CallbackPath of AzuerAd configuration of appsettings.json
+	            - The implicit flow must be allowed (in this use case)
+	        - For API + Client:
 
 	* MSAL:
 		The library enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, etc.
@@ -890,7 +923,7 @@ Repasar imagen
 				- If you need request microsoft graph or other services from the backend, you need to use client credentials or certificate
 			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
 
-	* SAS
+	* SAS (Shared access signature)
 		- To provide access to clients who should not be trusted
 		- Signed URI that point to one or more storage resources
 		- Includes a Token that indicates how the resources might be accessed by the client
