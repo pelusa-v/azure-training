@@ -884,7 +884,8 @@ Repasar imagen
 				- Apps performing On-behalf-of flow
 				- Apps accessing multiple services/resources
 				- SPAs using MSAL
-	* FLOW:
+
+	* FLOW - MICROSOFT IDENTITY PLATFORM:
 		- Scenarios: https://learn.microsoft.com/en-us/aspnet/core/security/authentication/azure-active-directory/?view=aspnetcore-9.0
 		* For web app (traditional server based app like Blazor or MVC) - (AUTHORIZATION CODE flow):
 			- Create an app registration (represents the app)
@@ -914,19 +915,31 @@ Repasar imagen
 	    * For API + Client:
 
 	* MSAL:
-		The library enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, etc.
-		Authentication flows:
-			- Authorization code
-			- Client credentials
-			- Device code
-			- Implicit grant
-			- On-behalf-of (OBO)
-			- Username/password (ROPC)
-			- Integrated Windows authentication (IWA)
-		Client applications:
-			- Public (desktop, browserless APIs, mobile, browser apps)
-			- Confidentials (web apps, web api apps, deamon/service apps)
-		Complete frontend-backend flow:
+		- The library enables devs to get tokens from Microsoft identity platform to authenticate and access to apis like microsoft graph, thir party apis, your own web APIs, etc.
+		- No need to directly the OAuth libraries
+		- Acquires tokens on behalf of a user or an app
+		- Platforms:
+			Android, Angular, IOS and macOS, Go, Java, JavaScript, TypeScript, .NET, Node, Python, React
+		- Authentication flows:
+			- Authorization code (desktop, mobile, SPA pkce, Web)
+			- Client credentials (Daemon)
+			- Device code (Desktop, Mobile)
+			- Implicit grant (SPA, Web)
+			- On-behalf-of (OBO) - (Web Api)
+			- Username/password (ROPC) - (Desktop, Mobile)
+			- Integrated Windows authentication (IWA) - (Desktop, Mobile)
+		- Client applications:
+			- Public client app (desktop, browserless APIs, mobile, browser apps)
+				- They can't be trusted to safely keep apps secrets, so they can only access web aPIs on behalf of the user
+			- Confidential client app (web apps, web api apps, deamon/service apps)
+				- They're considered difficult to access by users or attackers, they can hold config-time secrets (client secret or certificate X509Certificate2)
+		- Client:
+			- Install Microsoft.Identity.Client
+			- PublicClientApplicationBuilder
+			- ConfidentialClientApplicationBuilder
+			- Both builders have modifiers to add configuration variables (tenant, clientId, etc) or add authority directly
+			- WithCertificate and WithClientSecret methods are mutually exclusive
+		- Complete frontend-backend flow:
 			- Steps:
 				*** DELEGATED ACCESS ***
 				- Register client (spa) app registration
@@ -947,19 +960,24 @@ Repasar imagen
 		- Signed URI that point to one or more storage resources
 		- Includes a Token that indicates how the resources might be accessed by the client
 		
-		- Types:
+		- Azure storage SAS Types:
 			- USER DELEGATION SAS: (RECOMMENDED)
-				Delegation SAS secured with microsoft entra credentials and permissions for the SAS. (BLOB STORAGE)
+				Delegation SAS secured with microsoft entra credentials and permissions for the SAS. (BLOB STORAGE only)
 			- SERVICE SAS:
 				Service SAS secured with storage account key. (BLOB, QUEUE, TABLE, AZURE FILES)
 			- ACCOUNT SAS:
 				Account SAS secured with storage account key. Delegate access to resources in one or more of the storage services.
 			- SAS = URI + Authorization params
-				- sp (access rights)
+				- sp (access rights , a: access, c: create, d: delete, l: list, w: write)
 				- st, se (start access datatime, end access datetime)
 				- sv (version of the storage API)
 				- sr (kind of storage, blob, queue, etc)
 				- sig (cryptographic signature)
+			- Best practices:
+				- Use HTTPS
+				- User delegation SAS is the most secure
+				- Expiration time to smallest useful value
+				- Minimun required privileges
 			- When to use:
 				- Service where users read and write their own data to my storage account. (front end proxy service / SAS provider service)
 				- SAS is required when you want to copy Blobs or files to other blobs/storage accounts
