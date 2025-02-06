@@ -34,9 +34,13 @@ export const msalConfig = {
     // },
 };
 
-// THEN, DEFINE THE SCOPES YOU NEED FOR THE APPLICATION
+// THEN, DEFINE THE SCOPES YOU NEED FOR THE APPLICATION (items.read is the backend app scope to access the items endpoints, this type of scopes control the actions over the backend app)
 export const loginRequestData = {
-    scopes: ["User.Read"]
+    scopes: ["User.Read", "api://b1960d65-4ef0-45c5-813b-245867418e8e/Items.Read"]
+};
+
+export const loginRequestItemsData = {
+    scopes: ["api://b1960d65-4ef0-45c5-813b-245867418e8e/Items.Read"]
 };
 
 

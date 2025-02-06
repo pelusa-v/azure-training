@@ -1,0 +1,42 @@
+ASK HOW TO MANAGE USER LEVEL ROLES (CLAIMS) like dashboard.read
+
+
+
+
+* pre
+
+create app registration in azure for the client app
+create app registration in azure for the api app
+
+set owner for all apps
+create new scope in "expose api" in api app ("Items.Read") as delegated so the react app will be able to access the api on behalf of the signed in user
+add that scope to the "api permissions" in client app
+
+
+
+* create react app
+
+Don't mark the ID Token option to use the Authorization code PKCE flow instead implicit flow
+
+npm install react@18 react-dom@18
+npx create-react-app full-app-client
+npm install @azure/msal-browser @azure/msal-react
+
+set up auth config (azure data and scopes)
+instantiate and export PublicClientApplication using azure data, define the msalinstance for all the app and use it in the MsalProvider to wrap the app in index.js
+add login and logout logic using msal instance from package using loginRedirect and logoutRedirect methods. The login logic uses the scopes defined in auth config
+
+you have to add the scopes required for all the requests called from the client to the backend api
+
+
+* create asp.net core webapi
+
+install azure auth packages
+dotnet add package Microsoft.Identity.Web
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
+
+set up the project (add controllers, item entity)
+
+add authentication and authorization using azuread configuration, you have to specify the audience, and set up the cors
+in authorization yoy can add policies  based on scopes, so you can restrict the endpoints using policies (this is using scopes, allow granularity, they're like permissions)
+

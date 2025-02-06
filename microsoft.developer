@@ -850,7 +850,9 @@ Repasar imagen
 	* PERMISISONS AND CONSENTS:
 		- OAUTH2.0: 
 			- Method through which a third-party app can access web-hosted resources on behalf of a user
-			- permissions = scopes (string value)
+			- permissions = scopes (string value) at application level (how an application can access to other application on behalf of a user or as application itself)
+			- scopes control the actions over the app, like api.read, user.write, provides granularity
+			- If you want to use user-permissions you can do it by creating custom roles (represent a set of permissions) (premium) in "App roles" and then assigning roles to user or groups in the tenant
 			- An app requests permissions it needs by specifying the permission in "scope" query parameter
 			- Permission is indicated appending the permission to resource's identitifer or app ID: https://graph.microsoft.com/Calendar.Read
 			- Some high-privilege permission can be granted only through admin consent
