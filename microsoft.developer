@@ -897,6 +897,7 @@ Repasar imagen
 	        - Add redirect url as web or webapp to app registration configuration
 	        - The url must match with the CallbackPath of AzuerAd configuration of appsettings.json
 	        - The client secret must be aded in the azuread seciton because this is a server based app using authorization code
+	        - The app needs to request the permissions as scopes
 
 	    * For web app (traditional server based app like Blazor or MVC) - (AUTHORIZATION CODE HYBRID flow):
 	    	- Create an app registration (represents the app)
@@ -909,6 +910,7 @@ Repasar imagen
 	        - Add redirect url as web or webapp to app registration configuration
 	        - The url must match with the CallbackPath of AzuerAd configuration of appsettings.json
 	        - The implicit flow must be allowed (in this use case)
+	        - The app needs to request the permissions as scopes
 
 	    * For client app (React, angular, vure, SPAs) - (using MSAL RECOMMENDED or IMPLICIT flow):
 
@@ -954,6 +956,8 @@ Repasar imagen
 				*** APP ONLY ACCESS ***
 				- If you need request microsoft graph or other services from the backend, you need to use client credentials or certificate
 			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
+			- samples:
+				-https://learn.microsoft.com/en-us/entra/identity-platform/sample-v2-code?tabs=apptype#web-api
 
 	* SAS (Shared access signature)
 		- To provide access to clients who should not be trusted
