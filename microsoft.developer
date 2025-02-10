@@ -1031,21 +1031,38 @@ Repasar imagen
 	- Microsoft graph Connectors: Incoming data direction (external data sources: Jira, Google drive, etc)
 	- Microsoft graph Data Connect: Cached data serves as data source for azure development tools
 	- You need auth tokens of an app registration. to request microsoft graph api
-	- Resources: me, teams, groups, etc
-	- Query parameters: filters
+
+		* Request:
+		- You can use MSAL to acquire access token to microsoft graph (specifying scopes)
+		- format:
+			- {HTTP method} https://graph.microsoft.com/{version}/{resource}?{query-parameters}
+			- versions: v1.0, beta
+			- resource: me, user, group, chat, etc
+			- query-parameters: OData system query options (?filter=emailAddress eq 'jon@contoso.com')
 
 	* SDK
 		- Sevice library: models, request builders from graph metadata
 		- Core library: features to work with graph services
 		- TO REQUEST:
 			- YOU MUST CHOOSE THE AUTHENTICATION PROVIDER:
-				- Authorization code provider - (DELEGATED)
-				- Client credentials provider - (APP ONLY)
-				- On-behalf-of provider - (DELEGATED)
-				- Interactive provider - (DELEGATED)
-				- Integrated Windows provider - (DELEGATED)
-				- Username/password provider - (DELEGATED)
-				- Device code provider - (DELEGATED)
+				- SPAs
+					- Authorization Code with PKCE - (DELEGATED)
+				- Web App that calls web APIs
+					- Authorization code provider - (DELEGATED)
+					- Client credentials provider - (APP ONLY)
+				- Web API that calls web APIs:
+					- On-behalf-of provider - (DELEGATED)
+					- Client credentials provider - (APP ONLY)
+				- Desktop app that calls web APIs
+					- Interactive provider - (DELEGATED)
+					- Integrated Windows provider - (DELEGATED)
+					- Username/password provider - (DELEGATED)
+					- Device code provider - (DELEGATED)
+				- Daemon app
+					- Client credentials provider - (APP ONLY)
+				- Mobile app that calls web APIs
+					- Interactive provider - (DELEGATED)
+
 					########## - YOU NEED CERTIFICATE OR CLIENT SECRET in client credentials case ##########
 					########## - YOU NEED TO ENABLE MOBILE AND DESKTOP FLOWS in device code case ##########
 			- YOU MUST ADD THE ENOUGH PERMISSIONS FOR THE APP REGISTRATION
@@ -1054,20 +1071,34 @@ Repasar imagen
 			- There are some endpints that don't work using client credentials (/me because this requires a delegated flow)
 		- https://learn.microsoft.com/en-us/graph/sdks/choose-authentication-providers?tabs=csharp
 
-	* Request:
-		- You can use MSAL to acquire access token to microsoft graph (specifying scopes)
-
 	* BEST PRACTICES:
 		- Use least privilege
 		- Use the correct permission type based on scenarios
 		- Consider the end user and admin experience (consents)
 		- Consider multi-tenant applications
 		- Handle responses effectively (pagination, Evolvable enumerations)
+		- Pagination response 100 by default
 		- Cache locally for specific scenarios to avoid make a lot of requests to graph
 
 
 * AZURE KEY VAULT:
-	- Service for securely storing and accessing secrets (API keys, passwords, certificates, cryptographic keys)
+	- Service for securely storing and accessing secrets, keys and certificates (API keys, passwords, certificates, cryptographic keys)
+	- TIERS:
+		- Standard: encrypts with a software key
+		- Premium: includes hardware security module(HSM)-protectedd keys
+	- BENEFITS:
+		- Centralized application secrets
+		- Securely store secrets and keys (required proper authentication and authorization before get access to secrets using Micrososft Entra ID)
+		- Monitor access and use (By enabling logging for vaults)
+			- Archive logs to storage account
+			- Stream logs to an event hub
+			- Send logs to Azure Monitor logs
+		- Simplified administration of application secrets, Key Vault can:
+			- Remove the need for in-house knowledge of HSM
+			- Scale up
+			- Region replication (within a region and to a secondary region)
+			- Standard azure administration (Azure CLI and PowerShell)
+			- Automate certificate tasks lie enrollment and renewal (from public CAs)
 	- Container types:
 		- Vaults (software and HSM-backed keys, secrets and certificates)
 		- Managed hardware security module (HSM) pools (HSM-backed keys)
@@ -1086,12 +1117,13 @@ Repasar imagen
 			- Service principal and certificate (NOT RECOMMENDED)
 			- Service principal and secret (NOT RECOMMENDED)
 		- Azure key vault use TLS (to protect data when it's traveling between Key Vault and clients) and PFS (to protect connection between customers)
-		
 		- A vault per application per environment
 		- Control access to vault (sensitive data)
 		- Backup
 		- Logging
-		- Recovery (soft delete)
+		- Recovery
+			- Soft delete: 90 days by default as retention days (7 to 90 days allowed)
+			- Purge protection: When soft deletion is enabled, this ensures the retention policy is followed
 
 	- AUTHENTICATION TO KEY VAULT:
 		- System-assigned managed identity.

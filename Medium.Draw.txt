@@ -1,9 +1,10 @@
-ASK HOW TO MANAGE USER LEVEL ROLES (CLAIMS) like dashboard.read
+
+pink@jeanleonvoutlook.onmicrosoft.com
+Goma162751
 
 
 
-
-* pre
+* azure
 
 create app registration in azure for the client app
 create app registration in azure for the api app
@@ -11,6 +12,8 @@ create app registration in azure for the api app
 set owner for all apps
 create new scope in "expose api" in api app ("Items.Read") as delegated so the react app will be able to access the api on behalf of the signed in user
 add that scope to the "api permissions" in client app
+
+You need to add the specific scope as an api permission in client app so the app request protected api endpoints using the token acquired by the signed in user in the client
 
 
 
@@ -29,14 +32,32 @@ add login and logout logic using msal instance from package using loginRedirect 
 you have to add the scopes required for all the requests called from the client to the backend api
 
 
-* create asp.net core webapi
+
+
+* create angular app
+
+npm install @azure/msal-angular @azure/msal-browser
+add auth-config.ts and export relevant data
+update app.config.ts, add msal services and import the appMsalInstance,
+initialize msal in main wraping the bootstrap of the application
+add login and logout using msal instance, using loginPopup method
+add the if-else logic to the home template so the authenticated user will appear when the user sign in
+create the item-list-component, and add the logic to acquire the access token using the msal instance of the app (the authenticated user)
+add the loig to call the items api so the component can fetch the items
+add to template the returned items
+
+
+* create asp.net core webapi using dotnet cli
 
 install azure auth packages
 dotnet add package Microsoft.Identity.Web
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
 
+add AzureAd section in appsettings.json with app registration information
+
 set up the project (add controllers, item entity)
 
+add cors policies
 add authentication and authorization using azuread configuration, you have to specify the audience, and set up the cors
 in authorization yoy can add policies  based on scopes, so you can restrict the endpoints using policies (this is using scopes, allow granularity, they're like permissions)
 
