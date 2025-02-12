@@ -1118,6 +1118,7 @@ Repasar imagen
 			- Archive to a storage account
 			- Stream to an event hub
 			- Send logs to Azure Monitor Log
+	- Azure automatically rotates the cretentials for user-assigned managed identities
 
 	- BEST PRACTICES:
 		- Authentication:
@@ -1144,6 +1145,74 @@ Repasar imagen
 			- az keyvault create
 			- az keyvault secret show
 			- az keyvault secret set
+
+
+* AZURE APP CONFIGURATION
+	- Azure App Configuration has a maximum size limit for stored data (currently 10 MB per store)
+	- Service to centrally manage application settings
+	- Stores data as key-value pairs
+	- App configuration doesn't version key values. Use labels to version.
+	- Each key-value is uniquely identified by its key plus a label
+	- Scenarios:
+		- Centralize management and distribution of hierarchical configuration data for different environments and geographies
+		- Dynamically change application settings without the need to redeploy or restart an app
+		- Control feature availability in real time
+	
+	- TO USE IN CODE:
+		- App Configuration Provider for the specific programming language/framework
+	
+	- FORMAT:
+		AppName:Service1:ApiEndpoint
+		AppName:Service2:ApiEndpoint
+		(invaid: "*", ",", "\", escape invalid using "\" at the begining)
+
+	- LABEL (default: key-value has no label, used to differentiate key-values with the same Key):
+		Key = AppName:DbEndpoint1 & Label = Test
+		Key = AppName:DbEndpoint2 & Label = Staging
+		Key = AppName:DbEndpoint3 & Label = Production
+		("\0" = explicitly reference key-value without a label)
+
+	- APPLICATION FEATURE:
+		- Feature flag: Flag (true or false, on or off) to enable or disable a code block
+		- Feature manager: Handles the lifecycle of all the feature flags. Module of application manager to have extra functionality over feature (caching feature flas, update states)
+		- Filter: Rule for evaluating the state of a feature (user groups, device or browser type, geo-location, time window, etc)
+			- Types:
+				- Targeting filter: test feature only for specific users or groups
+				- Time window filter: test feature during a specific date range
+				- Custom filter
+		- Feature flag repository: Allows to change feature flags without modifying end redeploying the app.
+
+		Example:
+			"FeatureManagement": {
+			    "FeatureA": true, // Feature flag set to on
+			    "FeatureB": false, // Feature flag set to off
+			    "FeatureC": {
+			        "EnabledFor": [
+			            {
+			                "Name": "Percentage",
+			                "Parameters": {
+			                    "Value": 50
+			                }
+			            }
+			        ]
+			    }
+			}
+
+	- ENCRYPTION:
+		- It encrypts sensitive information at rest using AES256
+		- When customer-managed key capability is enabled, app configuration uses a manged identity assigned to the app config instance to authenticate with Microsoft Entra ID.
+		- Managed identity then calls Azure Key Vault and wraps the app configuration instance's encryption key.
+		- The wrapped encryption key is then stored and the unwrapped encryption key is cached within app config for ONE HOUR.
+		- App config refreshes the unwrapped version of the app config instance's encryption hourly.
+
+		- Custom-managed key capability:
+			- Requires Standard tier Azure App Configuration instance
+			- Requires Azure Key vault with SOFT DELETE and PURGE PROTECTION enabled
+			- Requires an RSA or RSA-HSM key within KEY VAULT
+			- Requires managed identity in the App Configuration instance
+			- Requires GET, WRAP and UNWRAP permissions in the Key Vaults access policy
+
+	- You can use private endpoints to allow clients on a virtual network to securely access data over a private link.
 
 
 
@@ -1310,50 +1379,6 @@ Repasar imagen
 
 		- Application map (troubleshoot app performance)
 			- You need to configure the app (sdk installed) and resources (enabling Distributed Tracing) to use the application map and identify bottlenecks
-
-
-* AZURE APP CONFIGURATION
-	- Service to centrally manage application settings
-	- Stores data as key-value pairs
-	- App configuration doesn't version key values. Use labels to version.
-	- Each key-value is uniquely identified by its key plus a label
-	- Scenarios:
-		- Centralize management and distribution of hierarchical configuration data for different environments and geographies
-		- Dynamically change application settings without the need to redeploy or restart an app
-		- Control feature availability in real time
-	
-	- TO USE IN CODE:
-		- App Configuration Provider for the specific programming language/framework
-	
-	- FORMAT:
-		AppName:Service1:ApiEndpoint
-		AppName:Service2:ApiEndpoint
-		(invaid: "*", ",", "\", escape invalid using "\" at the begining)
-
-	- LABEL (default: key-value has no label, used to differentiate key-values with the same Key):
-		Key = AppName:DbEndpoint1 & Label = Test
-		Key = AppName:DbEndpoint2 & Label = Staging
-		Key = AppName:DbEndpoint3 & Label = Production
-		("\0" = explicitly reference key-value without a label)
-
-	- APPLICATION FEATURE:
-		- Feature flag: Flag (true or false) to enable or disable a code block
-		- Feature manager: Module of application manager to have extra functionality over feature
-		- Filter: Rule for evaluating the state of a feature
-			- Types:
-				- Targeting filter: test feature only for specific users or groups
-				- Time window filter: test feature during a specific date range
-				- Custom filter
-
-	- ENCRYPTION:
-		- It encrypts sensitive information at rest using AES256
-		- When customer-managed key capability is enabled, app configuration uses a manged identity assigned to the app config instance to authenticate with Microsoft Entra ID.
-		- Managed identity then calls Azure Key Vault and wraps the app configuration instance's encryption key.
-		- The wrapped encryption key is then stored and the unwrapped encryption key is cached within app config for ONE HOUR.
-		- App config refreshes the unwrapped version of the app config instance's encryption hourly.
-
-	- You can use private endpoints to allow clients on a virtual network to securely access data over a private link.
-
 
 
 
