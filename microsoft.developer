@@ -776,6 +776,7 @@ Repasar imagen
 		* PARTITION KEYS:
 			- When you design a cosmosDB container, you must choose a partition key
 			- This determines how data is distributed across logical partitions
+			- A partition key with high cardinality (many unique values) ensures even distribution of data and workload
 			- Choose as partiton key: Many unique values
 			- If all the writes in a workload on a container target the same partition key, the partition gets all requests , while others reamin idle, RU/s consumed only in that partition (performance bottleneck)
 			- The above issue is called  "hot partition"
@@ -1218,9 +1219,13 @@ Repasar imagen
 
 * AZURE CACHE FOR REDIS:
 	
-	- Provides in memory data store absed on REDIS
-	- To process large volumes of app requests bykeeping frequently accessed data in the server memory (read and write quickly)
+	- Provides in memory data store based on REDIS
+	- Improves the performance and scalability of an application that uses backend data stores heavily
+	- To process large volumes of app requests by keeping frequently accessed data in the server memory (read and write quickly)
 	- Offers REDIS OPEN SOURCE and REDIS ENTERPRISE
+	- Microsoft operates the service, hosted on Azure, and usable by any application within or outside of Azure
+	- Support data persistence (premium or better). Offers RDB and AOF options
+
 
 	* SCENARIOS:
 		- DATA CACHE (load data into the cache only as needed)
@@ -1230,10 +1235,30 @@ Repasar imagen
 		- DISTRIBUTED TRANSACTIONS (Redis supports executing a batch of commands as a single transaction)
 
 	* TIERS: (determines the size and performance)
-		- BASIC < STANDARD < PREMIUM < ENTERPRISE < ENTERPRISE FLASH
-		- ENTERPRISE and ENTERPRISE FLASH allows clustering to automaticlly split dataset amoing multiple nodes
+		- BASIC: 
+			- OSS Redis on a Single VM. No SLA
+			- NO REPLICATION
+		- STANDARD: OSS Redis on two VMs
+		- PREMIUM: 
+			- High-performance OSS Redis on POWERFUL VMs. Higher throughput, lower latency
+			- Passive Geo replication
+			- Virtual network
+			- Zone redundancy
+			- Data persistence
+		- ENTERPRISE: 
+			- High-performance caches powered by Redis enterprise. Include RedisSearch, RedisBloom, RedisTimeSeries. Higher availability
+			- Geo replication
+			- Zone redundancy
+			- Data persistence
+		- ENTERPRISE FLASH: 
+			- Cost-effective large caches powered by Redis enterprise. Reduces per-GB memory cost using nonvolatile memory (cheaper than DRAM)
+			- Geo replication
+			- Zone redundancy
+			- Data persistence
+		ENTERPRISE and ENTERPRISE FLASH allows clustering to automaticlly split dataset among multiple nodes
 
 	* CONFIGURE AN INSTANCE:
+		- You can create redis cache using Azure portal, Azure CLI or AZure PowerShell
 		- The name contains numbers, letters and '-' (1 - 63 char), cannot startor end with '-', consecutive '-' invalid
 		- Always place the cache instance and app in the same region (or as close as possible, even outside of azure), different region = more latency, less reliability
 		- Microsoft recommends to use Standard tier or higher for production systems.
@@ -1247,10 +1272,22 @@ Repasar imagen
 			- Use from .NET
 				- Add package StackExchange.Redis
 				- Use host address, port, access key or CONNECTION STRING from azure
-				- Connection string contains "ssl" (encrypted communication) and "abortConnection" (allows a connection to be created even if the server is unavailable at that moment)
+				- Connection string contains "ssl=True" (encrypted communication) and "abortConnection=False" (allows a connection to be created even if the server is unavailable at that moment)
 				- The ConnectionMultiplexer class is optimized to manage connections efficiently
 				- Get the db instance from the redis connection (after execute ConnectionMultiplexer.Connect)
 				- You can execute specific commands in db object, or defined methods
+					- db.Execute("ping"); // db is IDatabase
+					- await db.ExecuteAsync("client", "list");
+				- You can store get and set binary values (byte[] as key or value)
+				- Common operations:
+					- CreateBatch
+					- CreateTransaction
+					- KeyDelete
+					- KeyExists
+					- KeyExpire
+					- KeyRename
+					- KeyTimeToLive
+					- KeyType
 				- You can store complex values (classes) and then serialize to JSON or XML and then retrieve and deserialize to class again.
 				- Dispose the connection object when finish
 
