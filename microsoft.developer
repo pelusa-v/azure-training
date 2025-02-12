@@ -273,6 +273,7 @@ Repasar imagen
 			- Has associated source code context (Git repo specifying branch), tasks use
 			- Build automaticlly when commits code to source
 			- USE-CASES:
+				- docker push: to push images (independent)
 				- Quick task -----> Like "docker build", "docker push" in azure (without docker engine, on demand) -----> az acr build (reduces local resources usage by building in cloud)
 				- Triggered tasks -----> Trigges to build on code update, base image update, schedule -----> az acr task create / track base image dependency / schedule
 				- Multi-step task -----> It uses a .yaml file to define steps (custom workflow) 
@@ -299,6 +300,8 @@ Repasar imagen
 			- Restart policy:
 				- ACI stops the container when its app, or script exits
 				- ALWAYS (default), NEVER, ONFAILURE
+
+
 
 		* Environment Variables:
 			- az container create ... --environment-variables 'MaxProcesses'='10'
@@ -338,6 +341,9 @@ Repasar imagen
 			- Same virtual network and log to the same LOG ANALYTICS WORKSPACE, and share the same DAPR conf
 			- Different environment = apps never share the same compute resources, DAPR apps can't communicate
 			- Environment ---contains---> container apps ---contains---> revisions, replica
+
+		* KEY FEATURES:
+			- Built-in autoscaling based on HTTP traffic
 
 		* REVISIONS:
 			- Azure container apps create versioning by creating REVISIONS (immutable snapshot)
@@ -993,7 +999,7 @@ Repasar imagen
 				- Services that support (BLOB, QUEUE, TABLE, AZURE FILES)
 
 	* MANAGED IDENTITIES:
-		* Apps can use managed identities to obtain Microsoft Entra tokens withous having to manage any credentials.
+		* Apps can use managed identities to obtain Microsoft Entra tokens without having to manage any credentials.
 		* It's like giving your webapp a unique "personality" in the form of credentials that can interact with other resources
 		* YOU MUST CHOOSE BETWEEN TRADITIONAL AUTHENTICATION (DELEGATED OR APP ONLY ACCESS VIA MICROSOFT ENTRA ID) and MANAGED IDENTITIES depends on the type of the application when you need to consume azure resources from a resource
 		* MANAGED IDENTITY is simpler to use when the app (webapp, function, etc) needs access to azure resources WITHOUT TO STORE OR MANAGE CREDENTIALS
@@ -1001,10 +1007,12 @@ Repasar imagen
 
 		* SYSTEM ASSIGNED MANAGED IDENTITY:
 			- Created as part of an azure resource (webapp, vm, etc, tied to the azure resource)
-			- Can't be shared
+			- Shared lifecycle with the Azure resource that the managed identity is created with. When the parent resource is deleted, the managed identity is deleted as well.
+			- Can't be shared (it's tied to the resource)
 		* USER ASSIGNED MANAGED IDENTITY:
 			- Created as stand-alone azure resource
-			- Can be shared
+			- Independent life-cycle. Must be explicitly deleted.
+			- Can be shared (the same user managed identity can be associated with more than one resource)
 
 		* Can be used to authenticate servicees that support Microsoft Entra auth.
 
