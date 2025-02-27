@@ -24,21 +24,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROMPT:
-I'm practicing for az-204 azure certificate, so I want to practice about AZURE_SERVICE_NAME.
-I need you to make me questions to practice. Remember, the questions should be AS DIFFICULT AS az-204 certification exam, you need to make the questions based on the documentation I'll provide you and up to date information (2025) about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score and the correct answer of each question. When you're asking me the questions, don't show the answer so I can practice.
-
-Here is the documentation so you can make te question based on that pages about the topics:
-
-
-Ok, now, give me 20 questions about all those services:
-AZURE APP SERVICE
-AZURE CONTAINERS (ACR, ACI, ACA)
-AZURE FUNCTIONS
-AZURE STORAGE ACCOUNT
-AZURE COSMOS DB
-AZURE ENTRA ID
-
-I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB, MICROSOFT AZURE ENTRA ID, AZURE MICROSOFT GRAPH, AZURE KEY VAULT, AZURE MANAGED IDENTITIES, AZURE APP CONFIGURATION, AZURE CACHE FOR REDIS.
+I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB, MICROSOFT AZURE ENTRA ID, AZURE MICROSOFT GRAPH, AZURE KEY VAULT, AZURE MANAGED IDENTITIES, AZURE APP CONFIGURATION, AZURE CACHE FOR REDIS, AZURE CDN.
 I need you to make me questions to practice about that. Remember, the questions should be AS DIFFICULT AS az-204 certification exam and the same style (alternatives), you need to make the questions based on the documentation I'll provide you and up to date information (2025) about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score, the correct answer of each question in order and point me out my wrongs. When you're asking me the questions, don't show the answer so I can practice. Don't forget, the questions should be based on the documentation I gave you and up to date online information
 
 Here is the documentation so you can make te question based on that pages about the topics:
@@ -86,6 +72,9 @@ https://learn.microsoft.com/en-us/training/modules/implement-azure-app-configura
 AZURE CACHE FOR REDIS
 https://learn.microsoft.com/en-us/training/modules/develop-for-azure-cache-for-redis/
 
+AZURE CDN
+https://learn.microsoft.com/en-us/training/modules/develop-for-storage-cdns/
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 DONE:
 ----
@@ -106,13 +95,14 @@ AZURE ENTRA ID
 	MANAGED IDENTITIES
 AZURE APP CONFIGURATION
 AZURE CACHE FOR REDIS
+AZURE CDN
+
 
 ------------------------------------------
 
 PENDING:
 -------
 
-AZURE CDN
 AZURE APPLICATIONS INSIGHTS
 AZURE API MANAGEMENT
 AZURE EVENT GRID
@@ -120,3 +110,25 @@ AZURE EVENT HUB
 AZURE SERVICE BUS
 AZURE STORAGE ACCOUNT
 	AZURE QUEUE STORAGE
+
+
+
+
+
+BORRRAR (BOT FRAMEWORK):
+- CONSTRUIR LA APP BOT FRAMEWORK DESDE VSCODE
+- CREAR AZURE BOT SERVICE APPLICATION Y APP REGISTRATION PARA ESTO
+- CREAR WEBAPP Y DEFINIR LAS VARIABLES DE ENTORNO EN BASE A VARIABLES DE APP REGISTRATION DE BOT (CLIENT SECRET)
+	{
+	  "MicrosoftAppType": "SingleTenant",
+	  "MicrosoftAppId": "",
+	  "MicrosoftAppPassword": "",
+	  "MicrosoftAppTenantId": ""
+	}
+- HABILITAR WEBSOCKETS EN WEBAPP
+- CORRER: dotnet publish -c Release -o ./publish
+- DESPLEGAR ESTA CARPETA PUBLISH A AZUER WEBAPP
+- CONFIGURAR RUTA DE /api/messages EN CONFIGURACIÓN DE AZURE BOT SERVICE
+- PROBAR CONEXIÓN DE BOT EN "TEST IN WEB CHAT"
+
+ALTERNATIVA: SE PUEDE USAR MANAGED IDENTITIES EN LUGAR DE USAR CLIENT CREDENTIALS

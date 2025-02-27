@@ -21,6 +21,7 @@ Goma162751
 - add auth-config.ts and export relevant data
 - update app.config.ts, add msal services and import the appMsalInstance,
 - initialize msal in main wraping the bootstrap of the application
+
 - add login and logout using msal instance, using loginPopup method
 - add the if-else logic to the home template so the authenticated user will appear when the user sign in
 - create the item-list-component, and add the logic to acquire the access token using the msal instance of the app (the authenticated user)
