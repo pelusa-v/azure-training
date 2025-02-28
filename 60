@@ -24,7 +24,7 @@
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 PROMPT:
-I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB, MICROSOFT AZURE ENTRA ID, AZURE MICROSOFT GRAPH, AZURE KEY VAULT, AZURE MANAGED IDENTITIES, AZURE APP CONFIGURATION, AZURE CACHE FOR REDIS, AZURE CDN.
+I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB, MICROSOFT AZURE ENTRA ID, AZURE MICROSOFT GRAPH, AZURE KEY VAULT, AZURE MANAGED IDENTITIES, AZURE APP CONFIGURATION, AZURE CACHE FOR REDIS, AZURE CDN, AZURE APPLICATIONS INSIGHTS.
 I need you to make me questions to practice about that. Remember, the questions should be AS DIFFICULT AS az-204 certification exam and the same style (alternatives), you need to make the questions based on the documentation I'll provide you and up to date information (2025) about az-204. Give me 20 questions to begin and at the end of this test, I need you tu give me the score, the correct answer of each question in order and point me out my wrongs. When you're asking me the questions, don't show the answer so I can practice. Don't forget, the questions should be based on the documentation I gave you and up to date online information
 
 Here is the documentation so you can make te question based on that pages about the topics:
@@ -63,17 +63,20 @@ https://learn.microsoft.com/en-us/training/modules/microsoft-graph/
 AZURE KEY VAULT:
 https://learn.microsoft.com/en-us/training/modules/implement-azure-key-vault/
 
-AZURE MANAGED IDENTITIES
+AZURE MANAGED IDENTITIES:
 https://learn.microsoft.com/en-us/training/modules/implement-managed-identities/
 
-AZURE APP CONFIGURATION
+AZURE APP CONFIGURATION:
 https://learn.microsoft.com/en-us/training/modules/implement-azure-app-configuration/
 
-AZURE CACHE FOR REDIS
+AZURE CACHE FOR REDIS:
 https://learn.microsoft.com/en-us/training/modules/develop-for-azure-cache-for-redis/
 
-AZURE CDN
+AZURE CDN:
 https://learn.microsoft.com/en-us/training/modules/develop-for-storage-cdns/
+
+AZURE APPLICATIONS INSIGHTS:
+https://learn.microsoft.com/en-us/training/modules/monitor-app-performance/
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 DONE:
@@ -96,6 +99,7 @@ AZURE ENTRA ID
 AZURE APP CONFIGURATION
 AZURE CACHE FOR REDIS
 AZURE CDN
+AZURE APPLICATIONS INSIGHTS
 
 
 ------------------------------------------
@@ -103,7 +107,6 @@ AZURE CDN
 PENDING:
 -------
 
-AZURE APPLICATIONS INSIGHTS
 AZURE API MANAGEMENT
 AZURE EVENT GRID
 AZURE EVENT HUB

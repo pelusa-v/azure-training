@@ -1146,6 +1146,8 @@ Repasar imagen
 			- az keyvault create
 			- az keyvault secret show
 			- az keyvault secret set
+		- POWERSHELL:
+			- Set-AzKeyVaultSecret (new secret)
 
 
 * AZURE APP CONFIGURATION
@@ -1361,8 +1363,18 @@ Repasar imagen
 	- Provides Application Performance monitoring (APM) features
 	- Proactive (how an app is performing) and Reactive (determine the couse of an incident) monitoring
 	- Store logging data, collect metrics and telemetry data (telemetry is sent to application insights for analysis and presentation)
-	- Monitors:
-		- request / failure rates, response times (internal and dependencies), where users are, etc
+
+	- FEATURES:
+		- Live metrics (from your application in real time without effect on host)
+		- Availability (to test external endpoints)
+		- Github / Azure DevOps integration
+		- Usage (which features are popular with users and how users interact and use your application)
+		- Smart detection (Automatic failure and anomaly detection)
+		- Application Map (high level top-down view of the application architecture)
+		- Distributed tracing (end-to-end flow of transactions or executions)
+
+	- MONITORS:
+		- requests / failure rates, response times (internal and dependencies), where users are, etc
 		- exceptions
 		- page views load performance
 		- ajax calls
@@ -1371,15 +1383,26 @@ Repasar imagen
 		- trace logs
 		- custom events
 
+	- USE
+		- At run time: Instrument apps already deployed
+		- At development time: Add application insights to code
+		- Instrument web pages: For page views, ajax, client-side telemetry
+		- Mobile apps: Visual Studio app center
+		- Availability tests: ping website regularly
+
 	- Metrics:
-		- Log-based metrics:
-			- FOR DATA ANALYSIS DIAGNOSTICS
-			- Behind the scene are translated into Kusto queries from stored events
-			- Application insights stores all collected events as logs (manually sent from code skd or from autoinstrumentation)
-		- Standard metrics:
-			- FOR REAL TIME ALERTING
-			- Stored as preaggregated time series (better performance at query time)
-			- Application insights stores metrics as preaggregated time series, and only with key dimensions
+		- TYPES:
+			- LOG-BASED metrics:
+				- FOR DATA ANALYSIS DIAGNOSTICS
+				- Behind the scene are translated into Kusto queries from stored events
+				- Application insights stores all collected events as logs (manually sent from code skd or from autoinstrumentation)
+				- Can be impractical or impossible for apps that generate a large volume of telemetry (application insights implements telemetry volume reduction techniques)
+				- Fewer stored events -> less accuracy of metrics
+			- STANDARD metrics (Preaggregated metrics):
+				- FOR REAL TIME ALERTING
+				- Stored as preaggregated time series (better performance at query time)
+				- Application insights stores metrics as preaggregated time series, and only with key dimensions
+				- Better choice for dashboarding and real time alerting
 
 	- Connect to webapp:
 		- Download the SDK (Microsoft.Application.Insights.AspNetCore), and add Services.AddApplicationInsightsTelemetry();
@@ -1415,7 +1438,7 @@ Repasar imagen
 		- Application insights sends requests to webapp at regular intervals from points around the world to alert if the app isn't responding or rsponds too slowly.
 		- 100 availabilty tests per application insights.
 		- Availabitlity tests types:
-			- Standdard test (single test http/https request)
+			- Standard test (single test http/https request)
 			- Custom TrackAvailability test (from code using sdk in another app, complex requests, auth flows, etc)
 			- URL ping test (classic ping, deprecated)
 
