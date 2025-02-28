@@ -1363,8 +1363,15 @@ Repasar imagen
 	- Provides Application Performance monitoring (APM) features
 	- Proactive (how an app is performing) and Reactive (determine the couse of an incident) monitoring
 	- Store logging data, collect metrics and telemetry data (telemetry is sent to application insights for analysis and presentation)
+	- Data is sent to an Application Insights Log Analytics workspace
+	- You can choose the retention period for raw data, from 30 to 730 days. Aggregated data is retained for 90 days, and debug snapshots are retained for 15 days
 
 	- FEATURES:
+	
+		****************************************************************
+		***************** BUSCAR ACERCA DE USERS FLOWS *****************
+		****************************************************************
+
 		- Live metrics (from your application in real time without effect on host)
 		- Availability (to test external endpoints)
 		- Github / Azure DevOps integration
@@ -1443,6 +1450,10 @@ Repasar imagen
 			- URL ping test (classic ping, deprecated)
 
 		- Application map (troubleshoot app performance)
+			- You can see the full app topology
+			- Components are different from "observed" external dependencies (other services)
+			- To spot performance bottlenecks or failuers hotspots across all components of your distributed app
+			- The app map finds components by following HTTP dependency calls made between servers with the Application Insights SDK installed. This applies DISCOVERY OF COMPONENTS
 			- You need to configure the app (sdk installed) and resources (enabling Distributed Tracing) to use the application map and identify bottlenecks
 
 
