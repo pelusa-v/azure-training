@@ -1367,15 +1367,10 @@ Repasar imagen
 	- You can choose the retention period for raw data, from 30 to 730 days. Aggregated data is retained for 90 days, and debug snapshots are retained for 15 days
 
 	- FEATURES:
-	
-		****************************************************************
-		***************** BUSCAR ACERCA DE USERS FLOWS *****************
-		****************************************************************
-
 		- Live metrics (from your application in real time without effect on host)
 		- Availability (to test external endpoints)
 		- Github / Azure DevOps integration
-		- Usage (which features are popular with users and how users interact and use your application)
+		- Usage Analysis (which features are popular with users and how users interact and use your application - user flows)
 		- Smart detection (Automatic failure and anomaly detection)
 		- Application Map (high level top-down view of the application architecture)
 		- Distributed tracing (end-to-end flow of transactions or executions)
@@ -1460,17 +1455,25 @@ Repasar imagen
 
 * API MANAGEMENT:
 	- Core functionalities to ensure a successful aPI program.
+	- FEATURES:
+		- Microsoft entra integration (not for consumption and basic)
+		- Private endpoint (not for consumption and basicV2)
+		- Multi-region deployment (Only for premium)
+		- Availability zones (Only for premium)
+		- Autoscaling (Only for basic, standard and premium)
+
 	- Components:
-		- API GATEWAY: route calls to backends, verify request credentials, quotas and limits, cache, logs, metrics, etc.
+		- API GATEWAY: route calls to backends, verify request credentials, enforces usage quotas and rate limits, cache, logs, metrics, etc.
 			- Executes CROSS-CUTTING tasks:
 				- Authentication, SSL, rate limiting, quotas, routing.
 			- Without API GATEWAY involves problems.
-		- MANAGEMENT PLANE: api service settings, define api schema, package api -> products, policies, manage users
-		- DEVELOPER PORTAL: api docs, call api via console, manage api keys
+		- MANAGEMENT PLANE: api service settings, define api schema, package api -> products, set up policies like quotas or transformations, get insights, manage users
+		- DEVELOPER PORTAL: api docs, call api via console, manage api keys, create account and subscribe to get API Keys, access analytics, download API definitions
 	- PRODUCTS:
 		- A PRODUCT has one or more APIs, it has a title, descriptiom and terms of use.
-		- OPEN: Can be used without subscription
-		- PROTECTED: It needs subscription (require ADMIN APPROVAL or AUTOAPPROVED)
+			- Types:
+				- OPEN: Can be used without subscription
+				- PROTECTED: It needs subscription (require ADMIN APPROVAL or AUTOAPPROVED)
 	- GROUPS: (limit the visibility of products to developers)
 		- Administrators, Developers, Guests
 		- Allows custom groups (or external microsoft entra)
