@@ -1463,14 +1463,18 @@ Repasar imagen
 		- Autoscaling (Only for basic, standard and premium)
 
 	- Components:
-		- API GATEWAY: route calls to backends, verify request credentials, enforces usage quotas and rate limits, cache, logs, metrics, etc.
+		- API GATEWAY:
+			- Route calls to backends
+			- Verify request credentials
+			- Enforces usage quotas and rate limits
+			- Cache, logs, metrics, etc.
 			- Executes CROSS-CUTTING tasks:
 				- Authentication, SSL, rate limiting, quotas, routing.
 			- Without API GATEWAY involves problems.
 		- MANAGEMENT PLANE: api service settings, define api schema, package api -> products, set up policies like quotas or transformations, get insights, manage users
 		- DEVELOPER PORTAL: api docs, call api via console, manage api keys, create account and subscribe to get API Keys, access analytics, download API definitions
 	- PRODUCTS:
-		- A PRODUCT has one or more APIs, it has a title, descriptiom and terms of use.
+		- A PRODUCT has one or more APIs, it has a title, descriptio and terms of use.
 			- Types:
 				- OPEN: Can be used without subscription
 				- PROTECTED: It needs subscription (require ADMIN APPROVAL or AUTOAPPROVED)
@@ -1536,10 +1540,16 @@ Repasar imagen
 	
 	- SECURITY:
 		- Subscription keys:
-			- Subscription has two keys (rotation)
+			- A subscription is essentially a named container for a pair of subscription keys
+			- Developers who need to consume the published APIs can get subscriptions. And they don't need approval from API publishers. API publishers can also create subscriptions directly for API consumers
+			- Subscriptions give you granular control over permissions and policies
+			- Subscription has two keys (rotation or regeneration. When need to change the primary key, use the secondary key in apps to avoid downtime)
 			- Including this in http request (header or query parameter) (Header: Ocp-Apim-Subscription-Key)
 			- Devs who need to consume published APIs can get subscriptions (subscription requst for PROTECTED products)
-			- Scopes: ALL APIS (all the gateway), SINGLE API (specific api), PRODUCT (colelction of apis of product)
+			- Scopes:
+				- ALL APIS (all the gateway)
+				- SINGLE API (specific api)
+				- PRODUCT (colelction of apis of product)
 		- OAUTH2
 		- IP whitelist
 		- Client certificates:
