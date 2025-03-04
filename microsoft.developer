@@ -1563,22 +1563,73 @@ Repasar imagen
 * AZURE EVENT GRID
 	- Pub Sub message distribution
 	- For event driven serverless architecture
-	- Uses HTTP and MQTT
+	- Uses HTTP and MQTT (support IoT solutions)
+	- Event driven solutions: publisher service announces its system changes (events) to subbscriber apps
+
 	- Maximum allowed size for event: 1 MB
 	- Maximum size of events array received in Event grid: 1 MB
-	* (event source) publisher ----> azure grid -----> subscriberA, subscriberB, ... subscriberN (consumer can be the publisher too)
-	- publisher can be a PARTNER (sends events from its system to make them available to azure customers)
-	- Event source: 
-		- Azure Storaege, IoT Hub, Custom app, etc.
-		- Send events to Event Grid in an array (max length size: 1 MB)
-		- If an event or array > 1 MB -----> 413 PAYLOAD TOO LARGE
-		- Operations are charged in 64 KB increments. (1 event of 130 KB ----> 3 events)
-	- Topic: A collection of related events:
-		- SYSTEM TOPICS: Provide data about the resource. Access = you can suscribe to events
-		- CUSTOM TOPICS: Custom apps and third-party event sources
-		- PARTNER TOPICS: To subscribe to events published by a PARTNER
-	- Event subscription: Tells grid which events on a topic you want to receive - Subscribers can be azure services (storage account, functions, etc) or CUSTOM WEBHOOKS
-	- Event handler: Part of grid where the event is sent. Process the event
+
+	Concepts:
+		* (event source) publisher ----> azure grid -----> subscriberA, subscriberB, ... subscriberN (consumer can be the publisher too)
+		* EVENT SOURCE:
+			- Where the event happens
+			- An Event source is related o one or more event types
+			- Azure Storage, IoT Hub, Custom app, etc.
+			- Your application is the event source for custom events that you define
+			- Send events to Event Grid in an array
+		* EVENT:
+			- Smallest amount of information that fully describes something that happened in a system.
+			- Follows the CloudEvents standard in JSON format
+			- Maximum allowed event size: 1 MB (If an event or array > 1 MB -----> 413 PAYLOAD TOO LARGE)
+			- Events over 64KB are charged in 64-KB increments (1 event of 130 KB ----> 3 increments)
+			- Structure:
+				{
+				    "specversion" : "1.0",
+				    "type" : "com.yourcompany.order.created",
+				    "source" : "https://yourcompany.com/orders/",
+				    "subject" : "O-28964",
+				    "id" : "A234-1234-1234",
+				    "time" : "2018-04-05T17:31:00Z",
+				    "comexampleextension1" : "value",
+				    "comexampleothervalue" : 5,
+				    "datacontenttype" : "application/json",
+				    "data" : {
+				       "orderId" : "O-28964",
+				       "URL" : "https://com.yourcompany/orders/O-28964"
+				    }
+				}
+		* TOPIC: 
+			- A collection of related events
+			- Types:
+				- SYSTEM TOPICS: 
+					- Built-in topics provided by Azure services
+					- Provide data about the specific Azureresource
+					- If you have access to the resource, you can suscribe to events
+					- You don't see topics in your Azure subscription because the publisher (Azure resource) owns the topics, but you can subscribe them
+				- CUSTOM TOPICS: 
+					- Custom apps (your apps) and third-party event sources
+					- You can see the topic in the Azure subscriotion if you created it or have access to it
+				- PARTNER TOPICS:
+					- To subscribe to events published by a PARTNER
+		* PUBLISHER: 
+			- Application that sends events to Event Grid
+			- It can be the same app where the events originated: event source
+			- Services outside of Azure can publish events through Event Grid
+			- Can be a PARTNER (sends events from its system to make them available to azure customers, partners can publish and receive events from Azure Event Grid)
+		* SUBSCRIBER:
+			- An Azure service or other application that decides witch topics to subscribe to
+			- They receive the events from subscriptions
+			- They can be Azure services or custom webhooks (apps)
+		* EVENT SUBSCRIPTION: 
+			- Tells grid which events on a topic you want to receive
+			- You can filter by event type or subject pattern
+			- You can set expiration for event subscription temporarily needed
+		* EVENT HANDLER:
+			- Part of grid where the event is sent. Process the event
+			- Event Grid follows different mechanisms to guarantee the delivery of the event (http webhooks, azure storage queue, etc)
+		* SECURITY:
+			- Usign managed identity with RBAC
+			- Example: if sending events to Event Hubs, the managed identity used in the event subscription should be a member of the Event Hubs Data Sender role
 
 	* SCHEMAS:
 		- Event grid schema
