@@ -1569,7 +1569,7 @@ Repasar imagen
 	- Maximum allowed size for event: 1 MB
 	- Maximum size of events array received in Event grid: 1 MB
 
-	Concepts:
+	* CONCEPTS:
 		* (event source) publisher ----> azure grid -----> subscriberA, subscriberB, ... subscriberN (consumer can be the publisher too)
 		* EVENT SOURCE:
 			- Where the event happens
@@ -1581,8 +1581,8 @@ Repasar imagen
 			- Smallest amount of information that fully describes something that happened in a system.
 			- Follows the CloudEvents standard in JSON format
 			- Maximum allowed event size: 1 MB (If an event or array > 1 MB -----> 413 PAYLOAD TOO LARGE)
-			- Events over 64KB are charged in 64-KB increments (1 event of 130 KB ----> 3 increments)
-			- Structure:
+			- Events over 64KB are charged in 64-KB increments (1 event of 130 KB ----> 3 event increments)
+			- CloudEvents Structure:
 				{
 				    "specversion" : "1.0",
 				    "type" : "com.yourcompany.order.created",
@@ -1637,7 +1637,7 @@ Repasar imagen
 			[
 			  {
 			    "topic": string,  ------> (optional)
-			    "subject": string,  ------> (REQUIRED) // to give the ability to filter events to the subscriber (file extensions, paths, containers, etc)
+			    "subject": string,  ------> (REQUIRED) // to give the ability to filter events to the subscriber (file extensions, paths, blob containers, etc)
 			    "id": string,   ------> (REQUIRED)
 			    "eventType": string, ------> (REQUIRED)  // event type filtering
 			    "eventTime": string,------> (REQUIRED)
@@ -1649,7 +1649,9 @@ Repasar imagen
 			  }
 			]
 
-			different header: "content-type":"application/json; charset=utf-8"
+			- different header: "content-type":"application/json; charset=utf-8"
+			- For custom topics, the publisher HAVE TO define the same top level fields as standard resource-defined events
+			- Used only within Azure (simplest integration with Event Grid subscribers)
 
 		- Cloud event schema (open specification)
 
@@ -1666,58 +1668,103 @@ Repasar imagen
 			    }
 			}
 
-			different header: "content-type":"application/cloudevents+json; charset=utf-8"
+			- different header: "content-type":"application/cloudevents+json; charset=utf-8"
+			- With this schema, you can more easily integrate work across platforms
+			- Used for cross-platform or multi-cloud event driven architectures
 		* All remaining headers are the same
 
 	* EVENT SUBSCRIPTION:
 		- Grid tries to send each event at least once for each subscription, if there's a failure, grid retries based on RETRY SCHEDULE or RETRY POLICY
-		- Grid doesn't guarantee order for event delivery
+		- Grid doesn't guarantee order for event delivery (subscriber may receive events out of order)
 		
 		- RETRY SCHEDULE:
-			- status code 400, 412 for azure resources -> dead-letter event, doesn't retry
-			- status code 400, 412, 401 for webhook -> dead-letter event, doesn't retry
-			- (if dead-letter isn't configured, events will be dropped)
-			- Normal scenario:
-				- Grid waits 30sfor response, if endpoint hasn't respond, is queued for retry.
+			- When Event Grid receives an error for an event delivery attempt, it decides wheter it should:
+				- retry the delivery
+				- dead-letter the event
+				- drop the event based on error type
+			
+			- If error returned is a config-related error that can't be fixed with retries, Event Grid will dead-letter the events (or drop event if dead-letter isn't configured):
+				- status code 400, 413 for azure resources -> dead-letter event or drop, doesn't retry
+				- status code 400, 413, 401 for webhook -> dead-letter event or drop, doesn't retry
+				(413: Request entity is too large)
+				- You SHOULD configure dead-letter if you don't want events to be dropped
+			
+			- Normal scenario (error different from above):
+				- Grid waits 30s for response after delivering a messge, if endpoint hasn't respond, is queued for retry.
 				- Exponential backoff retry policy
+				- If endpoint responds within 3 minutes, Event Grid attempts to remoev event from the retry queue
 
 		- RETRY POLICY
-			- An event is dropped if:
-				- Maximum number of attempts (1 - 30 attempts)
-				- Event TTL (Time to live) (1 - 1440 min)
+			- An event is dropped if either of the limits is reached:
+				- Maximum number of attempts (1 - 30 attempts) (default = 30)
+				- Event TTL (Time to live) (1 - 1440 min) (default = 1440 min)
 			- If not, retry
 
-		- OUTPT BATCHING: (hish-throughput scenarios)
-			- Max events per batch
-			- Preferred batch size in KB (target ceiling):
-				- batch size < preferred (more events aren't available when publishing)
-				- batch size > preferred (single event is larger than prefered)
+		- OUTPT BATCHING: (high-throughput scenarios)
+			- Turned off by default
+			- Settings:
+				- Max events per batch: 
+					- Between 1 and 5000
+					- Some events may be delivered if no other events are available
+					- Event Grid doesn't delay  events to create batch if feer events are available
+				- Preferred batch size in KB (target ceiling):
+					- batch size < preferred (more events aren't available when publishing)
+					- batch size > preferred (single event is larger than prefered)
 
-		- DELAYED DELIVERY: If the first 10 events fail, grid add delays to all subsequent retries
+		- DELAYED DELIVERY:
+			- If the first 10 events fail, grid add delays to all subsequent retries
+			- Without back-off and delay, retry policy and volume capabilities can easily overwhelm a system
 		- DEAD-LETTER EVENTS:
 			- Requires an storage account
 			- If grid can't deliver the event within certain time or after trying to deliver a number of times, it can send the undelivered event to storage account.
-			- It's disable by default
+			- It's disable by default (You MUST specify a storage account to hold undelivered events and turn on dead-letter)
 			- This process is executed if:
 				- Event isn't delivered whitin TTL
 				- Number of tries > limit
+			- There's 5 min delay between last attempt to deliver and delivry to dead-letter location (thois is intended to reduce the number of blob operations)
+			- If dead-letter location is unavailable for 4 hours, the event is dropped
 
-		- YOU CAN ADD CUSTOM DELIVERY PROPERTIES (Headers)
+		- CUSTOM DELIVERY PROPS:
+			- YOU CAN ADD CUSTOM DELIVERY PROPERTIES (Headers) up to 10 headers
 
 	* AUTHENTICATION:
 		- Uses RBAC
+		- Built-in roles:
+			- Event Grid Subscription Reader (read event subscriptions)
+			- Event Grid Subscription Contributor (manage event subscription operations)
+			- Event Grid Contributor (manage Event Grid resources)
+			- Event Grid Data Sender (send events to topics)
 
 	* WEBHOOK
-		- Send a POST request to your endpoint
+		- Send a POST http request to your endpoint
 		- Endpoint validation:
 			- SYNCHRONOUS HANDSHAKE (at subscription creation, grid sends an schema to validate)
 			- ASYNCHRONOUS HANDSHAKE (for third-party services)
-			- MANUAL VALIDATION (using a validationUrl valid for 5 min) for version 2018-05-01-preview
+			- MANUAL VALIDATION (using a validationUrl valid for 5 min, during this time, provisioning state is set to "AwaitingManualAction") for version 2018-05-01-preview
+			- Azure handles validation automatically when you use those services:
+				- Azure Logic Apps with Event Grid Connector
+				- Azure Automation via webhook
+				- Azure Functions with Event Grid Trigger
+			- Using self-signed certificates for validation isn't supported. Use a signed certificate from a commercial certificate authority (CA) instead
 
 	* FILTERING:
 		* event type
 		* event subject
-		* Grid allows ADVANCED FILTERIN using operators based on event data
+		* Grid allows ADVANCED FILTERIN using operators based on event data:
+			"filter": {
+			  "advancedFilters": [
+			    {
+			      "operatorType": "NumberGreaterThanOrEquals",
+			      "key": "Data.Key1",
+			      "value": 5
+			    },
+			    {
+			      "operatorType": "StringContains",
+			      "key": "Subject",
+			      "values": ["container1", "container2"]
+			    }
+			  ]
+			}
 
 
 
