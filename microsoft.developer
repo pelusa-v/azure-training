@@ -1573,7 +1573,7 @@ Repasar imagen
 		* (event source) publisher ----> azure grid -----> subscriberA, subscriberB, ... subscriberN (consumer can be the publisher too)
 		* EVENT SOURCE:
 			- Where the event happens
-			- An Event source is related o one or more event types
+			- An Event source is related to one or more event types
 			- Azure Storage, IoT Hub, Custom app, etc.
 			- Your application is the event source for custom events that you define
 			- Send events to Event Grid in an array
@@ -1600,6 +1600,7 @@ Repasar imagen
 				}
 		* TOPIC: 
 			- A collection of related events
+			- 100 Custom topics per Azure subscription (When the limit is reached, you can consider a different region or consider using domains, which can support 100,000 topics.)
 			- Types:
 				- SYSTEM TOPICS: 
 					- Built-in topics provided by Azure services
@@ -1608,7 +1609,7 @@ Repasar imagen
 					- You don't see topics in your Azure subscription because the publisher (Azure resource) owns the topics, but you can subscribe them
 				- CUSTOM TOPICS: 
 					- Custom apps (your apps) and third-party event sources
-					- You can see the topic in the Azure subscriotion if you created it or have access to it
+					- You can see the topic in the Azure subscription if you created it or have access to it
 				- PARTNER TOPICS:
 					- To subscribe to events published by a PARTNER
 		* PUBLISHER: 
@@ -1621,12 +1622,23 @@ Repasar imagen
 			- They receive the events from subscriptions
 			- They can be Azure services or custom webhooks (apps)
 		* EVENT SUBSCRIPTION: 
+			- 500 subscriptions allowed per topic (can’t be increased)
 			- Tells grid which events on a topic you want to receive
 			- You can filter by event type or subject pattern
 			- You can set expiration for event subscription temporarily needed
 		* EVENT HANDLER:
+			- They receive the events
 			- Part of grid where the event is sent. Process the event
 			- Event Grid follows different mechanisms to guarantee the delivery of the event (http webhooks, azure storage queue, etc)
+			- Handlers:
+				- Webhooks. Azure Automation runbooks and Logic Apps are supported via webhooks.
+				- Azure functions.
+				- Event Hubs.
+				- Service Bus queues and topics.
+				- Relay hybrid connections.
+				- Storage queues.
+				- Azure Monitor alerts (from Azure Key Vault source only).
+				- Event Grid namespace topics.
 		* SECURITY:
 			- Usign managed identity with RBAC
 			- Example: if sending events to Event Hubs, the managed identity used in the event subscription should be a member of the Event Hubs Data Sender role
@@ -1687,10 +1699,11 @@ Repasar imagen
 				- status code 400, 413 for azure resources -> dead-letter event or drop, doesn't retry
 				- status code 400, 413, 401 for webhook -> dead-letter event or drop, doesn't retry
 				(413: Request entity is too large)
+				(400: Bad request)
 				- You SHOULD configure dead-letter if you don't want events to be dropped
 			
 			- Normal scenario (error different from above):
-				- Grid waits 30s for response after delivering a messge, if endpoint hasn't respond, is queued for retry.
+				- Grid waits 30s for response after delivering a message, if endpoint hasn't respond, is queued for retry.
 				- Exponential backoff retry policy
 				- If endpoint responds within 3 minutes, Event Grid attempts to remoev event from the retry queue
 
@@ -1721,7 +1734,7 @@ Repasar imagen
 			- This process is executed if:
 				- Event isn't delivered whitin TTL
 				- Number of tries > limit
-			- There's 5 min delay between last attempt to deliver and delivry to dead-letter location (thois is intended to reduce the number of blob operations)
+			- There's 5 min delay between last attempt to deliver and delivery to dead-letter location (this is intended to reduce the number of blob operations)
 			- If dead-letter location is unavailable for 4 hours, the event is dropped
 
 		- CUSTOM DELIVERY PROPS:
@@ -1746,6 +1759,9 @@ Repasar imagen
 				- Azure Automation via webhook
 				- Azure Functions with Event Grid Trigger
 			- Using self-signed certificates for validation isn't supported. Use a signed certificate from a commercial certificate authority (CA) instead
+
+	* COMMANDS:
+		- Create event subscription: az eventgrid event-subscription create
 
 	* FILTERING:
 		* event type
