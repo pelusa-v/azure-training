@@ -614,6 +614,7 @@ Repasar imagen
 		- Pass the URI referencing the endpoint and use DefaultAzureCredential to use Managed identities
 
 		* METADATA:
+			* Up to 1,024 characters long
 			* System properties: Some can be read or set, others are read-only
 			* User-defined metadata: name-value pairs that user specify for blobs
 			
@@ -1361,6 +1362,8 @@ Repasar imagen
 
 * APPLICATION INSIGHTS
 	- Extenssion of AZURE MONITOR
+		- To monitoring performance, inspect METRICS and LOGS
+		- Example: To identify amount of time required for an app to access an azure resource (redis, cosmos, etc) and how it contributes to response time: TrackDependency
 	- Provides Application Performance monitoring (APM) features
 	- Proactive (how an app is performing) and Reactive (determine the couse of an incident) monitoring
 	- Store logging data, collect metrics and telemetry data (telemetry is sent to application insights for analysis and presentation)
@@ -1808,6 +1811,7 @@ Repasar imagen
 		- Each partition is an independent segment of data and is consumed independently
 		- Data in partition ages off based on configurable retention period
 		- Captured data ----> APACHE AVRO FORMAT
+		- Commit possition of the last successfully processed event within a partition: Use OFFSET and SEQUENCE NUMBER
 
 	* TRAFFIC:
 		- Controlled by THROUGHPUT UNITS
@@ -1839,6 +1843,7 @@ Repasar imagen
 		- Ownership of partitions is distributed among all the active event processor instances associated with an event hub and consumer group combination
 		- For production:
 			- EventProcessorClient > EventHubConsumerClient (performance)
+			- EventHubProducerClient (publish events in batches)
 
 	* ACCESS:
 		- Supports Microsoft Entra ID and SAS
