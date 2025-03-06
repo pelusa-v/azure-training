@@ -537,6 +537,7 @@ Repasar imagen
 * AZURE STORAGE
 	- An Azure Storage account is the top-level container for all of your Azure Blob storage
 	- Provides a unique namespace for your azure storage
+	- Default maximum storage account capacity: 5 PiB 
 
 	* STORAGE ACCOUNT TYPES:
 		* Standard general-purpose v2 (GPV2)
@@ -886,10 +887,10 @@ Repasar imagen
 		- CONDITIONAL ACCESS:
 			- Offers one of several wayt to secure an app:
 				- Multifactor auth
-				- Ony Intune enroleeed devices to access specific services
+				- Only Intune enrolled devices to access specific services
 				- Restrictirng user locations and ip ranges
 			- Sometimes it impacts an application, requiring code changes
-			- Require changes:
+			- Require code changes fot conditional access:
 				- Apps performing On-behalf-of flow
 				- Apps accessing multiple services/resources
 				- SPAs using MSAL
@@ -934,7 +935,7 @@ Repasar imagen
 		- Authentication flows:
 			- Authorization code (desktop, mobile, SPA pkce, Web)
 			- Client credentials (Daemon)
-			- Device code (Desktop, Mobile)
+			- Device code (Desktop, Mobile): Enables sign-in to a device by using another devide that has a browser
 			- Implicit grant (SPA, Web)
 			- On-behalf-of (OBO) - (Web Api)
 			- Username/password (ROPC) - (Desktop, Mobile)
@@ -1127,7 +1128,7 @@ Repasar imagen
 			- Service principal and certificate (NOT RECOMMENDED)
 			- Service principal and secret (NOT RECOMMENDED)
 		- Azure key vault use TLS (to protect data when it's traveling between Key Vault and clients) and PFS (to protect connection between customers)
-		- A vault per application per environment
+		- A VAULT PER APPLICATION PER ENVIRONMENT
 		- Control access to vault (sensitive data)
 		- Backup
 		- Logging
@@ -1766,7 +1767,7 @@ Repasar imagen
 	* FILTERING:
 		* event type
 		* event subject
-		* Grid allows ADVANCED FILTERIN using operators based on event data:
+		* Grid allows ADVANCED FILTERING using operators based on event data:
 			"filter": {
 			  "advancedFilters": [
 			    {
