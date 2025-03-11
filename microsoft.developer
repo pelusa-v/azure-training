@@ -1643,6 +1643,9 @@ Repasar imagen
 				- Storage queues.
 				- Azure Monitor alerts (from Azure Key Vault source only).
 				- Event Grid namespace topics.
+		* NAMESPACE TOPICS:
+			- Topics that are created within an Event Grid namespace
+			- For relatively large solutions, create a namespace topic for each category of related evetns 
 		* SECURITY:
 			- Usign managed identity with RBAC
 			- Example: if sending events to Event Hubs, the managed identity used in the event subscription should be a member of the Event Hubs Data Sender role
@@ -1766,6 +1769,7 @@ Repasar imagen
 
 	* COMMANDS:
 		- Create event subscription: az eventgrid event-subscription create
+		- Create event topic: az eventgrid topic create
 
 	* FILTERING:
 		* event type
@@ -1790,28 +1794,44 @@ Repasar imagen
 
 
 * AZURE EVENT HUBS:
-	- Stream million of events per second with LOW LATENCY
-	- Any SOURCE ----> Any DESTINATION
-	- Compatible with Apache KAFKA, Azure functions
-	- Supports AMQP, Apache Kafka, HTTPS
+	- Native data-streaming service in the cloud can stream millions of events per second with LOW LATENCY
+	- From Any SOURCE ----> To Any DESTINATION
+	- Compatible with Azure functions (for serverless architectures), Apache KAFKA (It enables you to run existing Kafka workloads without any code changes, without set up or configure your kafka clusters)
+	- Supports AMQP, Apache Kafka, HTTPS (multiprotocol)
+	- You can ingest, buffer, store, and process data stream in real time to get actionable insights
+	- Event hubs uses a partitioned consumer model (it could be multiple apps processing the stream concurrently)
+	
 	- AZURE SCHEMA REGISTRY: managing schemas of event streaming applications
-	- AZURE STREAM ANALYTICS: Analyze streaming data
+	- AZURE STREAM ANALYTICS: 
+		- Enable real-time stream processing, Analyze streaming data.
+		- It provides a built-in no-code editos, but you can also use the SQL-Based stream analytics query language, so you can perform real time processing
 	- Allows automatically capture data in "Azure Blob Storage" or "Azure Data Lake Storage"
 
 	* COMPONENTS:
-		- Producer application (ingest data via DSK or Kafka client)
-		- Namespace (Contains one or more event hubs or Kafka Topics)
+		- Producer application (ingest data via SDK or Kafka producer client)
+		- Namespace (Contains one or more event hubs or Kafka Topics. Streaming capacity, network security, geo-disaster recovery takes place here)
 		- Event Hubs/Kafka topic (Organize events into a topic, it has partitions)
-		- Partition (Used to scale an event hub, lane in a freeway)
+		- Partition (Used to scale an event hub, lane in a freeway. If you need more streaming throughput, add more partitions)
 		- Consumer application (consume data by seeking through the event log and maintaining consumer offset. "Kafka consumer client" or "Event Hub SDKs client")
 		- Consumer group (logical group of consumer instances reads data from a topic)
 
 	* CAPTURE DATA:
-		- Azure blob storage and Azure Data Lake Storage are used to capture data (same or different region)
+		- Store:
+			- Azure blob storage and Azure Data Lake Storage are used to capture data (same or different region).
+			- You can specify time or size interval
+			- No administrative costs to run capturing
+			- Scales automatically with:
+				- Throughput units -> STANDARD TIER
+				- Processing units -> PREMIUM TIER
 		- Each partition is an independent segment of data and is consumed independently
 		- Data in partition ages off based on configurable retention period
-		- Captured data ----> APACHE AVRO FORMAT
+		- Captured data ----> APACHE AVRO FORMAT -> fast, binary format with rich data structure and inline schema
 		- Commit possition of the last successfully processed event within a partition: Use OFFSET and SEQUENCE NUMBER
+		- Capture window:
+			- You can set up a window to control capturing
+			- Window: Minimum size and time config with "first wins policy" (first trigger found causes a capture operation)
+			- Name convention of capture:
+				- {Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}
 
 	* TRAFFIC:
 		- Controlled by THROUGHPUT UNITS
@@ -1826,21 +1846,30 @@ Repasar imagen
 			- On the consuming end, it's necessary a mechanism that can read the events, consolidate them and upload to a blob storage
 			- Then this data is ready to be used in the website for residents
 
+		- Design the consumer (distributed environment):
+			- SCALE: Create multiple consumers, with each consumer taking ownership of reading from a few partitions
+			- LOAD BALANCE: Increase or reduce the consumers dynamically (for example: new sensor type -> number of events increases)
+			- SEAMLESS RESUME ON FAILURES: If a consumer fails, then other consumers can pick p the partitions owned by the failed consumer and continue 
+				(continuation point = CHECKPOINT or OFFSET = exact point of failure or slightly before that)
+			- CONSUME EVENTS: Consumer code to do something with the events (aggregate, upload to storage, etc)
+
 		- Consumer client:
-			- Te event procesing application may need scaling, running multiple instances of the app and balancing the load among themselves
-			- EventProcessorClient (.NET and JAVA Azure Event Hubs SDKs)
+			- The event procesing application may need scaling, running multiple instances of the app and balancing the load among themselves
+			- EventProcessorClient (.NET and JAVA Azure Event Hubs SDKs) and EventHubConsumerClient (Python and JavaScript SDKs)
+			- Partition Ownership:
+				- Ownership of partitions is evenly distributed among all the active event processor instances associated with an event hub and consumer group combination
+				- Each event processor is given a unique identitifer and claims ownership of partitions.
 			- When create an EVENT PROCESSOR, you specify the functions that process events and errors (CLIENT RESPONSABILITY HANDLE THE EVENT)
 			- Execute as little processing as possible over received events.
 			- Code with Retry logic to ensure the consumer processes every message at least once
 
-			* CHECKPINT:
+			* CHECKPOINT:
 				- Checkpointing is a process by which an event processor marks or commits the position of the last successfully processed event within a partition. 
 				- Marking a checkpoint is typically done within the function that processes the events and occurs on a per-partition basis within a consumer group.
 				- If an event processor disconnects from a partition, another instance can resume processing the partition at the checkpoint that was previously committed by the last processor of that partition in that consumer group
 
 			- Thread safety (Events from different partitions can be processed concurrently and any shared state that is accessed across partitions have to be synchronized)
 
-		- Ownership of partitions is distributed among all the active event processor instances associated with an event hub and consumer group combination
 		- For production:
 			- EventProcessorClient > EventHubConsumerClient (performance)
 			- EventHubProducerClient (publish events in batches)

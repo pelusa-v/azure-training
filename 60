@@ -83,6 +83,10 @@ https://learn.microsoft.com/en-us/training/modules/explore-api-management/
 
 AZURE EVENT GRID:
 https://learn.microsoft.com/en-us/training/modules/azure-event-grid/
+
+AZURE EVENT HUB:
+https://learn.microsoft.com/en-us/training/modules/azure-event-hubs/
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
 DONE:
 ----
@@ -106,13 +110,13 @@ AZURE CACHE FOR REDIS
 AZURE CDN
 AZURE APPLICATIONS INSIGHTS
 AZURE EVENT GRID
+AZURE EVENT HUB
 
 ------------------------------------------
 
 PENDING:
 -------
 
-AZURE EVENT HUB
 AZURE SERVICE BUS
 AZURE STORAGE ACCOUNT
 	AZURE QUEUE STORAGE
