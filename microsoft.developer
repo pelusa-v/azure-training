@@ -1832,6 +1832,10 @@ Repasar imagen
 			- Window: Minimum size and time config with "first wins policy" (first trigger found causes a capture operation)
 			- Name convention of capture:
 				- {Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}
+			- Retention period:
+				- 1h -> Default
+				- 7d -> STANDARD TIER
+				- 90d -> PREMIUM and DEDICATED TIER
 
 	* TRAFFIC:
 		- Controlled by THROUGHPUT UNITS
