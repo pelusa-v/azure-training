@@ -1892,15 +1892,16 @@ Repasar imagen
 
 * AZURE MESSAGE QUEUES SOLUTIONS
 	* COMPARISON
-		* AZURE SERVICE BUS QUEUES
+		* USE AZURE SERVICE BUS QUEUES
 			(enterprise messaging)
 			- Solution needs to receive messages without polling the queue (built in in bus SERVICE BUS)
 			- Solution needs guaranteed FIFO order
 			- Solution needs automatic duplicate detection
-			- App requires to process messages as parallel long-running streams
+			- App requires to process messages as parallel long-running streams (Messages associated with stream using SESSION ID property)
+			- Solution requires transactional behavior and atomicity when sending or receving multiple messages from a queue
 			- 64KB < messages < 256KB or 1MB depending of tier (Service Bus supports > 100MB)
 			- Solution requires rol-based access model to queues, permission for sender and receivers
-		* AZURE STORAGE QUEUES
+		* USE AZURE STORAGE QUEUES
 			(simple message buffering, scalable, low cost queueing)
 			- NOT GUARANTEE FIFO
 			- messages < 64KB
@@ -1911,20 +1912,48 @@ Repasar imagen
 	* AZURE SERVICE BUS QUEUES
 		- Message broker (messaging, transfer business data)
 		- Decouple apps (client and service don't have to be online at the same time)
+		- Data is transferred using messages, data can be JSON, XML, Apache Avro and plain text
 		- TOPIC has many SUBSCRIPTIONS
-		- premium vs standard
-			- 100MB -> 256KB max (message size)
-			- throughput
-			- Fixed -> pay as you go
-			- Scale
 		- ADVANCED FEATURES over storage queue
 		- Protocols: AMQP
+
+		- SCENARIOS:
+			- Messaging: Transfer business data
+			- Decouple applications: Reliability and scalability
+			- Topics and subscriptions: (1:n) for pub-sub pattern
+			- Message sessions: Workflows that require message ordering
+
+		- TIERS:
+			Premium / Standard
+			- High througput / Variable throughput
+			- Predictable performance / Variable latency
+			- Fixed pricing / Pay as you go
+			- Ability to scale workload up and down / N/A
+			- messages < 100 MB / messages < 256 KB
+
+		- ADVANCED FEATURES:
+			Over storage queue
+			- Message sessions
+			- Autoforwarding
+			- Dead-letter queue
+			- Scheduled delivery
+			- Message deferral
+			- Transactions
+			- Filtering and actions
+			- Autodelete on idle
+			- Duplicate detection
+			- Security protocols
+			- Geo-disaster recovery
+			- Security
 		
 		- QUEUES:
+			- Offer FIFO
+			- Only one message consumer receives and processes each message
 			- POINT TO POINT PATTERN (MESSAGE PROCESSING)
 			- One to one communication
 			- load-leveling: enables producers and consumers to send and receive messages at different rates
-			- To intermediate between message producers and consumers
+			- Consumer only has to be able to handle average load instead peak load (despite the load sent by the producer)
+			- To intermediate between message producers and consumers (loose coupling)
 			- Loose coupling between components
 		
 		- TOPICS AND SUBSCRIPTIONS:
