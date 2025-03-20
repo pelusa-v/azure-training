@@ -1649,6 +1649,8 @@ Repasar imagen
 		* SECURITY:
 			- Usign managed identity with RBAC
 			- Example: if sending events to Event Hubs, the managed identity used in the event subscription should be a member of the Event Hubs Data Sender role
+		* EVENT DOMAINS:
+			- They are used to group multiple topics
 
 	* SCHEMAS:
 		- Event grid schema
@@ -1717,7 +1719,7 @@ Repasar imagen
 		- RETRY POLICY
 			- An event is dropped if either of the limits is reached:
 				- Maximum number of attempts (1 - 30 attempts) (default = 30)
-				- Event TTL (Time to live) (1 - 1440 min) (default = 1440 min)
+				- Event TTL (Time to live) (1 - 1440 min or 24h) (default = 1440 min or 24h)
 			- If not, retry
 
 		- OUTPT BATCHING: (high-throughput scenarios)
