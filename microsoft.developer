@@ -1155,7 +1155,7 @@ Repasar imagen
 * AZURE APP CONFIGURATION
 	- Azure App Configuration has a maximum size limit for stored data (currently 10 MB per store)
 	- Service to centrally manage application settings
-	- Stores data as key-value pairs
+	- Stores data as key-value pairs (limit = 10KB)
 	- App configuration doesn't version key values. Use labels to version.
 	- Each key-value is uniquely identified by its key plus a label
 	- Scenarios:
@@ -1219,6 +1219,10 @@ Repasar imagen
 
 	- BEST PRACTICES:
 		- All microservices should share a single App Configuration store
+
+	- SDK:
+		- For use app configuration: Azure.Data.AppConfiguration
+		- For use feature flags: Microsoft.FeatureManagement.AspNetCore
 
 	- You can use private endpoints to allow clients on a virtual network to securely access data over a private link.
 
@@ -1802,6 +1806,7 @@ Repasar imagen
 	- Supports AMQP, Apache Kafka, HTTPS (multiprotocol)
 	- You can ingest, buffer, store, and process data stream in real time to get actionable insights
 	- Event hubs uses a partitioned consumer model (it could be multiple apps processing the stream concurrently)
+	- Message size limit = 1MB
 	
 	- AZURE SCHEMA REGISTRY: managing schemas of event streaming applications
 	- AZURE STREAM ANALYTICS: 
@@ -1813,7 +1818,7 @@ Repasar imagen
 		- Producer application (ingest data via SDK or Kafka producer client)
 		- Namespace (Contains one or more event hubs or Kafka Topics. Streaming capacity, network security, geo-disaster recovery takes place here)
 		- Event Hubs/Kafka topic (Organize events into a topic, it has partitions)
-		- Partition (Used to scale an event hub, lane in a freeway. If you need more streaming throughput, add more partitions)
+		- Partition (Used to scale an event hub, lane in a freeway. If you need more streaming throughput, add more partitions. Ordering is preserved in a partition)
 		- Consumer application (consume data by seeking through the event log and maintaining consumer offset. "Kafka consumer client" or "Event Hub SDKs client")
 		- Consumer group (logical group of consumer instances reads data from a topic)
 
