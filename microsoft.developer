@@ -1840,8 +1840,7 @@ Repasar imagen
 			- Name convention of capture:
 				- {Namespace}/{EventHub}/{PartitionId}/{Year}/{Month}/{Day}/{Hour}/{Minute}/{Second}
 			- Retention period:
-				- 1h -> Default
-				- 7d -> STANDARD TIER
+				- 7d -> STANDARD TIER (Default)
 				- 90d -> PREMIUM and DEDICATED TIER
 
 	* TRAFFIC:
