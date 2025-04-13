@@ -57,9 +57,9 @@ Repasar imagen
 			#########################################################################################################################
 			- All work of initializing the swapped apps (and warmed up) happens on the source slot, the target slot remains online.
 			- The production slot should be always the target (so swap doesn't affect production app)
-			- Settings that are swapped:
+			- Settings that are swapped (NON-STICKY SETTINGS):
 				- General settings, app settings, connection strings, handler/path mappings, public certificates, Webjobs content
-			- Settings that aren't swapped:
+			- Settings that aren't swapped (STICKY SETTINGS):
 				- Publishing endpoints, custom domain, non public certs and tls/ssl settings, scale settings, webjos schedules, IP restrictions,
 					always on, diagnostic log settings, CORS, virtual nw integration, managed identities
 			- To make settings swappable set variable WEBSITE_OVERRIDE_PRESERVE_DEFAULT_STICKY_SLOT_SETTINGS = 0 / false
@@ -278,6 +278,8 @@ Repasar imagen
 				- Triggered tasks -----> Trigges to build on code update, base image update, schedule -----> az acr task create / track base image dependency / schedule
 				- Multi-step task -----> It uses a .yaml file to define steps (custom workflow) 
 
+		* Role to allow image pulls = AcrPull
+
 	* AZURE CONTAINER INSTANCES (ACI):
 		- No VM is needed, allows Windows and Linux
 		- Max resources: 4 CPU cores and 16 GB memory
@@ -285,6 +287,15 @@ Repasar imagen
 		- Container instances are billed by the second (you need to stop when not using)
 		- No support for persistent storage (natively)
 		- You can run ACI in a private network by deploying the app in a VNET
+
+		* SCENARIOS:
+			- Simple web application in a container (Frontend container + Backend container)
+			- App container and logging container
+			- App container and monitoring container
+
+		* FEATURES:
+			- Fast startup
+			- Mount Azure Files shares directly to a container to retrieve and persist state
 
 		* Container groups (multi container groups):
 			- Max number of containers per group = 60
@@ -300,8 +311,6 @@ Repasar imagen
 			- Restart policy:
 				- ACI stops the container when its app, or script exits
 				- ALWAYS (default), NEVER, ONFAILURE
-
-
 
 		* Environment Variables:
 			- az container create ... --environment-variables 'MaxProcesses'='10'
@@ -363,6 +372,7 @@ Repasar imagen
 			- az containerapp create ...  --secrets "super-secret=$CONNECTION_STRING" ------> create container app with secrets
 			- az containerapp update ... ------> modify env variables, compute resources, scale, deploy diff image.
 			- az containerapp revision list ... -----> list rvisions of container app
+			- func azurecontainerapps deploy ------> deploy a containerized app using functions core tools
 
 		* AUTHORIZATION AND AUTHENTICATION:
 			- Provides out-of-the-box auth (built-in auth features, low or no code) with federated identity providers
@@ -532,6 +542,11 @@ Repasar imagen
 					- download the nuget package: Contrib.Grpc.Core.M1
 					- add this before last project tag:
 						<Target Name="CopyGrpcNativeAssetsToOutDir" AfterTargets="Build"> <ItemGroup> <NativeAssetToCopy Condition="$([MSBuild]::IsOSPlatform('OSX'))" Include="$(OutDir)runtimes/osx-arm64/native/*" /> </ItemGroup> <Copy SourceFiles="@(NativeAssetToCopy)" DestinationFolder="$(OutDir).azurefunctions/runtimes/osx-arm64/native" /> </Target>
+	
+	* COMMANDS:
+		- You can use Azure Functions Core Tools
+		- func azure functionapp publish ------> deploy function app
+		- func azurecontainerapps deploy ------> deploy a containerized function app
 
 
 * AZURE STORAGE
