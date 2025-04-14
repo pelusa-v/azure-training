@@ -723,9 +723,9 @@ Repasar imagen
 		* CONSISTENT PREFIX:
 			- Client never sees updates out of order, but stale data is possible
 			- Updates made as a batch within a transaction are returned to the transaction in which they were commited
-			- Write operation withi a transaction of multiple items are always visible together
+			- Write operation within a transaction of multiple items are always visible together
 			- If writes are "DocA v1 -> DocA v2 & DocB v1 -> DocB v2", the user can see either "DocA v2 & DocB v2" or "DocA v1 & DocB v1" but never "DocA v2 & DocB v1" for the same read
-			- If wites are A -> B -> C, a read may return A -> B but never A -> C without B
+			- If writes are A -> B -> C, a read may return A -> B but never A -> C without B
 			- Use case: Chat apps, notifications, apps where order matters but real-time freshness is not critical
 
 		* EVENTUAL:
@@ -764,7 +764,10 @@ Repasar imagen
 	* SDK:
 		- Base client: CosmosClient, providing cosmos endpoint and credential (keys or DefaultAzureCredential for managed identities)
 		- You can obtain a Database client from CosmosClient so you can perform operations on containers
-		- You can obtain a Container form the datbase, so you can perform operations on items (CRUD and Query)
+		- You can obtain a Container from the datbase, so you can perform operations on items (CRUD and Query)
+		- Methods:
+			- container.CreateItemAsync() -----> crete new item in a container
+			- container.CreateTransactionalBatch() -----> multiple create and update actions within the same partition
 
 	* UTILITIES:
 		- Sp, trigger, user-defined functions:
