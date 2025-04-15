@@ -987,6 +987,7 @@ Repasar imagen
 			- https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-configure-app-expose-web-apis
 			- samples:
 				-https://learn.microsoft.com/en-us/entra/identity-platform/sample-v2-code?tabs=apptype#web-api
+		- In SPAs is recommended to use acquireTokenRedirect over acquireTokenPopup due to browser security constraints
 
 	* SAS (Shared access signature)
 		- To provide access to clients who should not be trusted
@@ -994,7 +995,7 @@ Repasar imagen
 		- Includes a Token that indicates how the resources might be accessed by the client
 		
 		- Azure storage SAS Types:
-			- USER DELEGATION SAS: (RECOMMENDED)
+			- USER DELEGATION SAS: (RECOMMENDED - MOST GRANULAR)
 				Delegation SAS secured with microsoft entra credentials and permissions for the SAS. (BLOB STORAGE only)
 			- SERVICE SAS:
 				Service SAS secured with storage account key. (BLOB, QUEUE, TABLE, AZURE FILES)
