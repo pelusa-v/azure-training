@@ -21,6 +21,8 @@ Repasar imagen
 		- Custom domains (From BASIC)
 		- Azure app service certiticate (From BASIC)
 		- SSL Connection (From BASIC)
+		- Dedicated VMs on Dedicated virtual networks (From ISOLATED)
+		- Network isolation (From ISOLATED)
 		* DEPLOY:
 			- Automatic: Using CI/CD
 			- Manual: Git, CLI (az webapp up), ZIP (using curl), FTPS/FTP
@@ -37,6 +39,7 @@ Repasar imagen
 			- OUTBOUND FEATURES: Hybrid Connections, Gateway-required virtual network integration, Virtual network integration
 	
 	* SLOTS (from STANDARD):
+		- Slots run on the same instances of the plan (share the same underlying app service plan)
 		- Live apps with their own host names (separate deployment)
 		- Standard (5 max), Premium (20 max)
 		- App content and config can be swapped between two slots (for example, staging <-> production)
@@ -89,7 +92,7 @@ Repasar imagen
 					- Basic (B1, B2, B3) (3 instances)
 					- Standard (S1, S2, S3) (10 instances max)
 					- Premium, PremiumV2, PremiumV3 (30 instances max)
-				- ISOLATED (Maximun scale-out capabilities)
+				- ISOLATED (Maximun scale-out capabilities and network isolation)
 					- Isolated, IsolatedV2
 		- An app always runs in an app service plan.
 		- App service plan ------many----> App
@@ -664,6 +667,13 @@ Repasar imagen
 			- Point in time restore
 			- Soft delete for blobs and containers (retention days)
 
+	* CHANGE FEED (from general-purpose-v2):
+		- Capture and record changes
+		- Change feed records are stored in the $blobchangefeed container
+		- One change feed in each storage account
+		- Create, Update, and Delete changes are captured only at the blob service level
+		- The change feed captures all of the changes for all of the available events that occur on the account. Client applications can filter out event types as required
+
 
 
 * AZURE COSMOS DB
@@ -1113,6 +1123,8 @@ Repasar imagen
 
 * AZURE KEY VAULT:
 	- Service for securely storing and accessing secrets, keys and certificates (API keys, passwords, certificates, cryptographic keys)
+	- MAXIMUM SECRET SIZE: 25KB
+
 	- TIERS:
 		- Standard: encrypts with a software key
 		- Premium: includes hardware security module(HSM)-protectedd keys
@@ -1451,7 +1463,7 @@ Repasar imagen
 			- Use the SDK if you require csutom events and metrics, control over telemetry flow, autoinstrumentation isn't available
 			- two ways:
 				- Application insigths SDKs
-				- Azure Monitor OpenTelemetry Distros
+				- Azure Monitor OpenTelemetry Distros (RECOMMENDED)
 
 		- OPEN TELEMETRY TERMS (replacing legacy application insights terms):
 			- autocollectors = instrumentation libraries
@@ -1560,6 +1572,19 @@ Repasar imagen
 							  <set-body/>
 							  <set-status/>
 							</return-response>
+			- Cache:
+				<cache-lookup vary-by-developer="true | false" vary-by-developer-groups="true | false" caching-type="prefer-external | external | internal" downstream-caching-type="none | private | public" must-revalidate="true | false" allow-private-response-caching="@(expression to evaluate)">
+				  <vary-by-header>Accept</vary-by-header>
+				  <!-- should be present in most cases -->
+				  <vary-by-header>Accept-Charset</vary-by-header>
+				  <!-- should be present in most cases -->
+				  <vary-by-header>Authorization</vary-by-header>
+				  <!-- should be present when allow-private-response-caching is "true"-->
+				  <vary-by-header>header name</vary-by-header>
+				  <!-- optional, can be repeated -->
+				  <vary-by-query-parameter>parameter name</vary-by-query-parameter>
+				  <!-- optional, can be repeated -->
+				</cache-lookup>
 
 	- HOSTING:
 		- Managed (All API traffic flows through Azure)
@@ -1840,6 +1865,10 @@ Repasar imagen
 		- Partition (Used to scale an event hub, lane in a freeway. If you need more streaming throughput, add more partitions. Ordering is preserved in a partition)
 		- Consumer application (consume data by seeking through the event log and maintaining consumer offset. "Kafka consumer client" or "Event Hub SDKs client")
 		- Consumer group (logical group of consumer instances reads data from a topic)
+		- GUIDE:
+			Scenario	What Happens
+			Same consumer group -> Webapps share the partitions. Each app sees partial data only.
+			Different consumer groups -> Each webapp reads the full data independently. Each app can make full reports.
 
 	* CAPTURE DATA:
 		- Store:
