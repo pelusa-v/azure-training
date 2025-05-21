@@ -243,6 +243,17 @@ Repasar imagen
 			- Built-in token store
 			- Auth traces are collected if application logging is enabled
 
+	* COMMANDS:
+		- Create webapp: 
+			az webapp create --resource-group <RG_NAME> --plan <APP_SERVICE_PLAN> --name <APP_NAME> --runtime "DOTNETCORE|6.0"
+		- Deploy code using ZIP: 
+			az webapp deployment source config-zip --resource-group <RG_NAME> --name <APP_NAME> --src <ZIP_FILE>
+		- Set up webapp settings: 
+			az webapp config appsettings set --resource-group <RG_NAME> --name <APP_NAME> --settings KEY=VALUE
+		- Scale up webapp: 
+			az appservice plan update --name <PLAN_NAME> --resource-group <RG_NAME> --sku P1V2
+
+
 
 * AZURE CONTAINERS
 
@@ -265,10 +276,6 @@ Repasar imagen
 			- Geo-replication (PREMIUM)
 			- Zone redundancy (PREMIUM)
 			- Scalable storage (ALL TIERS, up to storage limit)
-			- Create -----> az acr create
-			- List -----> az acr repository list
-			- Versions -----> az acr repository show-tags
-			- Run -----> az acr run (like docker run)
 
 		* ACR Taks:
 			- Builds images for LinuxOS and AMD64 arch.
@@ -282,6 +289,14 @@ Repasar imagen
 				- Multi-step task -----> It uses a .yaml file to define steps (custom workflow) 
 
 		* Role to allow image pulls = AcrPull
+
+		* COMMANDS:
+			- Create -----> az acr create
+			- List -----> az acr repository list
+			- Versions -----> az acr repository show-tags
+			- Run -----> az acr run (like docker run)
+			- docker tag <LOCAL_IMAGE> <ACR_NAME>.azurecr.io/<IMAGE_NAME>:<TAG>
+			- docker push <ACR_NAME>.azurecr.io/<IMAGE_NAME>:<TAG>
 
 	* AZURE CONTAINER INSTANCES (ACI):
 		- No VM is needed, allows Windows and Linux
@@ -550,6 +565,14 @@ Repasar imagen
 		- You can use Azure Functions Core Tools
 		- func azure functionapp publish ------> deploy function app
 		- func azurecontainerapps deploy ------> deploy a containerized function app
+		- Create function:
+			az functionapp create --resource-group <RG_NAME> --consumption-plan-location <LOCATION> --runtime dotnet --functions-version 4 --name <APP_NAME> --storage-account <STORAGE_NAME>
+		- List functions inside an app:
+			az functionapp function list --resource-group <RG_NAME> --name <APP_NAME>
+		- Deploy zip:
+			az functionapp deployment source config-zip --resource-group <RG_NAME> --name <APP_NAME> --src <ZIP_FILE>
+
+
 
 
 * AZURE STORAGE
@@ -1292,8 +1315,9 @@ Repasar imagen
 			- Geo replication
 			- Zone redundancy
 			- Data persistence
+			- Redis modules
 		- ENTERPRISE FLASH: 
-			- Cost-effective large caches powered by Redis enterprise. Reduces per-GB memory cost using nonvolatile memory (cheaper than DRAM)
+			- Cost-effective large caches powered by Redis enterprise. Reduces per-GB memory cost using NONVOLATILE MEMORY (cheaper than DRAM)
 			- Geo replication
 			- Zone redundancy
 			- Data persistence

@@ -1,0 +1,61 @@
+MÉTODO
+
+x-amazon-apigateway-integration:
+      connectionType: VPC_LINK
+      connectionId: "fs8gpd"
+      type: "http_proxy"
+      tlsConfig:
+        insecureSkipVerification: true        
+      httpMethod: "GET"
+      uri: "https://r1-alb-pjbxi.qas.dombifaws.com/api/products-company/v1/productsCustomName"
+      responses:
+        default:
+          statusCode: "200"
+      passthroughBehavior: "when_no_match"
+
+
+
+OPTIONS:
+
+
+
+options:
+    summary: CORS preflight request
+    description: Maneja las solicitudes preflight CORS para el recurso.
+    operationId: corsPreflight
+    responses:
+      '200':
+        description: OK
+        headers:
+          Access-Control-Allow-Origin:
+            description: "Origin allowed"
+            schema:
+              type: string
+          Access-Control-Allow-Methods:
+            description: "Methods allowed"
+            schema:
+              type: string
+          Access-Control-Allow-Headers:
+            description: "Headers allowed"
+            schema:
+              type: string
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "CORS preflight request successful."
+    x-amazon-apigateway-integration:
+      type: "mock"
+      responses:
+        default:
+          statusCode: "200"
+          responseParameters:
+            method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST'"
+            method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,idTransaction,channelCode,ip,device'"
+            method.response.header.Access-Control-Allow-Origin: "'https://bancaempresa.qas.banbif.com.pe'"
+      requestTemplates:
+        application/json: "{\"statusCode\": 200}"
+      passthroughBehavior: "when_no_match"
