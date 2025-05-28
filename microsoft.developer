@@ -1087,6 +1087,14 @@ Repasar imagen
 		* For delegated access:
 			- Get the token using authentication/authorization at app level, or use PublicClientApplicationBuilder to acquire token manually, then make a request to the desired service (similar to consume graph).
 
+	* COMMANDS:
+		* Grant permissions to app:
+			az ad app permission admin-consent --id <appId>
+		* List service principals:
+			az ad sp list
+		* Create app registration:
+			az ad app create --display-name myApp
+
 
 
 * MICROSOFT GRAPH
@@ -1886,7 +1894,7 @@ Repasar imagen
 		- Producer application (ingest data via SDK or Kafka producer client)
 		- Namespace (Contains one or more event hubs or Kafka Topics. Streaming capacity, network security, geo-disaster recovery takes place here)
 		- Event Hubs/Kafka topic (Organize events into a topic, it has partitions)
-		- Partition (Used to scale an event hub, lane in a freeway. If you need more streaming throughput, add more partitions. Ordering is preserved in a partition)
+		- Partition (Used to scale an event hub, lane in a freeway. If you need more streaming throughput, add more partitions. Ordering is preserved in a partition. It uses Hash-based partitioning)
 		- Consumer application (consume data by seeking through the event log and maintaining consumer offset. "Kafka consumer client" or "Event Hub SDKs client")
 		- Consumer group (logical group of consumer instances reads data from a topic)
 		- GUIDE:
