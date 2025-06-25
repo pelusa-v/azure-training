@@ -77,6 +77,10 @@ Repasar imagen
 			- Once the client is routed to slot, it's pinned to that slot during the session's life
 			- You give the user a button to "test beta" (url + route cookie) and route to non-prod slot.
 			- Default routing rule (prod o specific slot) in new slot is 0%
+		- COMMANDS:
+			- list slots:
+				- az webapp deployment slot list --name myapp --resource-group myrg
+				- az webapp slot create --name myapp --resource-group myrg --slot staging
 	
 	* APP SERVICE PLAN:
 		- Define the set of compute resources and pricing:
@@ -207,7 +211,9 @@ Repasar imagen
 		- ACCESS LOGS:
 			- You can send specific traces to logs using packages of your language/framework
 			- Log stream
-			- az webapp log tail --name appname --resource-group myResourceGroup
+				az webapp log tail --name appname --resource-group myResourceGroup
+			- Enable logging:
+				az webapp log config --name myapp --resource-group myrg --application-logging filesystem
 			- Kudu
 			- Consume blobs or download zip file if using file system
 
@@ -215,6 +221,10 @@ Repasar imagen
 			- You can run cmd or powershell to interact with files of webapp in real time
 			- You can view files and configuration of webapp (files deployed)
 			- It's good for diagnostic (debug when It works in local but doesn't work in cloud environment)
+
+		- COMMANDS:
+			Enable diagnostic logging
+			- az webapp log config --name myapp --resource-group myrg --application-logging filesystem
 
 	* SECURITY:
 		- Certificates:
@@ -252,6 +262,8 @@ Repasar imagen
 			az webapp config appsettings set --resource-group <RG_NAME> --name <APP_NAME> --settings KEY=VALUE
 		- Scale up webapp: 
 			az appservice plan update --name <PLAN_NAME> --resource-group <RG_NAME> --sku P1V2
+		- Scale out webapp: 
+			az webapp plan update --name <PLAN_NAME> --resource-group <RG_NAME> --number-of-workers <INSTANCES>
 
 
 
@@ -617,6 +629,11 @@ Repasar imagen
 				* Append blobs: Optimized for apppend operations (logging use case)
 				* Page blobs: Store random access files up to 8 TB in size. Page blobs store virtual hard drive (VHD) files and serve as disks for Azure virtual machines.
 				- URL: http://STORAGE_ACCOUNT_NAME.blob.core.windows.net/CONTAINER_NAME/BLOB_NAME
+		* COMMANDS:
+			- List all blob containers in a storage:
+			az storage container list --account-name mystorage
+			- Upload file to blob:
+			az storage blob upload --account-name mystorage --container-name docs --file myfile.txt --name myfile.txt
 
 	* ENCRYPTION:
 		- All blobs, disks, files, queues, tables and metadata are encrypted for free (any region, tier, type)
@@ -733,7 +750,7 @@ Repasar imagen
 		- 100% of read requests meet the consistency guarantee for the consistency level chosen
 
 		- STRONG >>>>>> BOUNDED STALENESS >>>>>> SESSION >>>>>> CONSISTENT PREFIX >>>>>> EVENTUAL
-		-------------- Higher availability, lower latency, higher throughput-------------------->
+		-------------- Higher availability, lower latency, higher throughput ------------------->
 
 		* STRONG:
 			- Reads are guaranteed to return the most recent version of an item (latest commited write)
@@ -848,6 +865,12 @@ Repasar imagen
 					- The delegate: What the devs want to do with each bearch of changes
 
 			- Pull model: client pull work from server, client has bussines logic for processing work, store state and handles load balancing. Extra low level control (NOT RECOMMENDED)
+
+	* COMMANDS:
+		- Create new cosmosDB sql account:
+			az cosmosdb create --name mycosmos --resource-group myrg --kind GlobalDocumentDB
+		- Add new container to existing db:
+			az cosmosdb sql container create --account-name mycosmos --database-name mydb --name mycontainer --partition-key-path "/mypartition"
 
 
 * MICROSOFT IDENTITY PLATFORM (ENTRA ID)
@@ -1112,6 +1135,7 @@ Repasar imagen
 			- query-parameters: OData system query options (?filter=emailAddress eq 'jon@contoso.com')
 
 	* SDK
+		- Package: Microsoft.Graph
 		- Sevice library: models, request builders from graph metadata
 		- Core library: features to work with graph services
 		- TO REQUEST:
@@ -1150,6 +1174,12 @@ Repasar imagen
 		- Handle responses effectively (pagination, Evolvable enumerations)
 		- Pagination response 100 by default
 		- Cache locally for specific scenarios to avoid make a lot of requests to graph
+
+	* COMMANDS:
+		- Login:
+			mgc login --scopes
+		- List users:
+			mgc users list --filter
 
 
 * AZURE KEY VAULT:
@@ -1850,8 +1880,17 @@ Repasar imagen
 			- Using self-signed certificates for validation isn't supported. Use a signed certificate from a commercial certificate authority (CA) instead
 
 	* COMMANDS:
-		- Create event subscription: az eventgrid event-subscription create
-		- Create event topic: az eventgrid topic create
+		- Create event subscription: 
+			az eventgrid event-subscription create
+		- List event subscriptions:
+			az eventgrid event-subscription list --topic-name
+		- Delete event subscription:
+			az eventgrid event-subscription delete --name
+		- Create event topic: 
+			az eventgrid topic create
+		- List event topics:
+			az eventgrid topic list
+
 
 	* FILTERING:
 		* event type

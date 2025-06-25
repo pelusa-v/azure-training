@@ -23,8 +23,8 @@
 - message based
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
-PROMPT:
-I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB, MICROSOFT AZURE ENTRA ID, AZURE MICROSOFT GRAPH, AZURE KEY VAULT, AZURE MANAGED IDENTITIES, AZURE APP CONFIGURATION, AZURE CACHE FOR REDIS, AZURE CDN, AZURE APPLICATIONS INSIGHTS, AZURE API MANAGEMENT, AZURE EVENT GRID, AZURE EVENT HUB.
+PROMPT 1:
+I'm practicing for az-204 azure certificate, so I want to practice about AZURE APP SERVICE, AZURE CONTAINERS (ACR, ACI, ACA), AZURE FUNCTIONS, AZURE STORAGE ACCOUNT, AZURE COSMOS DB, MICROSOFT AZURE ENTRA ID, AZURE MICROSOFT GRAPH, AZURE KEY VAULT, AZURE MANAGED IDENTITIES, AZURE APP CONFIGURATION, AZURE CACHE FOR REDIS, AZURE CDN, AZURE APPLICATIONS INSIGHTS, AZURE API MANAGEMENT, AZURE EVENT GRID, AZURE EVENT HUB, AZURE SERVICE BUS and AZURE QUEUE STORAGE.
 I need you to make me questions to practice about that. Remember, the questions should be AS DIFFICULT AS az-204 certification exam and the same style (alternatives), you need to make the questions based on the documentation I'll provide you and up to date information (2025) about az-204. Give me 15 questions to begin and at the end of this test, I need you tu give me the score, the correct answer of each question in order and point me out my wrongs. When you're asking me the questions, don't show the answer so I can practice. Don't forget, the questions should be based on the documentation I gave you and up to date online information
 
 Here is the documentation so you can make te question based on that pages about the topics:
@@ -87,11 +87,30 @@ https://learn.microsoft.com/en-us/training/modules/azure-event-grid/
 AZURE EVENT HUB:
 https://learn.microsoft.com/en-us/training/modules/azure-event-hubs/
 
+AZURE SERVICE BUS and AZURE QUEUE STORAGE:
+https://learn.microsoft.com/en-us/training/modules/discover-azure-message-queue/
+
 Please, also include questions about azure commands refering to the services of the questions
 
 REMEMBER, TRY TO MAKE THE QUESTIONS BASED ON THE LINKS I SHARED ABOVE AND COVER ALL THE TOPICS AS POSSIBLE
 
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------
+PROMPT 2:
+
+Can I share you my notes about SERVICE?, so you can ask me 10 questions for practicing this service based on my notes. The questions must be the same style and difficult as az-204 certificate exam.
+
+Here are my notes:
+
+
+
+YOU HAVE TO REMEMBER MY NOTES AND THE QUESTIONS YOU'LL GIVE ME BECAUSE I'M GOINT TO ANSWER AND I NEED TO RECEIVE MY SCORE. DON'T GIVE ME THE ANSWERS, I WANT TO PRACTICE
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
 DONE:
 ----
 
@@ -103,6 +122,7 @@ AZURE CONTAINERS
 AZURE FUNCTIONS8
 AZURE STORAGE ACCOUNT
 	AZURE BLOB STORAGE
+	AZURE QUEUE STORAGE
 AZURE COSMOS DB
 AZURE ENTRA ID
 AZURE MICROSOFT GRAPH
@@ -115,15 +135,12 @@ AZURE CDN
 AZURE APPLICATIONS INSIGHTS
 AZURE EVENT GRID
 AZURE EVENT HUB
+AZURE SERVICE BUS
 
 ------------------------------------------
 
 PENDING:
 -------
-
-AZURE SERVICE BUS
-AZURE STORAGE ACCOUNT
-	AZURE QUEUE STORAGE
 
 
 
