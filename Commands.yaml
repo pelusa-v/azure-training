@@ -1,0 +1,181 @@
+COMMANDS:
+
+
+AZURE APP SERVICE:
+
+	WEBAPP:
+		Manage Web App:
+			- az webapp create --name MyWebApp --plan MyPlan --resource-group MyResourceGroup
+			- az webapp start --name MyWebapp --resource-group MyResourceGroup
+			- az webapp stop --name MyWebapp --resource-group MyResourceGroup
+			- az webapp list --resource-group MyResourceGroup
+
+		Create an App Service plan:
+			- az appservice plan create --name MyPlan --resource-group MyRG --sku S1
+			- az appservice plan list --query "[?sku.tier=='Free']"
+			- az appservice plan delete --name MyAppServicePlan --resource-group MyResourceGroup
+			- New-AzAppServicePlan -Name MyPlan -ResourceGroupName MyRG -Location "WestUS" -Tier "Standard"
+
+		Deploy code to Web App from ZIP:
+			- az webapp deployment source config-zip --resource-group MyRG --name MyWebApp --src myapp.zip
+
+		Deploy code for local workspace to the app:
+			- az webapp up -g $resourceGroup -n $appName --html
+
+		Set app settings:
+			- az webapp config appsettings set --name MyWebApp --resource-group MyRG --settings KEY=VALUE
+			- Set-AzWebApp -Name MyWebApp -ResourceGroupName MyRG -AppSettings @{KEY="VALUE"}
+
+		Configure Web App:
+			- az webapp config show --name MyWebapp --resource-group MyResourceGroup
+			- az webapp config set -g MyResourceGroup -n MyUniqueApp --always-on true
+			- az webapp config set -g MyResourceGroup -n MyUniqueApp --generic-configurations "@.\params.json"
+			- az webapp config ssl bind --certificate-thumbprint <thumbprint> --ssl-type SNI --name MyWebApp --resource-group MyRG
+			- az webapp config hostname add --webapp-name MyWebApp --resource-group MyRG --hostname www.example.com
+
+		Connection with services:
+			- az webapp connection create app-insights -g WebAppRG -n MyWebApp --tg AppInsightsRG --app-insights MyAppInsights --secret
+			- az webapp connection create cosmos-mongo -g WebAppRG -n MyWebApp --tg CosmosRG --account MyAccount --database MyDB --system-identity
+			- az webapp connection create appconfig -g WebAppRG -n MyWebApp --tg AppconfigRG --app-config MyConfigStore --system-identity
+			- az webapp connection create redis -g WebAppRG -n MyWebApp --tg RedisRG --server MyServer --database MyDB --system-identity
+			- az webapp connection create eventhub -g WebAppRG -n MyWebApp --tg EventhubRG --namespace MyNamespace --system-identity
+
+		Scale:
+		 	- az webapp scale -g MyResourceGroup -n MyApp --instance-count 2
+
+	MANAGE BACKUP:
+		- az webapp config backup create --container-url {container-url} --resource-group MyResourceGroup --webapp-name MyWebapp
+		- az webapp config backup list --resource-group MyResourceGroup --webapp-name MyWebapp
+
+	MANAGE APPSETTINGS AND CONN STRING:
+		- az webapp config appsettings list --name MyWebApp --resource-group MyRG
+		- az webapp config appsettings delete --name MyWebApp --resource-group MyResourceGroup --setting-names {setting-names}
+		- az webapp config appsettings set -g MyResourceGroup -n MyUniqueApp --settings WEBSITE_NODE_DEFAULT_VERSION=6.9.1
+		- az webapp config connection-string list --name MyWebapp --resource-group MyResourceGroup
+		- az webapp config connection-string set -g MyResourceGroup -n MyUniqueApp -t mysql --settings mysql1='Server=myServer;Database=myDB;Uid=myUser;Pwd=myPwd;'
+
+	MANAGE LOGGING:
+		Enable diagnostic logging:
+			- az webapp log config --name myapp --resource-group myrg --application-logging filesystem
+
+		Webapp deployment logging:
+			- az webapp log deployment list --name MyWebApp --resource-group MyResourceGroup
+			- az webapp log deployment show --name MyWebApp --resource-group MyResourceGroup
+
+		Webapp logging:
+			- az webapp log show --name MyWebApp --resource-group MyResourceGroup
+			- az webapp log tail --name MyWebApp --resource-group MyResourceGroup
+
+	MANAGE SLOTS:
+		- az webapp deployment slot list --name myapp --resource-group myrg
+		- az webapp deployment slot delete --name MyWebapp --resource-group myrg --slot staging
+		- az webapp deployment slot create --name MyWebapp --resource-group MyResourceGroup --slot staging
+		- az webapp deployment slot auto-swap --name MyWebapp --resource-group MyResourceGroup --slot staging
+		- az webapp deployment slot swap --name MyWebApp --resource-group MyRG --slot staging --target-slot production
+
+
+
+
+AZURE FUNCTIONS:
+
+	MANAGE FUNCTION:
+		Basics:
+			- az functionapp create -g MyResourceGroup  -p MyPlan -n MyUniqueAppName -s MyStorageAccount
+			- az functionapp list --query "[].{hostName: defaultHostName, state: state}"
+			- az functionapp list --resource-group MyResourceGroup
+			- az functionapp start --name MyFuncApp --resource-group MyRG
+			- az functionapp stop --name MyFuncApp --resource-group MyRG
+			- az functionapp delete --name MyFuncApp --resource-group MyRG
+			- az functionapp config show --name MyFuncApp --resource-group MyRG
+			- az functionapp identity assign --name MyFuncApp --resource-group MyRG
+
+		Settings:
+			- az functionapp config show --name MyFuncApp --resource-group MyRG
+			- az functionapp config appsettings set -g MyResourceGroup -n MyUniqueApp --settings mySetting=value @moreSettings.json
+
+		Plan:
+			- az functionapp plan update --name MyPlan --resource-group MyRG --number-of-workers 3
+
+	DEPLOY:
+		Deploy code to Web App from ZIP:
+		- az functionapp deployment source config-zip --resource-group MyRG --name MyFuncApp --src myfunc.zip
+
+	CORE TOOLS:
+		- func azure functionapp publish <APP_NAME>
+		- func azurecontainerapps deploy
+		- func init MyProjFolder --worker-runtime dotnet-isolated
+		- func init MyProjFolder --worker-runtime dotnet
+		- func new --name MyHttpFunc --template "HTTP trigger"
+		- func start
+
+
+
+
+AZURE CONTAINERS REGISTRY:
+	Create ACR
+		- az acr create --name MyRegistry --resource-group MyRG --sku Basic
+
+	Login to ACR
+		- az acr login --name MyRegistry
+
+	List repositories
+		- az acr repository list --name MyRegistry
+
+	Push/pull images (using Docker after login)
+		- docker push MyRegistry.azurecr.io/myimage:tag
+		- docker pull MyRegistry.azurecr.io/myimage:tag
+
+
+* AZURE CONTAINERS INSTANCE:
+	
+	Create a container group
+		- az container create --resource-group MyRG --name mycontainer --image mcr.microsoft.com/azuredocs/aci-helloworld --cpu 1 --memory 1 --ports 80
+
+	List containers
+		- az container list --resource-group MyRG
+
+	Show logs
+		- az container logs --resource-group MyRG --name mycontainer
+
+
+* AZURE CONTAINERS APPLICATION:
+	
+	Create an environment
+		- az containerapp env create --name MyEnv --resource-group MyRG --location westus
+
+	Create a container app
+		- az containerapp create --name MyApp --resource-group MyRG --environment MyEnv --image myrepo.azurecr.io/myimage:tag --target-port 80 --ingress 'external'
+
+	List container apps
+		- az containerapp list --resource-group MyRG
+
+
+* AZURE FUNCTIONS:
+	
+	Create a Function App (Consumption Plan)
+		- az functionapp create --resource-group MyRG --consumption-plan-location westus --runtime dotnet --functions-version 4 --name MyFuncApp --storage-account mystorageacct
+		- New-AzFunctionApp -Name MyFuncApp -ResourceGroupName MyRG -Location "WestUS" -StorageAccountName mystorageacct -Runtime dotnet
+
+	Deploy code to Function App
+		- az functionapp deployment source config-zip --resource-group MyRG --name MyFuncApp --src myfunc.zip
+
+	Set app settings
+		- az functionapp config appsettings set --name MyFuncApp --resource-group MyRG --settings KEY=VALUE
+		- Set-AzFunctionAppSetting -Name MyFuncApp -ResourceGroupName MyRG -AppSetting @{KEY="VALUE"}
+
+
+* AZURE BLOB STORAGE:
+	
+	Create a storage account
+		- az storage account create --name mystorageacct --resource-group MyRG --location westus --sku Standard_LRS
+
+	Create a container
+		- az storage container create --name mycontainer --account-name mystorageacct
+
+	Upload a blob
+		- az storage blob upload --account-name mystorageacct --container-name mycontainer --name myfile.txt --file ./myfile.txt
+
+	List blobs
+		- az storage blob list --account-name mystorageacct --container-name mycontainer
+
+

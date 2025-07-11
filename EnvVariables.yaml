@@ -1,0 +1,31 @@
+ENVIRONMENT VARIABLES:
+
+
+AZURE APP SERVICE:
+
+	WEBAPP:
+		Speficies default node.js verision:
+			- WEBSITE_NODE_DEFAULT_VERSION=18.16.0
+		Runs app directly from deployed ZIP (need enable run from package):
+			- WEBSITE_RUN_FROM_PACKAGE=1
+		Server's time zone:
+			- WEBSITE_TIME_ZONE=Eastern Standard Time
+		Set ertention days for http logs:
+			- WEBSITE_HTTPLOGGING_RETENTION_DAYS=7
+		Enable build actions (like dotnet restore):
+			- SCM_DO_BUILD_DURING_DEPLOYMENT=true
+		Disable background updates during deployment (avoid file lock issues):
+			- WEBSITE_ENABLE_SYNC_UPDATE_SITE=true
+		Defines a custom path for warm-up checks during slot swaps:
+			- WEBSITE_SWAP_WARMUP_PING_PATH=/health
+		Specify curren slot name (useful for slot-specific config):
+			- WEBSITE_SLOT_NAME=staging
+		Azure Key Vault references (for env variables values):
+			- SOME_VARIABLE=@Microsoft.KeyVault(SecretUri=https://<vault-name>.vault.azure.net/secrets/<secret-name>/<version>)
+		.NET app environment:
+			- ASPNETCORE_ENVIRONMENT=Production
+		Enable local cache (Always, Never, Auto):
+			- WEBSITE_LOCAL_CACHE_OPTION=Always
+		Set size of local cache:
+			- WEBSITE_LOCAL_CACHE_SIZEINMB=300
+

@@ -80,7 +80,6 @@ Repasar imagen
 		- COMMANDS:
 			- list slots:
 				- az webapp deployment slot list --name myapp --resource-group myrg
-				- az webapp slot create --name myapp --resource-group myrg --slot staging
 	
 	* APP SERVICE PLAN:
 		- Define the set of compute resources and pricing:
@@ -435,6 +434,20 @@ Repasar imagen
 			- More options for programming languages and azure service integration
 
 	* HOSTING OPTIONS
+
+		- In-process functions:
+			- Attributes or decorators in code
+			- Languages:
+				- In-Process (C#)
+				- JavaScript/Python
+
+		- Isolated worker and some other languages:
+			- function.json to describe bindings
+			- Languages:
+				- .NET Isolated
+				- Java
+				- PowerShell/Custom
+
 		- functionTimeout in host.json (time out parameter, timeout duration for function executions)
 		- Hosting option specify how the function scale, resource available for funtcion app instances, advanced functionalities, support linux container
 		- Event driven Autoscale: Instances of the functions hosts are dinamiclly added and removed based on incoming events
@@ -472,7 +485,7 @@ Repasar imagen
 			- For long-runing scenarios where durable functions can't be used
 			- To run multiple webapps and functions on the same plan
 			- Larger compute size
-			- App service environment (ASE): secure network isolation, haigh memory usage and high scale
+			- App service environment (ASE): secure network isolation, high memory usage and high scale
 			- Max scale out: 40-60
 			- Linux containers support
 			- Default functionTimeout: 30m

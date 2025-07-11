@@ -1,0 +1,185 @@
+BUENAS: 38
+MALAS: 12
+
+azure redis:
+	buenas: 5
+	malas: 0
+aplication insights:
+	buenas: 3
+	malas: 0
+acr:
+	buenas: 1
+	malas: 0
+aci:
+	buenas: 1
+	malas: 0
+aca:
+	buenas: 2
+	malas: 0
+app service:
+	buenas: 2
+	malas: 2 (deploy methods, log errors) OK
+azure functions:
+	buenas: 4
+	malas: 1 (tiers features) OK
+api management:
+	buenas: 1
+	malas: 1 (expose only necessary operations) OK
+azure event hub:
+	buenas: 1
+	malas: 0
+azure service bus:
+	buenas: 1
+	malas: 3 (message size, message features, filters, tiers, FIFO guarantee) OK
+azure event grid:
+	buenas: 1
+	malas: 0
+microsoft graph:
+	buenas: 1
+	malas: 0
+storage account (blob):
+	buenas: 4
+	malas: 4 (sas, geneate sas via code, sas types, stored access policies, block blobs, life cycle, rehydratate region)
+microsoft entra id:
+	buenas: 4
+	malas: 0
+app configuration:
+	buenas: 1
+	malas: 0
+azure key vault:
+	buenas: 2
+	malas: 0
+azure cosmos db:
+	buenas: 6 (change feed, sql queries)
+	malas: 1 (consistency levels order, consistency levels features)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+BUENAS: 46.5
+MALAS: 3.5
+
+azure redis:
+	buenas: 0
+	malas: 0
+aplication insights:
+	buenas: 4
+	malas: 0
+acr:
+	buenas: 1
+	malas: 0
+aci:
+	buenas: 3
+	malas: 0
+aca:
+	buenas: 0
+	malas: 0
+app service:
+	buenas: 7
+	malas: 0
+azure functions:
+	buenas: 3
+	malas: 0
+api management:
+	buenas: 5
+	malas: 1
+azure event hub:
+	buenas: 1
+	malas: 1 (data and performance isolation)
+azure service bus:
+	buenas: 4
+	malas: 0
+azure event grid:
+	buenas: 1
+	malas: 0
+microsoft graph:
+	buenas: 1
+	malas: 0
+storage account (blob):
+	buenas: 5.5
+	malas: 0.5
+azure storage queue:.
+	buenas: 0
+	malas: 1 (PeekMessages vs Peek of azure service bus)
+microsoft entra id:
+	buenas: 4
+	malas: 0
+app configuration:
+	buenas: 2
+	malas: 0
+azure key vault:
+	buenas: 2
+	malas: 0
+azure cosmos db:
+	buenas: 3
+	malas: 0
+azure cdn:
+	buenas: 0
+	malas: 0
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+BUENAS: 48
+MALAS: 2
+
+azure redis:
+	buenas: 0
+	malas: 0
+aplication insights:
+	buenas: 4
+	malas: 0
+acr:
+	buenas: 2
+	malas: 0
+aci:
+	buenas: 3
+	malas: 0
+aca:
+	buenas: 0
+	malas: 0
+app service:
+	buenas: 6
+	malas: 0
+azure functions:
+	buenas: 4
+	malas: 0
+api management:
+	buenas: 5
+	malas: 0
+azure event hub:
+	buenas: 2.5
+	malas: 0.5
+azure service bus:
+	buenas: 3
+	malas: 0
+azure event grid:
+	buenas: 0
+	malas: 0
+microsoft graph:
+	buenas: 0
+	malas: 0
+storage account (blob):
+	buenas: 2.5
+	malas: 1.5 (SAS types, standard http properties ETag, LastModified)
+azure storage queue:
+	buenas: 2
+	malas: 0
+microsoft entra id:
+	buenas: 4
+	malas: 0
+app configuration:
+	buenas: 2
+	malas: 0
+azure key vault:
+	buenas: 2
+	malas: 0
+azure cosmos db:
+	buenas: 6
+	malas: 0
+azure cdn:
+	buenas: 0
+	malas: 0
+
