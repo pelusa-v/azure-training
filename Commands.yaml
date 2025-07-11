@@ -112,18 +112,40 @@ AZURE FUNCTIONS:
 
 
 AZURE CONTAINERS REGISTRY:
-	Create ACR
-		- az acr create --name MyRegistry --resource-group MyRG --sku Basic
-
-	Login to ACR
+	
+	REGISTRY LEVEL:
+		- az acr create --resource-group MyRG --name MyRegistry --sku Basic
+		- az acr delete --name MyRegistry --resource-group MyRG --yes
+		- az acr update --name MyRegistry --admin-enabled true
 		- az acr login --name MyRegistry
+		- az acr list --resource-group MyRG
 
-	List repositories
-		- az acr repository list --name MyRegistry
+		Quick task (build and push):
+			- az acr build --registry MyRegistry --image myapp:v1 .
 
-	Push/pull images (using Docker after login)
+		Triggered task:
+			- az acr task create -n hello-world -r myregistry --cmd '$Registry/myimage' -c /dev/null
+
+	REPOSITORY LEVEL:
+		Delete image:
+			- az acr repository delete -n myregistry --image hello-world:latest
+
+		Delete repository:
+			- az acr repository delete -n myregistry --repository hello-world
+
+		List registries:
+			- az acr list --resource-group MyRG
+
+		List repositories in a registry:
+			- az acr repository list --name MyRegistry
+
+		List versions and tags:
+			- az acr repository show-tags --name MyRegistry --repository myimage
+
+	LOCAL:
 		- docker push MyRegistry.azurecr.io/myimage:tag
 		- docker pull MyRegistry.azurecr.io/myimage:tag
+
 
 
 * AZURE CONTAINERS INSTANCE:
